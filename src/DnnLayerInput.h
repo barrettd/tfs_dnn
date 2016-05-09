@@ -14,6 +14,7 @@ namespace tfs {
     
     class DnnLayerInput : public DnnLayer {
     protected:
+        // Only m_out_x, m_out_y, m_out_z really matter with this layer.
         
     public:
         DnnLayerInput( void );

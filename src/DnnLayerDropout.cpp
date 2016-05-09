@@ -7,3 +7,16 @@
 //
 
 #include "DnnLayerDropout.h"
+
+namespace tfs {
+    
+    
+    DnnLayerDropout::DnnLayerDropout( void ) {
+        // Constructor
+    }
+    
+    DnnLayerDropout::~DnnLayerDropout( void ) {
+        // Destructor
+    }
+    
+}   // namespace tfs

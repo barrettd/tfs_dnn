@@ -4,14 +4,15 @@
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-
 #include "Dnn.h"
 #include "DnnLayers.h"
 #include "Error.h"
 
 namespace tfs {
    
-    Dnn::Dnn( void ) {
+    Dnn::Dnn( void ) :
+    m_layer_input(  0 ),
+    m_layer_output( 0 ) {
         // Constructor
     }
     
@@ -23,6 +24,8 @@ namespace tfs {
     void
     Dnn::clear( void ) {
         // Clean up the layers.
+        m_layer_input  = 0;
+        m_layer_output = 0;
         std::vector< DnnLayer* >::const_iterator layer_end = m_layers.end();
         for( std::vector< DnnLayer* >::const_iterator it = m_layers.begin(); it != layer_end; it++ ) {
             DnnLayer *layer = *it;
@@ -33,36 +36,66 @@ namespace tfs {
     }
     
     bool
+    Dnn::addLayer( DnnLayerInput *layer ) {
+        if( layer == 0 ) {
+            return log_error( "null layer" );
+        }
+        if( !m_layers.empty()) {
+            delete layer;
+            return log_error( "Input layer should be the first layer" );
+        }
+        m_layers.push_back( layer );
+        m_layer_input = layer;
+        return true;
+    }
+    
+    bool
+    Dnn::addLayer( DnnLayer *layer ) {
+        if( layer == 0 ) {
+            return log_error( "null layer" );
+        }
+        if( m_layers.empty()) {
+            delete layer;
+            return log_error( "Input layer should be the first layer" );
+        }
+        m_layers.push_back( layer );
+        m_layer_output = layer;
+        return true;
+    }
+    
+    bool
     Dnn::addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz ) {
         // Add an input layer
         if( xx < 1 || yy < 1 || zz < 1 ) {
             return log_error( "bad args" );
         }
         DnnLayerInput *layer = new DnnLayerInput( xx, yy, zz );
-        m_layers.push_back( layer );
-        
-        return true;
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride, unsigned long pad ) {
-        // ADD A Convolution Layer
-        return true;
+        // Add A Convolution Layer
+        DnnLayerConvolution *layer = new DnnLayerConvolution();
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerDropout( void ) {
-        return true;
+        DnnLayerDropout *layer = new DnnLayerDropout();
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerFullyConnected( unsigned long xx, unsigned long yy, unsigned long zz ) {
-        return true;
+        DnnLayerFullyConnected *layer = new DnnLayerFullyConnected( xx, yy, zz );
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerLocalResponseNormalization( void ) {
-        return true;
+        DnnLayerLocalResponseNormalization *layer = new DnnLayerLocalResponseNormalization();
+        return addLayer( layer );
     }
     
     bool
@@ -106,6 +139,16 @@ namespace tfs {
         return true;
     }
     
+    DnnLayerInput*
+    Dnn::getLayerInput(  void ) {
+        return m_layer_input;
+    }
+    
+    DnnLayer*
+    Dnn::getLayerOutput( void ) {
+        return m_layer_output;
+    }
+
     void
     Dnn::randomize( void ) {
         // Randomize weights and bias.

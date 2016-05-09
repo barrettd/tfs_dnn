@@ -18,10 +18,17 @@
 namespace tfs {     // Tree Frog Software
 
     class DnnLayer;
+    class DnnLayerInput;
 
     class Dnn {
     protected:
-        std::vector< DnnLayer* > m_layers;
+        std::vector< DnnLayer* > m_layers;              // This collection "owns" all of the layers
+        DnnLayerInput           *m_layer_input;
+        DnnLayer                *m_layer_output;
+        
+    protected:
+        bool addLayer( DnnLayerInput *layer );
+        bool addLayer( DnnLayer      *layer );
 
     public:
         Dnn( void );
@@ -43,6 +50,9 @@ namespace tfs {     // Tree Frog Software
         bool addLayerSoftmax( unsigned long classCount );   // softmax
         bool addLayerSupportVectorMachine( void );          // svm
         bool addLayerTanh( void );                          // tanh
+        
+        DnnLayerInput *getLayerInput(  void );
+        DnnLayer      *getLayerOutput( void );
         
         void randomize( void );                             // Randomize weights and bias.
 

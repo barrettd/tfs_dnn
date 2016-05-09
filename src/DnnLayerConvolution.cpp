@@ -6,3 +6,17 @@
 // --------------------------------------------------------------------
 
 #include "DnnLayerConvolution.h"
+
+namespace tfs {
+    
+    
+    DnnLayerConvolution::DnnLayerConvolution( void ) {
+        // Constructor
+    }
+    
+    DnnLayerConvolution::~DnnLayerConvolution( void ) {
+        // Destructor
+    }
+    
+    
+}   // namespace tfs

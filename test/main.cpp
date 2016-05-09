@@ -12,7 +12,7 @@ namespace tfs {
     
     
     bool
-    testAssembly( void ) {
+    testAssemblyCifar10( void ) {
         // Taking an example from ConvNetJS cifar10: http://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html
 //        layer_defs = [];
 //        layer_defs.push({type:'input', out_sx:32, out_sy:32, out_depth:3});
@@ -78,7 +78,7 @@ int
 main( int argc, const char * argv[] ) {
     std::cout << "Test DNN begin\n";
     
-    tfs::testAssembly();
+    tfs::testAssemblyCifar10();
     
     std::cout << "Test DNN end\n";
     return 0;
