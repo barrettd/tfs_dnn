@@ -7,5 +7,21 @@
 #ifndef DnnLayerMaxout_h
 #define DnnLayerMaxout_h
 
+#include "DnnLayer.h"
+
+namespace tfs {
+    
+    class DnnLayerMaxout : public DnnLayer {
+    protected:
+        
+    public:
+        DnnLayerMaxout( void );
+        virtual ~DnnLayerMaxout( void );
+        
+    };
+    
+    
+}   // namespace tfs
+
 
 #endif /* DnnLayerMaxout_h */

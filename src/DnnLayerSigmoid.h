@@ -7,5 +7,20 @@
 #ifndef DnnLayerSigmoid_h
 #define DnnLayerSigmoid_h
 
+#include "DnnLayer.h"
+
+namespace tfs {
+    
+    class DnnLayerSigmoid : public DnnLayer {
+    protected:
+        
+    public:
+        DnnLayerSigmoid( void );
+        virtual ~DnnLayerSigmoid( void );
+        
+    };
+    
+    
+}   // namespace tfs
 
 #endif /* DnnLayerSigmoid_h */

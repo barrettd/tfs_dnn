@@ -100,43 +100,51 @@ namespace tfs {
     
     bool
     Dnn::addLayerMaxout( void ) {
-        return true;
+        DnnLayerMaxout *layer = new DnnLayerMaxout();
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerPool( unsigned long side, unsigned long stride ) {
-        return true;
+        DnnLayerPool *layer = new DnnLayerPool();
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerRectifiedLinearUnit( void ) {
         // Add a ReLu layer
-        return true;
+        DnnLayerRectifiedLinearUnit *layer = new DnnLayerRectifiedLinearUnit();
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerRegression( void ) {
-        return true;
+        DnnLayerRegression *layer = new DnnLayerRegression();
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerSigmoid( void ) {
-        return true;
+        DnnLayerSigmoid *layer = new DnnLayerSigmoid();
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerSoftmax( unsigned long classCount ) {
-        return true;
+        DnnLayerSoftmax *layer = new DnnLayerSoftmax();
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerSupportVectorMachine( void ) {
-        return true;
+        DnnLayerSupportVectorMachine *layer = new DnnLayerSupportVectorMachine();
+        return addLayer( layer );
     }
     
     bool
     Dnn::addLayerTanh( void ) {
-        return true;
+        DnnLayerTanh *layer = new DnnLayerTanh();
+        return addLayer( layer );
     }
     
     DnnLayerInput*

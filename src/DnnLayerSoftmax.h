@@ -7,5 +7,20 @@
 #ifndef DnnLayerSoftmax_h
 #define DnnLayerSoftmax_h
 
+#include "DnnLayer.h"
+
+namespace tfs {
+    
+    class DnnLayerSoftmax : public DnnLayer {
+    protected:
+        
+    public:
+        DnnLayerSoftmax( void );
+        virtual ~DnnLayerSoftmax( void );
+        
+    };
+    
+    
+}   // namespace tfs
 
 #endif /* DnnLayerSoftmax_h */

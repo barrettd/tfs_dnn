@@ -7,5 +7,20 @@
 #ifndef DnnLayerRegression_h
 #define DnnLayerRegression_h
 
+#include "DnnLayer.h"
+
+namespace tfs {
+    
+    class DnnLayerRegression : public DnnLayer {
+    protected:
+        
+    public:
+        DnnLayerRegression( void );
+        virtual ~DnnLayerRegression( void );
+        
+    };
+    
+    
+}   // namespace tfs
 
 #endif /* DnnLayerRegression_h */

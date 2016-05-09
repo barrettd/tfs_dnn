@@ -19,6 +19,7 @@
 #include "DnnLayerRectifiedLinearUnit.h"
 #include "DnnLayerRegression.h"
 #include "DnnLayerSigmoid.h"
+#include "DnnLayerSoftmax.h"
 #include "DnnLayerSupportVectorMachine.h"
 #include "DnnLayerTanh.h"
 

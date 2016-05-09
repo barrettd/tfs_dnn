@@ -7,5 +7,20 @@
 #ifndef DnnLayerRectifiedLinearUnit_h
 #define DnnLayerRectifiedLinearUnit_h
 
+#include "DnnLayer.h"
+
+namespace tfs {
+    
+    class DnnLayerRectifiedLinearUnit : public DnnLayer {
+    protected:
+        
+    public:
+        DnnLayerRectifiedLinearUnit( void );
+        virtual ~DnnLayerRectifiedLinearUnit( void );
+        
+    };
+    
+    
+}   // namespace tfs
 
 #endif /* DnnLayerRectifiedLinearUnit_h */

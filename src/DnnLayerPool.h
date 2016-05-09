@@ -7,5 +7,20 @@
 #ifndef DnnLayerPool_h
 #define DnnLayerPool_h
 
+#include "DnnLayer.h"
+
+namespace tfs {
+    
+    class DnnLayerPool : public DnnLayer {
+    protected:
+        
+    public:
+        DnnLayerPool( void );
+        virtual ~DnnLayerPool( void );
+        
+    };
+    
+    
+}   // namespace tfs
 
 #endif /* DnnLayerPool_h */

@@ -7,5 +7,20 @@
 #ifndef DnnLayerSupportVectorMachine_h
 #define DnnLayerSupportVectorMachine_h
 
+#include "DnnLayer.h"
+
+namespace tfs {
+    
+    class DnnLayerSupportVectorMachine : public DnnLayer {
+    protected:
+        
+    public:
+        DnnLayerSupportVectorMachine( void );
+        virtual ~DnnLayerSupportVectorMachine( void );
+        
+    };
+    
+    
+}   // namespace tfs
 
 #endif /* DnnLayerSupportVectorMachine_h */
