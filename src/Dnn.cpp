@@ -23,7 +23,7 @@ namespace tfs {
     
     void
     Dnn::clear( void ) {
-        // Clean up the layers.
+        // Delete all of the layers.
         m_layer_input  = 0;
         m_layer_output = 0;
         std::vector< DnnLayer* >::const_iterator layer_end = m_layers.end();
@@ -35,8 +35,15 @@ namespace tfs {
         return;
     }
     
+    unsigned long
+    Dnn::count( void ) const {
+        // Return the number of layers
+        return m_layers.size();
+    }
+    
     bool
     Dnn::addLayer( DnnLayerInput *layer ) {
+        // Add the input layer to our collection.  It should be the first layer.
         if( layer == 0 ) {
             return log_error( "null layer" );
         }
@@ -45,12 +52,13 @@ namespace tfs {
             return log_error( "Input layer should be the first layer" );
         }
         m_layers.push_back( layer );
-        m_layer_input = layer;
+        m_layer_input = layer;          // Remember our input layer
         return true;
     }
     
     bool
     Dnn::addLayer( DnnLayer *layer ) {
+        // Add subsequent layers to our collection.
         if( layer == 0 ) {
             return log_error( "null layer" );
         }
@@ -59,7 +67,7 @@ namespace tfs {
             return log_error( "Input layer should be the first layer" );
         }
         m_layers.push_back( layer );
-        m_layer_output = layer;
+        m_layer_output = layer;         // Remember the last layer seen as the output layer.
         return true;
     }
     
@@ -188,8 +196,8 @@ namespace tfs {
     bool
     Dnn::backprop( void ) {
         // Back propagate while training
-        std::vector< DnnLayer* >::const_iterator layer_end = m_layers.end();
-        for( std::vector< DnnLayer* >::const_iterator it = m_layers.begin(); it != layer_end; it++ ) {
+        std::vector< DnnLayer* >::const_reverse_iterator layer_end = m_layers.rend();
+        for( std::vector< DnnLayer* >::const_reverse_iterator it = m_layers.rbegin(); it != layer_end; it++ ) {
             DnnLayer *layer = *it;
             if( layer != 0 ) {
                 if( !layer->backprop()) {

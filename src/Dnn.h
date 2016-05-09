@@ -35,6 +35,7 @@ namespace tfs {     // Tree Frog Software
         virtual ~Dnn( void );
         
         void clear( void );                                 // Remove all of the layers.
+        unsigned long count( void ) const;                  // Count of the layers.
         
         bool addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz = 1 ); // input
 
