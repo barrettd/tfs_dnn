@@ -10,12 +10,14 @@
 namespace tfs {
     
     DnnLayer::DnnLayer( void ):
-    m_x( 0 ), m_y( 0 ), m_z( 0 ) {
+    m_in_x(  0 ), m_in_y(  0 ), m_in_z(  0 ),
+    m_out_x( 0 ), m_out_y( 0 ), m_out_z( 0 ) {
         // Constructor
     }
     
     DnnLayer::DnnLayer( unsigned long xx, unsigned long yy, unsigned long zz ) :
-    m_x( xx ), m_y( yy ), m_z( zz ) {
+    m_in_x(  xx ), m_in_y(  yy ), m_in_z(  zz ),
+    m_out_x( xx ), m_out_y( yy ), m_out_z( zz ) {
         // Constructor
     }
     

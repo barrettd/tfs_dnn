@@ -11,9 +11,12 @@ namespace tfs {
     
     class DnnLayer {            // Base class of all layers.
     protected:
-        unsigned long m_x;
-        unsigned long m_y;
-        unsigned long m_z;      // Depth
+        unsigned long m_in_x;
+        unsigned long m_in_y;
+        unsigned long m_in_z;      // Depth
+        unsigned long m_out_x;
+        unsigned long m_out_y;
+        unsigned long m_out_z;      // Depth
         
     public:
         DnnLayer( void );

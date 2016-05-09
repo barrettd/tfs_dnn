@@ -10,4 +10,16 @@
 
 #include "DnnLayerInput.h"
 
+#include "DnnLayerConvolution.h"
+#include "DnnLayerDropout.h"
+#include "DnnLayerFullyConnected.h"
+#include "DnnLayerLocalResponseNormalization.h"
+#include "DnnLayerMaxout.h"
+#include "DnnLayerPool.h"
+#include "DnnLayerRectifiedLinearUnit.h"
+#include "DnnLayerRegression.h"
+#include "DnnLayerSigmoid.h"
+#include "DnnLayerSupportVectorMachine.h"
+#include "DnnLayerTanh.h"
+
 #endif /* DnnLayers_h */
