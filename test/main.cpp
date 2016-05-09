@@ -29,12 +29,11 @@ namespace tfs {
 //        
 //        trainer = new convnetjs.SGDTrainer(net, {method:'adadelta', batch_size:4, l2_decay:0.0001});
         Dnn *dnn = new Dnn();
-        // Input layer
-        if( !dnn->addLayerInput( 32, 32, 3 )) {             // Input layer for RGB image
+        if( !dnn->addLayerInput( 32, 32, 3 )) {             // Input layer for 32x32 RGB image
             return log_error( "Cannot add Input layer" );
         }
         // Convolution / Pool set:
-        if( !dnn->addLayerConvolution( 5, 16, 1, 2 )) {
+        if( !dnn->addLayerConvolution( 5, 16, 1, 2 )) {     // 16 5x5 filters for convolution
             return log_error( "Cannot add Convolution layer" );
         }
         if( !dnn->addLayerRectifiedLinearUnit()) {          // Activation function for previous layer.
@@ -44,7 +43,7 @@ namespace tfs {
             return log_error( "Cannot add Pool layer" );
         }
         // Convolution / Pool set:
-        if( !dnn->addLayerConvolution( 5, 20, 1, 2 )) {
+        if( !dnn->addLayerConvolution( 5, 20, 1, 2 )) {     // 20 5x5 filters for convolution
             return log_error( "Cannot add Convolution layer" );
         }
         if( !dnn->addLayerRectifiedLinearUnit()) {          // Activation function for previous layer.
@@ -54,7 +53,7 @@ namespace tfs {
             return log_error( "Cannot add Pool layer" );
         }
         // Convolution / Pool set:
-        if( !dnn->addLayerConvolution( 5, 20, 1, 2 )) {
+        if( !dnn->addLayerConvolution( 5, 20, 1, 2 )) {     // 20 5x5 filters for convolution
             return log_error( "Cannot add Convolution layer" );
         }
         if( !dnn->addLayerRectifiedLinearUnit()) {          // Activation function for previous layer.
