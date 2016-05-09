@@ -33,14 +33,14 @@ namespace tfs {     // Tree Frog Software
 
         bool addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride = 1, unsigned long pad = 0 ); // conv (square)
         bool addLayerDropout( void );                       // dropout
-        bool addLayerFullyConnected( void );                // fully connected
+        bool addLayerFullyConnected( unsigned long xx, unsigned long yy, unsigned long zz = 1 );  // fully connected
         bool addLayerLocalResponseNormalization( void );    // lrn
         bool addLayerMaxout( void );                        // maxout
         bool addLayerPool( unsigned long side, unsigned long stride = 1 );  // pool (square)
         bool addLayerRectifiedLinearUnit( void );           // relu
         bool addLayerRegression( void );                    // regression
         bool addLayerSigmoid( void );                       // sigmoid
-        bool addLayerSoftmax( void );                       // softmax
+        bool addLayerSoftmax( unsigned long classCount );   // softmax
         bool addLayerSupportVectorMachine( void );          // svm
         bool addLayerTanh( void );                          // tanh
         

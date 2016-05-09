@@ -1,5 +1,5 @@
 # tfs_dnn
-C++ Deep Neural Net library
+C++ Deep Neural Net library - Under initial development, please ignore this project for the moment.
 
 
 

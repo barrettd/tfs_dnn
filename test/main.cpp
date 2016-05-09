@@ -1,11 +1,9 @@
-//
+// --------------------------------------------------------------------
 //  main.cpp
-//  TestNeuralNet
 //
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
-//
-
+// --------------------------------------------------------------------
 #include <iostream>
 #include "Dnn.h"
 #include "Error.h"
@@ -32,7 +30,7 @@ namespace tfs {
 //        trainer = new convnetjs.SGDTrainer(net, {method:'adadelta', batch_size:4, l2_decay:0.0001});
         Dnn *dnn = new Dnn();
         // Input layer
-        if( !dnn->addLayerInput( 32, 32, 1 )) {
+        if( !dnn->addLayerInput( 32, 32, 3 )) {             // Input layer for RGB image
             return log_error( "Cannot add Input layer" );
         }
         // Convolution / Pool set:
@@ -65,7 +63,13 @@ namespace tfs {
         if( !dnn->addLayerPool( 2, 2 )) {
             return log_error( "Cannot add Pool layer" );
         }
-
+        // Fully connected layer with softmax:
+        if( !dnn->addLayerFullyConnected( 1, 1, 10 )) {
+            return log_error( "Cannot add Fully Connected layer" );
+        }
+        if( !dnn->addLayerSoftmax( 10 )) {                  // Output classifier
+            return log_error( "Cannot add Softmax layer" );
+        }
         return true;
     }
 

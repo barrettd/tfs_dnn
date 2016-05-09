@@ -56,7 +56,7 @@ namespace tfs {
     }
     
     bool
-    Dnn::addLayerFullyConnected( void ) {
+    Dnn::addLayerFullyConnected( unsigned long xx, unsigned long yy, unsigned long zz ) {
         return true;
     }
     
@@ -92,7 +92,7 @@ namespace tfs {
     }
     
     bool
-    Dnn::addLayerSoftmax( void ) {
+    Dnn::addLayerSoftmax( unsigned long classCount ) {
         return true;
     }
     
