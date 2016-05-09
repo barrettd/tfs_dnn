@@ -34,7 +34,7 @@ namespace tfs {
     }
 
     bool
-    DnnLayer::backward( void ) {  // Back propagate while training
+    DnnLayer::backprop( void ) {  // Back propagate while training
         return true;
     }
 

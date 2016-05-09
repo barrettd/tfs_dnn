@@ -7,6 +7,7 @@
 
 #include "Dnn.h"
 #include "DnnLayers.h"
+#include "Error.h"
 
 namespace tfs {
    
@@ -35,7 +36,7 @@ namespace tfs {
     Dnn::addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz ) {
         // Add an input layer
         if( xx < 1 || yy < 1 || zz < 1 ) {
-            return false;
+            return log_error( "bad args" );
         }
         DnnLayerInput *layer = new DnnLayerInput( xx, yy, zz );
         m_layers.push_back( layer );
@@ -44,8 +45,8 @@ namespace tfs {
     }
     
     bool
-    Dnn::addLayerConvolution( void ) {
-        // Convolution Layer
+    Dnn::addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride, unsigned long pad ) {
+        // ADD A Convolution Layer
         return true;
     }
     
@@ -70,12 +71,13 @@ namespace tfs {
     }
     
     bool
-    Dnn::addLayerPool( void ) {
+    Dnn::addLayerPool( unsigned long side, unsigned long stride ) {
         return true;
     }
     
     bool
     Dnn::addLayerRectifiedLinearUnit( void ) {
+        // Add a ReLu layer
         return true;
     }
     
@@ -107,18 +109,43 @@ namespace tfs {
     void
     Dnn::randomize( void ) {
         // Randomize weights and bias.
+        std::vector< DnnLayer* >::const_iterator layer_end = m_layers.end();
+        for( std::vector< DnnLayer* >::const_iterator it = m_layers.begin(); it != layer_end; it++ ) {
+            DnnLayer *layer = *it;
+            if( layer != 0 ) {
+                layer->randomize();
+            }
+        }
         return;
     }
     
     bool
     Dnn::forward(  void ) {
         // Forward propagate while training
+        std::vector< DnnLayer* >::const_iterator layer_end = m_layers.end();
+        for( std::vector< DnnLayer* >::const_iterator it = m_layers.begin(); it != layer_end; it++ ) {
+            DnnLayer *layer = *it;
+            if( layer != 0 ) {
+                if( !layer->forward()) {
+                    return log_error( "forward propagate failed" );
+                }
+            }
+        }
         return true;
     }
     
     bool
-    Dnn::backward( void ) {
+    Dnn::backprop( void ) {
         // Back propagate while training
+        std::vector< DnnLayer* >::const_iterator layer_end = m_layers.end();
+        for( std::vector< DnnLayer* >::const_iterator it = m_layers.begin(); it != layer_end; it++ ) {
+            DnnLayer *layer = *it;
+            if( layer != 0 ) {
+                if( !layer->backprop()) {
+                    return log_error( "back propagate failed" );
+                }
+            }
+        }
         return true;
     }
     
@@ -131,7 +158,7 @@ namespace tfs {
     bool
     Dnn::save( const char *file_path ) const  {
         if( file_path == 0 || *file_path == 0 ) {
-            return false;
+            return log_error( "bad file path" );
         }
         return true;
     }
@@ -139,7 +166,7 @@ namespace tfs {
     bool
     Dnn::load( const char *file_path ) {
         if( file_path == 0 || *file_path == 0 ) {
-            return false;
+            return log_error( "bad file path" );
         }
         return true;
     }

@@ -4,6 +4,10 @@
 //
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
+//  Software released under the The MIT License (MIT)
+//  Please feel free to use this software as you wish, but please
+//  drop me a line to let me know how you are using this library.
+//  Regards, Barrett Davis: barrett (at) thefrog.com
 // --------------------------------------------------------------------
 #ifndef dnn_h
 #define dnn_h
@@ -27,12 +31,12 @@ namespace tfs {     // Tree Frog Software
         
         bool addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz = 1 ); // input
 
-        bool addLayerConvolution( void );                   // conv
+        bool addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride = 1, unsigned long pad = 0 ); // conv (square)
         bool addLayerDropout( void );                       // dropout
         bool addLayerFullyConnected( void );                // fully connected
         bool addLayerLocalResponseNormalization( void );    // lrn
         bool addLayerMaxout( void );                        // maxout
-        bool addLayerPool( void );                          // pool
+        bool addLayerPool( unsigned long side, unsigned long stride = 1 );  // pool (square)
         bool addLayerRectifiedLinearUnit( void );           // relu
         bool addLayerRegression( void );                    // regression
         bool addLayerSigmoid( void );                       // sigmoid
@@ -43,7 +47,7 @@ namespace tfs {     // Tree Frog Software
         void randomize( void );                             // Randomize weights and bias.
 
         bool forward(  void );  // Forward propagate while training
-        bool backward( void );  // Back propagate while training
+        bool backprop( void );  // Back propagate while training
         bool predict(  void );  // Forward progagate when predicting
 
         bool save( const char *file_path ) const;

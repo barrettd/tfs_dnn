@@ -23,7 +23,7 @@ namespace tfs {
         virtual void randomize( void ); // Randomize weights and bias.
 
         virtual bool forward(  void );  // Forward propagate while training
-        virtual bool backward( void );  // Back propagate while training
+        virtual bool backprop( void );  // Back propagate while training
         virtual bool predict(  void );  // Forward progagate when predicting
         
     };
