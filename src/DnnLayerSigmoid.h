@@ -15,6 +15,8 @@ namespace tfs {
     protected:
         
     public:
+        static const char *className( void );
+
         DnnLayerSigmoid( void );
         virtual ~DnnLayerSigmoid( void );
         

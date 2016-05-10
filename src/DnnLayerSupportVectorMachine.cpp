@@ -8,8 +8,15 @@
 
 namespace tfs {
     
-    
-    DnnLayerSupportVectorMachine::DnnLayerSupportVectorMachine( void ) {
+    static const char *NAME = "svm";
+
+    const char*
+    DnnLayerSupportVectorMachine::className( void ) {
+        return NAME;
+    }
+
+    DnnLayerSupportVectorMachine::DnnLayerSupportVectorMachine( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     

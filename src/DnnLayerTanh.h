@@ -15,6 +15,8 @@ namespace tfs {
     protected:
         
     public:
+        static const char *className( void );
+
         DnnLayerTanh( void );
         virtual ~DnnLayerTanh( void );
         

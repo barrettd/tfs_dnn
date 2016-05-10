@@ -61,8 +61,14 @@ namespace tfs {     // Tree Frog Software
         bool backprop( void );  // Back propagate while training
         bool predict(  void );  // Forward progagate when predicting
 
+        // Binary file I/O
         bool save( const char *file_path ) const;
         bool load( const char *file_path );
+
+        // JSON file I/O, compatible with ConvNetJs 
+        bool saveJson( const char *file_path ) const;
+        bool loadJson( const char *file_path );
+
     };
     
 

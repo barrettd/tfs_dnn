@@ -8,12 +8,20 @@
 
 namespace tfs {
     
-    DnnLayerFullyConnected::DnnLayerFullyConnected( void ) {
+    static const char *NAME = "fc";
+
+    const char*
+    DnnLayerFullyConnected::className( void ) {
+        return NAME;
+    }
+
+    DnnLayerFullyConnected::DnnLayerFullyConnected( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     
     DnnLayerFullyConnected::DnnLayerFullyConnected( unsigned long xx, unsigned long yy, unsigned long zz ) :
-    DnnLayer( xx, yy, zz ) {
+    DnnLayer( NAME, xx, yy, zz ) {
         // Constructor
     }
     

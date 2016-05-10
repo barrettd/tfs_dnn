@@ -8,8 +8,15 @@
 
 namespace tfs {
     
+    static const char *NAME = "regression";
+
+    const char*
+    DnnLayerRegression::className( void ) {
+        return NAME;
+    }
     
-    DnnLayerRegression::DnnLayerRegression( void ) {
+    DnnLayerRegression::DnnLayerRegression( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     

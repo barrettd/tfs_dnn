@@ -8,8 +8,15 @@
 
 namespace tfs {
     
-    
-    DnnLayerRectifiedLinearUnit::DnnLayerRectifiedLinearUnit( void ) {
+    static const char *NAME = "relu";
+
+    const char*
+    DnnLayerRectifiedLinearUnit::className( void ) {
+        return NAME;
+    }
+
+    DnnLayerRectifiedLinearUnit::DnnLayerRectifiedLinearUnit( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     

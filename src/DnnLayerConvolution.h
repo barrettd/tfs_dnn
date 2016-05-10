@@ -15,6 +15,8 @@ namespace tfs {
     protected:
         
     public:
+        static const char *className( void );
+
         DnnLayerConvolution( void );
         virtual ~DnnLayerConvolution( void );
         

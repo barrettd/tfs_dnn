@@ -10,8 +10,15 @@
 
 namespace tfs {
     
-    
-    DnnLayerDropout::DnnLayerDropout( void ) {
+    static const char *NAME = "dropout";
+
+    const char*
+    DnnLayerDropout::className( void ) {
+        return NAME;
+    }
+
+    DnnLayerDropout::DnnLayerDropout( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     

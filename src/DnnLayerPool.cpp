@@ -8,8 +8,15 @@
 
 namespace tfs {
     
-    
-    DnnLayerPool::DnnLayerPool( void ) {
+    static const char *NAME = "pool";
+
+    const char*
+    DnnLayerPool::className( void ) {
+        return NAME;
+    }
+
+    DnnLayerPool::DnnLayerPool( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     

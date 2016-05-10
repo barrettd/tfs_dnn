@@ -8,8 +8,15 @@
 
 namespace tfs {
     
-    
-    DnnLayerSoftmax::DnnLayerSoftmax( void ) {
+    static const char *NAME = "softmax";
+
+    const char*
+    DnnLayerSoftmax::className( void ) {
+        return NAME;
+    }
+
+    DnnLayerSoftmax::DnnLayerSoftmax( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     

@@ -8,8 +8,15 @@
 
 namespace tfs {
     
-    
-    DnnLayerSigmoid::DnnLayerSigmoid( void ) {
+    static const char *NAME = "sigmoid";
+
+    const char*
+    DnnLayerSigmoid::className( void ) {
+        return NAME;
+    }
+
+    DnnLayerSigmoid::DnnLayerSigmoid( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     

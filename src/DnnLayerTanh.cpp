@@ -8,8 +8,15 @@
 
 namespace tfs {
     
-    
-    DnnLayerTanh::DnnLayerTanh( void ) {
+    static const char *NAME = "tanh";
+
+    const char*
+    DnnLayerTanh::className( void ) {
+        return NAME;
+    }
+
+    DnnLayerTanh::DnnLayerTanh( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     

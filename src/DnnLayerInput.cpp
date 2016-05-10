@@ -8,13 +8,20 @@
 
 namespace tfs {
 
-
-    DnnLayerInput::DnnLayerInput( void ) {
+    static const char *NAME = "input";
+    
+    const char*
+    DnnLayerInput::className( void ) {
+        return NAME;
+    }
+    
+    DnnLayerInput::DnnLayerInput( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     
     DnnLayerInput::DnnLayerInput( unsigned long xx, unsigned long yy, unsigned long zz ) :
-    DnnLayer( xx, yy, zz ) {
+    DnnLayer( NAME, xx, yy, zz ) {
         // Constructor
     }
     

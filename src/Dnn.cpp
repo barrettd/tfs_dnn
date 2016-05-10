@@ -214,6 +214,8 @@ namespace tfs {
         return true;
     }
 
+    
+    // Binary file I/O
     bool
     Dnn::save( const char *file_path ) const  {
         if( file_path == 0 || *file_path == 0 ) {
@@ -229,6 +231,24 @@ namespace tfs {
         }
         return true;
     }
+    
+    // JSON file I/O, compatible with ConvNetJs
+    bool
+    Dnn::saveJson( const char *file_path ) const {
+        if( file_path == 0 || *file_path == 0 ) {
+            return log_error( "bad file path" );
+        }
+        return true;
+    }
+    
+    bool
+    Dnn::loadJson( const char *file_path ) {
+        if( file_path == 0 || *file_path == 0 ) {
+            return log_error( "bad file path" );
+        }
+        return true;
+    }
+
     
 
     

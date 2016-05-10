@@ -8,9 +8,16 @@
 #include "DnnLayerConvolution.h"
 
 namespace tfs {
-    
-    
-    DnnLayerConvolution::DnnLayerConvolution( void ) {
+  
+    static const char *NAME = "conv";
+
+    const char*
+    DnnLayerConvolution::className( void ) {
+        return NAME;
+    }
+
+    DnnLayerConvolution::DnnLayerConvolution( void ):
+    DnnLayer( NAME ) {
         // Constructor
     }
     

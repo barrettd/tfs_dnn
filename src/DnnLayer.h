@@ -11,6 +11,7 @@ namespace tfs {
     
     class DnnLayer {            // Base class of all layers.
     protected:
+        const char   *m_name;   // Used in serialization.
         unsigned long m_in_x;
         unsigned long m_in_y;
         unsigned long m_in_z;      // Depth
@@ -19,9 +20,12 @@ namespace tfs {
         unsigned long m_out_z;      // Depth
         
     public:
-        DnnLayer( void );
-        DnnLayer( unsigned long xx, unsigned long yy, unsigned long zz = 1 );
+        DnnLayer( const char *name );
+        DnnLayer( const char *name, unsigned long xx, unsigned long yy, unsigned long zz = 1 );
         virtual ~DnnLayer( void );
+        
+        const char *getName( void ) const;
+        const char *setName( const char *name );
         
         virtual void randomize( void ); // Randomize weights and bias.
 

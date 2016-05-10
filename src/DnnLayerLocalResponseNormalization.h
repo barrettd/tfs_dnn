@@ -16,6 +16,8 @@ namespace tfs {
     protected:
         
     public:
+        static const char *className( void );
+
         DnnLayerLocalResponseNormalization( void );
         virtual ~DnnLayerLocalResponseNormalization( void );
         
