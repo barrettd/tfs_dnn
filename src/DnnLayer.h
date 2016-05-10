@@ -7,6 +7,9 @@
 #ifndef dnnLayer_h
 #define dnnLayer_h
 
+#include <vector>
+#include "Constants.h"
+
 namespace tfs {
     
     class DnnLayer {            // Base class of all layers.
@@ -29,9 +32,13 @@ namespace tfs {
         
         virtual void randomize( void ); // Randomize weights and bias.
 
-        virtual bool forward(  void );  // Forward propagate while training
+        virtual bool forward( const std::vector< DNN_NUMERIC > &data,
+                              const std::vector< DNN_NUMERIC > &expectation );  // Forward propagate while training
+        
         virtual bool backprop( void );  // Back propagate while training
-        virtual bool predict(  void );  // Forward progagate when predicting
+        
+        virtual bool predict( const std::vector< DNN_NUMERIC > &data,
+                                    std::vector< DNN_NUMERIC > &prediction );   // Forward progagate when predicting
         
     };
     

@@ -179,7 +179,7 @@ namespace tfs {
     }
     
     bool
-    Dnn::forward(  void ) {
+    Dnn::forward( std::vector< DNN_NUMERIC > &data, std::vector< DNN_NUMERIC > &expectation ) {
         // Forward propagate while training
         std::vector< DnnLayer* >::const_iterator layer_end = m_layers.end();
         for( std::vector< DnnLayer* >::const_iterator it = m_layers.begin(); it != layer_end; it++ ) {
@@ -209,7 +209,7 @@ namespace tfs {
     }
     
     bool
-    Dnn::predict( void ) {
+    Dnn::predict( std::vector< DNN_NUMERIC > &data, std::vector< DNN_NUMERIC > &prediction ) {
         // Forward progagate when predicting
         return true;
     }
