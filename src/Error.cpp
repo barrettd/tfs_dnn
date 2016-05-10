@@ -20,7 +20,7 @@ namespace tfs {     // Tree Frog Software
         if( level != 0 ) {
             stream << level << ": ";
         } else {
-            level = "Unkn : ";
+            stream << "Unkn : ";
         }
         if( file != 0 ) {
             stream << file  << " ";
