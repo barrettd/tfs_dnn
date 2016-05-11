@@ -16,10 +16,12 @@ namespace tfs {
     public:
         static const char *className( void );
         
-        DnnLayerInput( unsigned long xx, unsigned long yy, unsigned long zz = 1 );
+        DnnLayerInput( unsigned long xx, unsigned long yy = 1, unsigned long zz = 1 );
         virtual ~DnnLayerInput( void );
        
-        virtual bool forward( const DNN_NUMERIC *data, const unsigned long length );  // Forward propagate while training
+        virtual void randomize( void );     // Randomize weights and bias.
+
+        virtual bool forward( const DNN_NUMERIC *data, const unsigned long length );   // Forward propagate while training
         virtual bool predict( const DNN_NUMERIC *data, const unsigned long length );   // Forward progagate when predicting
 
     };

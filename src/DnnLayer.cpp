@@ -4,7 +4,8 @@
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-
+#include <cmath>        // sqrt()
+#include <cstdlib>      // RAND_MAX
 #include "DnnLayer.h"
 
 namespace tfs {
@@ -114,6 +115,16 @@ namespace tfs {
     void
     DnnLayer::randomize( void ) {
         // Randomize weights and bias.
+        // Weight normalization is done to equalize the output variance of every neuron,
+        // otherwise neurons with a lot of incoming connections will have outputs with a larger variance
+        if( m_w != 0 && m_size > 0 ) {
+            const DNN_NUMERIC scale = sqrt( 1.0 / m_size );
+            DNN_NUMERIC *ptr = m_w;
+            DNN_NUMERIC *end = m_w + m_size;
+            while( ptr < end ) {
+                *ptr++ = ((double) rand() / (RAND_MAX)) * scale;
+            }
+        }
         if( m_next_layer != 0 ) {
             m_next_layer->randomize();
         }

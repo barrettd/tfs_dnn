@@ -30,6 +30,15 @@ namespace tfs {
         m_w = 0;
     }
     
+    void
+    DnnLayerInput::randomize( void ) {
+        // Do not randomize the input.
+        if( m_next_layer != 0 ) {
+            m_next_layer->randomize();
+        }
+        return;
+    }
+    
     bool
     DnnLayerInput::forward( const DNN_NUMERIC *data, const unsigned long length ) {
         // Forward propagate while training
