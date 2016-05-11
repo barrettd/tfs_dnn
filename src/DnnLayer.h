@@ -28,18 +28,23 @@ namespace tfs {
         DnnLayer( const char *name, DnnLayer *previousLayer );
         virtual ~DnnLayer( void );
         
+        // Layer attributes:
         const char *name(   void ) const;
         Matrix     *w(  void );             // Weights
         Matrix     *dw( void );             // Weight derivatives
         Matrix     *a(  void );             // Activations
         
+        // Linked list pointers:
         DnnLayer *getPreviousLayer( void ) const;
         DnnLayer *setPreviousLayer( DnnLayer *layer );
         DnnLayer *getNextLayer( void ) const;
         DnnLayer *setNextLayer( DnnLayer *layer );
         
-        virtual void initialize( void );                // Zero activations, gradiant and randomize weights.
-        virtual void randomize(  void );                // Randomize gradiant.
+        // ----------------------------------------------------------------------------------------------
+        // These methods perform a function, then call the next layer in the chain to do the same.
+        // ----------------------------------------------------------------------------------------------
+        virtual void initialize( void );                // Zero activations, gradiant and randomize weights. Forward calling.
+        virtual void randomize(  void );                // Randomize gradiant. Forward calling.
         
         virtual bool forward( const Matrix &data );     // Forward propagate while training
         virtual bool backprop( void );                  // Back propagate while training

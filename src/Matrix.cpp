@@ -5,9 +5,9 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
 #include <cmath>        // sqrt()
-#include <cstdlib>      // RAND_MAX
 #include <cstring>      // memset()
 #include "Matrix.h"
+#include "Utility.h"
 
 namespace tfs {     // Tree Frog Software
  
@@ -60,7 +60,7 @@ namespace tfs {     // Tree Frog Software
             DNN_NUMERIC *ptr = m_data;
             const DNN_NUMERIC *end = m_data + m_size;
             while( ptr < end ) {
-                *ptr++ = ((DNN_NUMERIC) rand() / (RAND_MAX)) * scale;
+                *ptr++ = random( scale );
             }
         }
         return;

@@ -99,7 +99,7 @@ namespace tfs {
     }
     
     bool
-    Dnn::addLayerFullyConnected( void ) {
+    Dnn::addLayerFullyConnected( unsigned long neuronCount ) {
         DnnLayerFullyConnected *layer = new DnnLayerFullyConnected( m_layer_previous );
         return addLayer( layer );
     }
@@ -167,6 +167,17 @@ namespace tfs {
     DnnLayer*
     Dnn::getLayerOutput( void ) {
         return m_layer_output;
+    }
+
+    void
+    Dnn::initialize( void ) {
+        // Initialize for learning
+        if( m_layer_input != 0 ) {
+            m_layer_input->initialize();     // Calls each layer in the forward direction.
+        } else {
+            log_error( "No input layer" );
+        }
+        return;
     }
 
     void

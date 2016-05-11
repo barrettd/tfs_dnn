@@ -1,6 +1,6 @@
 //
 //  testCifar10.cpp
-//  TestNeuralNet
+//  Example inspired by http://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html
 //
 //  Created by Barrett Davis on 5/9/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
@@ -65,14 +65,14 @@ namespace tfs {
             return log_error( "Cannot add Pool layer" );
         }
         // Fully connected layer with softmax:
-        if( !dnn->addLayerFullyConnected()) {               //  1, 1, 10
+        if( !dnn->addLayerFullyConnected( 10 )) {               //  1, 1, 10
             return log_error( "Cannot add Fully Connected layer" );
         }
         if( !dnn->addLayerSoftmax( 10 )) {                  // Output classifier
             return log_error( "Cannot add Softmax layer" );
         }
         const unsigned long count = dnn->count();
-        log_info( "We have %lu layers", count );
+        log_info( "We have set up %lu layers", count );
         log_info( "Test Cifar10 - End" );
         return true;
     }

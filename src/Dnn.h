@@ -42,7 +42,7 @@ namespace tfs {     // Tree Frog Software
 
         bool addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride = 1, unsigned long pad = 0 ); // conv (square)
         bool addLayerDropout( void );                       // dropout
-        bool addLayerFullyConnected( void );                // fully connected
+        bool addLayerFullyConnected( unsigned long neuronCount ); // fully connected
         bool addLayerLocalResponseNormalization( void );    // lrn
         bool addLayerMaxout( void );                        // maxout
         bool addLayerPool( unsigned long side, unsigned long stride = 1 );  // pool (square)
@@ -56,6 +56,7 @@ namespace tfs {     // Tree Frog Software
         DnnLayerInput *getLayerInput(  void );
         DnnLayer      *getLayerOutput( void );
         
+        void initialize( void );                                        // Initialize for learning.
         void randomize( void );                                         // Randomize weights and bias.
 
         bool forward( const Matrix &data, const Matrix &expectation );  // Forward propagate while training
