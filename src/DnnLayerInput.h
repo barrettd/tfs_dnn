@@ -13,16 +13,15 @@
 namespace tfs {
     
     class DnnLayerInput : public DnnLayer {
-    protected:
-        // Only m_out_x, m_out_y, m_out_z really matter with this layer.
-        
     public:
         static const char *className( void );
         
-        DnnLayerInput( void );
         DnnLayerInput( unsigned long xx, unsigned long yy, unsigned long zz = 1 );
         virtual ~DnnLayerInput( void );
-        
+       
+        virtual bool forward( const DNN_NUMERIC *data, const unsigned long length );  // Forward propagate while training
+        virtual bool predict( const DNN_NUMERIC *data, const unsigned long length );   // Forward progagate when predicting
+
     };
     
 

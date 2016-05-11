@@ -15,16 +15,11 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerFullyConnected::DnnLayerFullyConnected( void ):
-    DnnLayer( NAME ) {
+    DnnLayerFullyConnected::DnnLayerFullyConnected( DnnLayer *previousLayer ):
+    DnnLayer( NAME, previousLayer ) {
         // Constructor
     }
-    
-    DnnLayerFullyConnected::DnnLayerFullyConnected( unsigned long xx, unsigned long yy, unsigned long zz ) :
-    DnnLayer( NAME, xx, yy, zz ) {
-        // Constructor
-    }
-    
+        
     DnnLayerFullyConnected::~DnnLayerFullyConnected( void ) {
         // Destructor
     }

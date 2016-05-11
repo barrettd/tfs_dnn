@@ -17,7 +17,7 @@ namespace tfs {
     public:
         static const char *className( void );
 
-        DnnLayerRectifiedLinearUnit( void );
+        DnnLayerRectifiedLinearUnit( DnnLayer *previousLayer );
         virtual ~DnnLayerRectifiedLinearUnit( void );
         
     };

@@ -15,8 +15,8 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerTanh::DnnLayerTanh( void ):
-    DnnLayer( NAME ) {
+    DnnLayerTanh::DnnLayerTanh( DnnLayer *previousLayer ):
+    DnnLayer( NAME, previousLayer ) {
         // Constructor
     }
     

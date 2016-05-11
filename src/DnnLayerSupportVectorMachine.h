@@ -17,7 +17,7 @@ namespace tfs {
     public:
         static const char *className( void );
 
-        DnnLayerSupportVectorMachine( void );
+        DnnLayerSupportVectorMachine( DnnLayer *previousLayer );
         virtual ~DnnLayerSupportVectorMachine( void );
         
     };

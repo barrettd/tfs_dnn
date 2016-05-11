@@ -15,8 +15,8 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerMaxout::DnnLayerMaxout( void ):
-    DnnLayer( NAME ) {
+    DnnLayerMaxout::DnnLayerMaxout( DnnLayer *previousLayer ):
+    DnnLayer( NAME, previousLayer ) {
         // Constructor
     }
     

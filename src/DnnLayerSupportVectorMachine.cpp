@@ -15,8 +15,8 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerSupportVectorMachine::DnnLayerSupportVectorMachine( void ):
-    DnnLayer( NAME ) {
+    DnnLayerSupportVectorMachine::DnnLayerSupportVectorMachine( DnnLayer *previousLayer ):
+    DnnLayer( NAME, previousLayer ) {
         // Constructor
     }
     

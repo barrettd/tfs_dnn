@@ -24,6 +24,7 @@ namespace tfs {     // Tree Frog Software
     protected:
         std::vector< DnnLayer* > m_layers;              // This collection "owns" all of the layers
         DnnLayerInput           *m_layer_input;
+        DnnLayer                *m_layer_previous;      // Used during creation of the layer stack.
         DnnLayer                *m_layer_output;
         
     protected:
@@ -41,7 +42,7 @@ namespace tfs {     // Tree Frog Software
 
         bool addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride = 1, unsigned long pad = 0 ); // conv (square)
         bool addLayerDropout( void );                       // dropout
-        bool addLayerFullyConnected( unsigned long xx, unsigned long yy, unsigned long zz = 1 );  // fully connected
+        bool addLayerFullyConnected( void );                // fully connected
         bool addLayerLocalResponseNormalization( void );    // lrn
         bool addLayerMaxout( void );                        // maxout
         bool addLayerPool( unsigned long side, unsigned long stride = 1 );  // pool (square)

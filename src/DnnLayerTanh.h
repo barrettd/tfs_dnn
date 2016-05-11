@@ -17,7 +17,7 @@ namespace tfs {
     public:
         static const char *className( void );
 
-        DnnLayerTanh( void );
+        DnnLayerTanh( DnnLayer *previousLayer );
         virtual ~DnnLayerTanh( void );
         
     };

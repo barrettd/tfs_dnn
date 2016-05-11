@@ -15,8 +15,8 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerLocalResponseNormalization::DnnLayerLocalResponseNormalization( void ):
-    DnnLayer( NAME ) {
+    DnnLayerLocalResponseNormalization::DnnLayerLocalResponseNormalization( DnnLayer *previousLayer ):
+    DnnLayer( NAME, previousLayer ) {
         // Constructor
     }
     

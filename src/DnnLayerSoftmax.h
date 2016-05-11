@@ -17,7 +17,7 @@ namespace tfs {
     public:
         static const char *className( void );
 
-        DnnLayerSoftmax( void );
+        DnnLayerSoftmax( DnnLayer *previousLayer );
         virtual ~DnnLayerSoftmax( void );
         
     };

@@ -15,8 +15,8 @@ namespace tfs {
         return NAME;
     }
     
-    DnnLayerRegression::DnnLayerRegression( void ):
-    DnnLayer( NAME ) {
+    DnnLayerRegression::DnnLayerRegression( DnnLayer *previousLayer ):
+    DnnLayer( NAME, previousLayer ) {
         // Constructor
     }
     

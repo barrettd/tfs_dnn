@@ -5,6 +5,7 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
 #include "DnnLayerInput.h"
+#include "Error.h"
 
 namespace tfs {
 
@@ -15,19 +16,46 @@ namespace tfs {
         return NAME;
     }
     
-    DnnLayerInput::DnnLayerInput( void ):
+    DnnLayerInput::DnnLayerInput( unsigned long xx, unsigned long yy, unsigned long zz ) :
     DnnLayer( NAME ) {
         // Constructor
+        m_x = xx;
+        m_y = yy;
+        m_z = zz;
+        m_size = m_x * m_y * m_z;
     }
-    
-    DnnLayerInput::DnnLayerInput( unsigned long xx, unsigned long yy, unsigned long zz ) :
-    DnnLayer( NAME, xx, yy, zz ) {
-        // Constructor
-    }
-    
+        
     DnnLayerInput::~DnnLayerInput( void ) {
         // Destructor
+        m_w = 0;
     }
+    
+    bool
+    DnnLayerInput::forward( const DNN_NUMERIC *data, const unsigned long length ) {
+        // Forward propagate while training
+        if( data == 0 || length != m_size ) {
+            return log_error( "Invalid parameters" );
+        }
+        m_w = const_cast <DNN_NUMERIC*>( data );
+        if( m_next_layer != 0 ) {
+            return m_next_layer->forward( data, length );
+        }
+        return true;
+    }
+        
+    bool
+    DnnLayerInput::predict( const DNN_NUMERIC *data, const unsigned long length ) {
+        // Forward progagate when predicting
+        if( data == 0 || length != m_size ) {
+            return log_error( "Invalid parameters" );
+        }
+        m_w = const_cast <DNN_NUMERIC*>( data );
+        if( m_next_layer != 0 ) {
+            return m_next_layer->forward( data, length );
+        }
+        return true;
+    }
+
 
 
 }   // namespace tfs

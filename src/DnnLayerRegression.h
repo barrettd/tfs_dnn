@@ -17,7 +17,7 @@ namespace tfs {
     public:
         static const char *className( void );
 
-        DnnLayerRegression( void );
+        DnnLayerRegression( DnnLayer *previousLayer );
         virtual ~DnnLayerRegression( void );
         
     };

@@ -15,8 +15,8 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerPool::DnnLayerPool( void ):
-    DnnLayer( NAME ) {
+    DnnLayerPool::DnnLayerPool( DnnLayer *previousLayer ):
+    DnnLayer( NAME, previousLayer ) {
         // Constructor
     }
     

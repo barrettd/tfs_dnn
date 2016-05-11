@@ -18,7 +18,7 @@ namespace tfs {
     public:
         static const char *className( void );
 
-        DnnLayerLocalResponseNormalization( void );
+        DnnLayerLocalResponseNormalization( DnnLayer *previousLayer );
         virtual ~DnnLayerLocalResponseNormalization( void );
         
     };

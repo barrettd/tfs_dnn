@@ -65,7 +65,7 @@ namespace tfs {
             return log_error( "Cannot add Pool layer" );
         }
         // Fully connected layer with softmax:
-        if( !dnn->addLayerFullyConnected( 1, 1, 10 )) {
+        if( !dnn->addLayerFullyConnected()) {               //  1, 1, 10 
             return log_error( "Cannot add Fully Connected layer" );
         }
         if( !dnn->addLayerSoftmax( 10 )) {                  // Output classifier

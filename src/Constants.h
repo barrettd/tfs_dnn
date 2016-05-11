@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------
 //  Constants.h
-//  TFS DNN library level constants live here.
+//  TFS DNN library level constants are defined here.
 //
 //  Created by Barrett Davis on 5/10/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.

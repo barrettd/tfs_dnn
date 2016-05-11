@@ -17,8 +17,7 @@ namespace tfs {
     public:
         static const char *className( void );
 
-        DnnLayerFullyConnected( void );
-        DnnLayerFullyConnected( unsigned long xx, unsigned long yy, unsigned long zz = 1 );
+        DnnLayerFullyConnected( DnnLayer *previousLayer );
         virtual ~DnnLayerFullyConnected( void );
         
     };
