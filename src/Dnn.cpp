@@ -54,8 +54,8 @@ namespace tfs {
             return log_error( "Input layer should be the first layer" );
         }
         m_layers.push_back( layer );
-        m_layer_input    = layer;           // Remember our input layer
         m_layer_previous = layer;           // Remember the previous layer.
+        m_layer_input    = layer;           // Remember our input layer
         return true;
     }
     
@@ -181,12 +181,10 @@ namespace tfs {
     }
     
     bool
-    Dnn::forward( const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_NUMERIC > &expectation ) {
+    Dnn::forward( const Matrix &data, const Matrix &expectation ) {
         // Forward propagate while training
-        const DNN_NUMERIC  *ptr    = data.data();
-        const unsigned long length = data.size();
         if( m_layer_input != 0 ) {
-            m_layer_input->forward( ptr, length );     // Calls each layer in the forward direction.
+            m_layer_input->forward( data );     // Calls each layer in the forward direction.
         } else {
             log_error( "No input layer" );
         }
@@ -205,12 +203,10 @@ namespace tfs {
     }
     
     bool
-    Dnn::predict( const std::vector< DNN_NUMERIC > &data, std::vector< DNN_NUMERIC > &prediction ) {
+    Dnn::predict( const Matrix &data, Matrix &prediction ) {
         // Forward progagate when predicting
-        const DNN_NUMERIC  *ptr    = data.data();
-        const unsigned long length = data.size();
         if( m_layer_input != 0 ) {
-            m_layer_input->predict( ptr, length );     // Calls each layer in the forward direction.
+            m_layer_input->predict( data );     // Calls each layer in the forward direction.
         } else {
             log_error( "No input layer" );
         }

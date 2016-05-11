@@ -21,8 +21,8 @@ namespace tfs {
        
         virtual void randomize( void );     // Randomize weights and bias.
 
-        virtual bool forward( const DNN_NUMERIC *data, const unsigned long length );   // Forward propagate while training
-        virtual bool predict( const DNN_NUMERIC *data, const unsigned long length );   // Forward progagate when predicting
+        virtual bool forward( const Matrix &data );   // Forward propagate while training
+        virtual bool predict( const Matrix &data );   // Forward progagate when predicting
 
     };
     

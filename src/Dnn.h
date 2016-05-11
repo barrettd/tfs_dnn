@@ -13,7 +13,7 @@
 #define dnn_h
 
 #include <vector>
-#include "Constants.h"
+#include "Matrix.h"
 
 namespace tfs {     // Tree Frog Software
     
@@ -56,15 +56,12 @@ namespace tfs {     // Tree Frog Software
         DnnLayerInput *getLayerInput(  void );
         DnnLayer      *getLayerOutput( void );
         
-        void randomize( void );                             // Randomize weights and bias.
+        void randomize( void );                                         // Randomize weights and bias.
 
-        bool forward( const std::vector< DNN_NUMERIC > &data,
-                      const std::vector< DNN_NUMERIC > &expectation );  // Forward propagate while training
+        bool forward( const Matrix &data, const Matrix &expectation );  // Forward propagate while training
+        bool backprop( void );                                          // Back propagate while training
         
-        bool backprop( void );  // Back propagate while training
-        
-        bool predict( const std::vector< DNN_NUMERIC > &data,
-                            std::vector< DNN_NUMERIC > &prediction );   // Forward progagate when predicting
+        bool predict( const Matrix &data, Matrix &prediction );         // Forward progagate when predicting
 
         // Binary file I/O
         bool save( const char *file_path ) const;

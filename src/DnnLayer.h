@@ -7,26 +7,19 @@
 #ifndef dnnLayer_h
 #define dnnLayer_h
 
-#include <vector>
-#include "Constants.h"
+#include "Matrix.h"
 
 namespace tfs {
     
-    class DnnLayer {            // Base class of all layers.
+    class DnnLayer {                // Base class of all layers.
     protected:
-        const char  *m_name;    // Used in serialization.
-        DNN_NUMERIC *m_w;       // Weights
-        DNN_NUMERIC *m_dw;      // Weight derivative
+        const char *m_name;         // Used in serialization.
+        Matrix     *m_w;            // Weights
+        Matrix     *m_dw;           // Weight derivative, will be null when not training.
+        DnnLayer   *m_prev_layer;
+        DnnLayer   *m_next_layer;
         
-        unsigned long m_x;      // Width
-        unsigned long m_y;      // Height
-        unsigned long m_z;      // Depth
-        unsigned long m_size;   // = x * w * h;  // Count of DNN_NUMERIC elements.
-        
-        DnnLayer *m_prev_layer;
-        DnnLayer *m_next_layer;
-        
-        void setup( unsigned long xx, unsigned long yy, unsigned long zz );
+        void setup( unsigned long xx, unsigned long yy, unsigned long zz, bool training = true );
         void teardown( void );
         
     public:
@@ -34,26 +27,21 @@ namespace tfs {
         DnnLayer( const char *name, DnnLayer *previousLayer );
         virtual ~DnnLayer( void );
         
-        const char*   name(   void ) const;
-        unsigned long width(  void ) const; // x
-        unsigned long height( void ) const; // y
-        unsigned long depth(  void ) const; // z
-        unsigned long size(   void ) const; // = x * w * h;  // Count of DNN_NUMERIC elements.
-        DNN_NUMERIC* w(  void );            // weights
-        DNN_NUMERIC* dw( void );            // weight derivatives
+        const char *name(   void ) const;
+        Matrix     *w(  void );            // weights
+        Matrix     *dw( void );            // weight derivatives
         
         DnnLayer *getPreviousLayer( void ) const;
         DnnLayer *setPreviousLayer( DnnLayer *layer );
         DnnLayer *getNextLayer( void ) const;
         DnnLayer *setNextLayer( DnnLayer *layer );
         
-        virtual void randomize( void );     // Randomize weights and bias.
-
-        virtual bool forward( const DNN_NUMERIC *data, const unsigned long length );  // Forward propagate while training
+        virtual void randomize( void );                 // Randomize weights and bias.
         
-        virtual bool backprop( void );  // Back propagate while training
+        virtual bool forward( const Matrix &data );     // Forward propagate while training
+        virtual bool backprop( void );                  // Back propagate while training
         
-        virtual bool predict( const DNN_NUMERIC *data, const unsigned long length );   // Forward progagate when predicting
+        virtual bool predict( const Matrix &data );     // Forward progagate when predicting
         
     };
     

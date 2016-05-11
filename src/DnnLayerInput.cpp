@@ -19,15 +19,10 @@ namespace tfs {
     DnnLayerInput::DnnLayerInput( unsigned long xx, unsigned long yy, unsigned long zz ) :
     DnnLayer( NAME ) {
         // Constructor
-        m_x = xx;
-        m_y = yy;
-        m_z = zz;
-        m_size = m_x * m_y * m_z;
     }
         
     DnnLayerInput::~DnnLayerInput( void ) {
         // Destructor
-        m_w = 0;
     }
     
     void
@@ -40,27 +35,19 @@ namespace tfs {
     }
     
     bool
-    DnnLayerInput::forward( const DNN_NUMERIC *data, const unsigned long length ) {
+    DnnLayerInput::forward( const Matrix &data ) {
         // Forward propagate while training
-        if( data == 0 || length != m_size ) {
-            return log_error( "Invalid parameters" );
-        }
-        m_w = const_cast <DNN_NUMERIC*>( data );
         if( m_next_layer != 0 ) {
-            return m_next_layer->forward( data, length );
+            return m_next_layer->forward( data );
         }
         return true;
     }
         
     bool
-    DnnLayerInput::predict( const DNN_NUMERIC *data, const unsigned long length ) {
+    DnnLayerInput::predict( const Matrix &data ) {
         // Forward progagate when predicting
-        if( data == 0 || length != m_size ) {
-            return log_error( "Invalid parameters" );
-        }
-        m_w = const_cast <DNN_NUMERIC*>( data );
         if( m_next_layer != 0 ) {
-            return m_next_layer->forward( data, length );
+            return m_next_layer->predict( data );
         }
         return true;
     }
