@@ -16,6 +16,7 @@ namespace tfs {
         const char *m_name;         // Used in serialization.
         Matrix     *m_w;            // Weights
         Matrix     *m_dw;           // Weight derivative, will be null when not training.
+        Matrix     *m_a;            // Activations, output of a neuron.
         DnnLayer   *m_prev_layer;
         DnnLayer   *m_next_layer;
         
@@ -28,15 +29,17 @@ namespace tfs {
         virtual ~DnnLayer( void );
         
         const char *name(   void ) const;
-        Matrix     *w(  void );            // weights
-        Matrix     *dw( void );            // weight derivatives
+        Matrix     *w(  void );             // Weights
+        Matrix     *dw( void );             // Weight derivatives
+        Matrix     *a(  void );             // Activations
         
         DnnLayer *getPreviousLayer( void ) const;
         DnnLayer *setPreviousLayer( DnnLayer *layer );
         DnnLayer *getNextLayer( void ) const;
         DnnLayer *setNextLayer( DnnLayer *layer );
         
-        virtual void randomize( void );                 // Randomize weights and bias.
+        virtual void initialize( void );                // Zero activations, gradiant and randomize weights.
+        virtual void randomize(  void );                // Randomize gradiant.
         
         virtual bool forward( const Matrix &data );     // Forward propagate while training
         virtual bool backprop( void );                  // Back propagate while training

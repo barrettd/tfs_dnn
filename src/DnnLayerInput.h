@@ -19,10 +19,11 @@ namespace tfs {
         DnnLayerInput( unsigned long xx, unsigned long yy = 1, unsigned long zz = 1 );
         virtual ~DnnLayerInput( void );
        
-        virtual void randomize( void );     // Randomize weights and bias.
+        virtual void initialize( void );                // Zero activations, gradiant and randomize weights.
+        virtual void randomize(  void );                // Randomize weights and bias.
 
-        virtual bool forward( const Matrix &data );   // Forward propagate while training
-        virtual bool predict( const Matrix &data );   // Forward progagate when predicting
+        virtual bool forward( const Matrix &data );     // Forward propagate while training
+        virtual bool predict( const Matrix &data );     // Forward progagate when predicting
 
     };
     

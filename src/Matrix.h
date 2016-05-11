@@ -31,6 +31,7 @@ namespace tfs {     // Tree Frog Software
         DNN_NUMERIC*  data(   void );       // weights
         
         void randomize( void );
+        void zero( void );
 
     };
     

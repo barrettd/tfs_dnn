@@ -10,14 +10,14 @@ namespace tfs {
     
     DnnLayer::DnnLayer( const char *name ):
     m_name( name ),
-    m_w( 0 ), m_dw( 0 ),
+    m_w( 0 ), m_dw( 0 ), m_a( 0 ),
     m_prev_layer( 0 ), m_next_layer( 0 ) {
         // Constructor
     }
     
     DnnLayer::DnnLayer( const char *name, DnnLayer *previousLayer ) :
     m_name( name ),
-    m_w( 0 ), m_dw( 0 ),
+    m_w( 0 ), m_dw( 0 ), m_a( 0 ),
     m_prev_layer( previousLayer ), m_next_layer( 0 ) {
         // Constructor
         if( previousLayer != 0 ) {
@@ -38,6 +38,7 @@ namespace tfs {
         if( training ) {
             m_dw = new Matrix( xx, yy, zz );
         }
+        m_a = new Matrix( xx, yy, zz );
         return;
     }
     
@@ -45,8 +46,10 @@ namespace tfs {
     DnnLayer::teardown( void ) {
         delete m_w;
         delete m_dw;
+        delete m_a;
         m_w    = 0;
         m_dw   = 0;
+        m_a    = 0;
         return;
     }
 
@@ -57,12 +60,17 @@ namespace tfs {
     
     Matrix*
     DnnLayer::w( void ) {
-        return m_w;             // weights
+        return m_w;             // Weights
     }
     
     Matrix*
     DnnLayer::dw( void ) {
-        return m_dw;            // weight derivatives
+        return m_dw;            // Weight derivatives
+    }
+    
+    Matrix*
+    DnnLayer::a( void ) {
+        return m_a;             // Activations
     }
     
     DnnLayer*
@@ -83,6 +91,24 @@ namespace tfs {
     DnnLayer*
     DnnLayer::setNextLayer( DnnLayer *layer ) {
         return m_next_layer = layer;
+    }
+
+    void
+    DnnLayer::initialize( void ) {
+        // Zero activations, gradiant and randomize weights.
+        if( m_w != 0 ) {
+            m_w->randomize();
+        }
+        if( m_dw != 0 ) {
+            m_dw->zero();
+        }
+        if( m_a != 0 ) {
+            m_a->zero();
+        }
+        if( m_next_layer != 0 ) {
+            m_next_layer->initialize();  // Forward propagate
+        }
+        return;
     }
 
     void

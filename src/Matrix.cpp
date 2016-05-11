@@ -6,6 +6,7 @@
 // --------------------------------------------------------------------
 #include <cmath>        // sqrt()
 #include <cstdlib>      // RAND_MAX
+#include <cstring>      // memset()
 #include "Matrix.h"
 
 namespace tfs {     // Tree Frog Software
@@ -13,13 +14,16 @@ namespace tfs {     // Tree Frog Software
     Matrix::Matrix( unsigned long xx, unsigned long yy, unsigned long zz ):
     m_x( xx ), m_y( yy ), m_z( zz ), m_size( xx * yy * zz ) {
         // Constructor
-        m_data = new DNN_NUMERIC[m_size];
+        if( m_size > 0 ) {
+            m_data = new DNN_NUMERIC[m_size];   // Possibly random values.
+        }
     }
     
     Matrix::~Matrix( void ) {
         // Destructor
         delete[] m_data;
         m_data = 0;
+        m_size = 0;
     }
 
     unsigned long
@@ -58,6 +62,15 @@ namespace tfs {     // Tree Frog Software
             while( ptr < end ) {
                 *ptr++ = ((DNN_NUMERIC) rand() / (RAND_MAX)) * scale;
             }
+        }
+        return;
+    }
+    
+    void
+    Matrix::zero( void ) {
+        if( m_data != 0 && m_size > 0 ) {
+            const unsigned long length = m_size * sizeof( DNN_NUMERIC );
+            memset( m_data, 0, length );    // Yields IEEE 0 for both integer and real valued variables.
         }
         return;
     }

@@ -26,6 +26,15 @@ namespace tfs {
     }
     
     void
+    DnnLayerInput::initialize( void ) {
+        // Do not intialize the input.
+        if( m_next_layer != 0 ) {
+            m_next_layer->initialize();
+        }
+        return;
+    }
+
+    void
     DnnLayerInput::randomize( void ) {
         // Do not randomize the input.
         if( m_next_layer != 0 ) {
