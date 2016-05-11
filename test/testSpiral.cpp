@@ -69,56 +69,50 @@ namespace tfs {
     
     static bool
     localTestSpiral( void ) {
-        std::vector< DNN_NUMERIC > data;    // x,y pairs
-        std::vector< DNN_NUMERIC > label;   // binary labels.
-        
-        spiralSetUpData( data, label, 100 );
-        
+        log_info( "Test Spiral - Start" );
+
         Dnn dnn;
         if( !setupDnn( dnn )) {
             return false;
         }
         DnnTrainerSGD trainer( &dnn );
+        trainer.learningRate( 0.01 );
+        trainer.momentum( 0.1 );
+        trainer.batchSize( 10 );
+        trainer.l2Decay( 0.001 );
         
+        std::vector< DNN_NUMERIC > data;    // x,y pairs
+        std::vector< DNN_NUMERIC > label;   // binary labels.
         
+        spiralSetUpData( data, label, 100 );
         
+        Matrix input(  1, 1, 2 );   // x,y
+        Matrix output( 1, 1, 1 );   // label
         
+        DNN_NUMERIC *outPtr = output.data();
 
-        
-        //        layer_defs = [];
-        //        layer_defs.push({type:'input', out_sx:1, out_sy:1, out_depth:2});
-        //        layer_defs.push({type:'fc', num_neurons:8, activation: 'tanh'});
-        //        layer_defs.push({type:'fc', num_neurons:6, activation: 'tanh'});
-        //        layer_defs.push({type:'fc', num_neurons:2, activation: 'tanh'});
-        //        layer_defs.push({type:'softmax', num_classes:2});
-        //
-        //        net = new convnetjs.Net();
-        //        net.makeLayers(layer_defs);
-        //
-        //        trainer = new convnetjs.SGDTrainer(net, {learning_rate:0.01, momentum:0.1, batch_size:10, l2_decay:0.001});
-
-        log_info( "Test Spiral - Start" );
-        
-//        function spiral_data() {
-//            data = [];
-//            labels = [];
-//            var n = 100;
-//            for(var i=0;i<n;i++) {
-//                var r = i/n*5 + convnetjs.randf(-0.1, 0.1);
-//                var t = 1.25*i/n*2*Math.PI + convnetjs.randf(-0.1, 0.1);
-//                data.push([r*Math.sin(t), r*Math.cos(t)]);
-//                labels.push(1);
-//            }
-//            for(var i=0;i<n;i++) {
-//                var r = i/n*5 + convnetjs.randf(-0.1, 0.1);
-//                var t = 1.25*i/n*2*Math.PI + Math.PI + convnetjs.randf(-0.1, 0.1);
-//                data.push([r*Math.sin(t), r*Math.cos(t)]);
-//                labels.push(0);
-//            }
-//            N = data.length;
-//        }
-
-        
+        const unsigned long MAX_ITERATION = 20;
+        const unsigned long DATA_COUNT    = label.size();
+        const DNN_NUMERIC target_loss  = 0.0001;
+        DNN_NUMERIC average_loss = 0.0;
+        do {
+            average_loss = 0.0;
+            for( unsigned long ii = 0; ii < MAX_ITERATION; ii++ ) {
+                const DNN_NUMERIC *dPtr = data.data();
+                const DNN_NUMERIC *lPtr = label.data();
+                const DNN_NUMERIC *ePtr = lPtr + DATA_COUNT;
+                
+                while( lPtr < ePtr ) {
+                    DNN_NUMERIC *inPtr = input.data();
+                    *inPtr++ = *dPtr++;     // x
+                    *inPtr++ = *dPtr++;     // y
+                    *outPtr  = *lPtr++;     // label
+                    average_loss += trainer.train( input, output );
+                }
+            }
+            average_loss /= DATA_COUNT * MAX_ITERATION;
+            log_info( "Average loss = %f", average_loss );
+        } while( average_loss > target_loss );
 
         log_info( "Test Spiral - End" );
         return true;
