@@ -17,10 +17,10 @@ namespace tfs {
         DNN_NUMERIC   m_learning_rate;
         DNN_NUMERIC   m_l1_decay;
         DNN_NUMERIC   m_l2_decay;
-        unsigned long m_batch_size;
         DNN_NUMERIC   m_momentum;
-        DNN_NUMERIC   m_k;            // iteration counter
         DNN_NUMERIC   m_loss;
+        unsigned long m_batch_size;
+        unsigned long m_k;            // iteration counter
         
 //        this.gsum = []; // last iteration gradients (used for momentum calculations)
         
@@ -37,20 +37,19 @@ namespace tfs {
         DNN_NUMERIC   l2Decay( void ) const;
         DNN_NUMERIC   l2Decay( DNN_NUMERIC value );
         
-        unsigned long batchSize( void ) const;
-        unsigned long batchSize( unsigned long value );
-        
         DNN_NUMERIC   momentum( void ) const;
         DNN_NUMERIC   momentum( DNN_NUMERIC value );
-        
-        DNN_NUMERIC   k( void ) const;
-        DNN_NUMERIC   k( DNN_NUMERIC value );
         
         DNN_NUMERIC   loss( void ) const;
         DNN_NUMERIC   loss( DNN_NUMERIC value );
         
+        unsigned long batchSize( void ) const;
+        unsigned long batchSize( unsigned long value );
         
-        DNN_NUMERIC train( const Matrix &data, const Matrix &expectation );     // Returns loss.
+        unsigned long   k( void ) const;
+        unsigned long   k( unsigned long value );
+        
+        virtual DNN_NUMERIC train( const Matrix &data, const Matrix &expectation );     // Returns loss.
         
         
     };

@@ -32,15 +32,27 @@ namespace tfs {
     }
     
     void
-    DnnLayer::setup( unsigned long xx, unsigned long yy, unsigned long zz, bool training ) {
+    DnnLayer::setup( const unsigned long xx, const unsigned long yy, const unsigned long zz, const bool trainable ) {
         teardown();
         m_w = new Matrix( xx, yy, zz );
-        if( training ) {
+        if( trainable ) {
             m_dw = new Matrix( xx, yy, zz );
         }
         m_a = new Matrix( xx, yy, zz );
         return;
     }
+    
+    void
+    DnnLayer::setup( const Matrix *activations, const bool trainable ) {
+        if( activations != 0 ) {
+            const unsigned long xx = activations->width();
+            const unsigned long yy = activations->height();
+            const unsigned long zz = activations->depth();
+            setup( xx, yy, zz, trainable );
+        }
+        return;
+    }
+
     
     void
     DnnLayer::teardown( void ) {
@@ -122,6 +134,16 @@ namespace tfs {
         }
         return;
     }
+
+    //forward: function(V, is_training) {
+    //    if(typeof(is_training) === 'undefined') is_training = false;
+    //    var act = this.layers[0].forward(V, is_training);
+    //    for(var i=1;i<this.layers.length;i++) {
+    //        act = this.layers[i].forward(act, is_training);
+    //    }
+    //    return act;
+    //},
+    
 
     bool
     DnnLayer::forward( const Matrix &data ) {

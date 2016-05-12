@@ -15,7 +15,7 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerPool::DnnLayerPool( DnnLayer *previousLayer ):
+    DnnLayerPool::DnnLayerPool( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
     }

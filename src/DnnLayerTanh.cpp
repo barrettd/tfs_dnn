@@ -15,7 +15,7 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerTanh::DnnLayerTanh( DnnLayer *previousLayer ):
+    DnnLayerTanh::DnnLayerTanh( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
     }

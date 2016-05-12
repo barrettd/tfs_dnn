@@ -77,8 +77,8 @@ namespace tfs {
         }
         DnnTrainerSGD trainer( &dnn );
         trainer.learningRate( 0.01 );
-        trainer.momentum( 0.1 );
-        trainer.batchSize( 10 );
+        trainer.momentum(  0.1 );
+        trainer.batchSize(  10 );
         trainer.l2Decay( 0.001 );
         
         std::vector< DNN_NUMERIC > data;    // x,y pairs
@@ -87,7 +87,7 @@ namespace tfs {
         spiralSetUpData( data, label, 100 );
         
         Matrix input(  1, 1, 2 );   // x,y
-        Matrix output( 1, 1, 1 );   // label
+        Matrix output( 1, 1, 1 );   // label ( 0 or 1 )
         
         DNN_NUMERIC *outPtr = output.data();
 

@@ -20,7 +20,8 @@ namespace tfs {
         DnnLayer   *m_prev_layer;
         DnnLayer   *m_next_layer;
         
-        void setup( unsigned long xx, unsigned long yy, unsigned long zz, bool training = true );
+        void setup( const unsigned long xx, const unsigned long yy, const unsigned long zz, const bool trainable = true );
+        void setup( const Matrix *activations, const bool trainable = true );
         void teardown( void );
         
     public:
@@ -29,7 +30,7 @@ namespace tfs {
         virtual ~DnnLayer( void );
         
         // Layer attributes:
-        const char *name(   void ) const;
+        const char *name( void ) const;
         Matrix     *w(  void );             // Weights
         Matrix     *dw( void );             // Weight derivatives
         Matrix     *a(  void );             // Activations

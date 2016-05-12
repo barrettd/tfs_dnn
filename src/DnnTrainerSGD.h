@@ -17,6 +17,8 @@ namespace tfs {
         DnnTrainerSGD( Dnn *dnn );
         virtual ~DnnTrainerSGD( void );
         
+        virtual DNN_NUMERIC train( const Matrix &data, const Matrix &expectation );     // Returns loss.
+
     };
     
 }   // namespace tfs

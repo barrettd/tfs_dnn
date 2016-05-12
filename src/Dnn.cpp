@@ -13,7 +13,8 @@ namespace tfs {
     Dnn::Dnn( void ) :
     m_layer_input(    0 ),
     m_layer_previous( 0 ),
-    m_layer_output(   0 ) {
+    m_layer_output(   0 ),
+    m_trainable( true ) {
         // Constructor
     }
     
@@ -22,6 +23,15 @@ namespace tfs {
         clear();
     }
     
+    bool
+    Dnn::trainable( void ) const {
+        return m_trainable;
+    }
+    bool
+    Dnn::trainable( const bool value ) {
+        return m_trainable = value;
+    }
+
     void
     Dnn::clear( void ) {
         // Delete all of the layers.
@@ -88,74 +98,74 @@ namespace tfs {
     bool
     Dnn::addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride, unsigned long pad ) {
         // Add a Convolution Layer
-        DnnLayerConvolution *layer = new DnnLayerConvolution( m_layer_previous );
+        DnnLayerConvolution *layer = new DnnLayerConvolution( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerDropout( void ) {
-        DnnLayerDropout *layer = new DnnLayerDropout( m_layer_previous );
+        DnnLayerDropout *layer = new DnnLayerDropout( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerFullyConnected( unsigned long neuronCount ) {
-        DnnLayerFullyConnected *layer = new DnnLayerFullyConnected( m_layer_previous );
+        DnnLayerFullyConnected *layer = new DnnLayerFullyConnected( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerLocalResponseNormalization( void ) {
-        DnnLayerLocalResponseNormalization *layer = new DnnLayerLocalResponseNormalization( m_layer_previous );
+        DnnLayerLocalResponseNormalization *layer = new DnnLayerLocalResponseNormalization( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerMaxout( void ) {
-        DnnLayerMaxout *layer = new DnnLayerMaxout( m_layer_previous );
+        DnnLayerMaxout *layer = new DnnLayerMaxout( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerPool( unsigned long side, unsigned long stride ) {
-        DnnLayerPool *layer = new DnnLayerPool( m_layer_previous );
+        DnnLayerPool *layer = new DnnLayerPool( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerRectifiedLinearUnit( void ) {
         // Add a ReLu layer
-        DnnLayerRectifiedLinearUnit *layer = new DnnLayerRectifiedLinearUnit( m_layer_previous );
+        DnnLayerRectifiedLinearUnit *layer = new DnnLayerRectifiedLinearUnit( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerRegression( void ) {
-        DnnLayerRegression *layer = new DnnLayerRegression( m_layer_previous );
+        DnnLayerRegression *layer = new DnnLayerRegression( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerSigmoid( void ) {
-        DnnLayerSigmoid *layer = new DnnLayerSigmoid( m_layer_previous );
+        DnnLayerSigmoid *layer = new DnnLayerSigmoid( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerSoftmax( unsigned long classCount ) {
-        DnnLayerSoftmax *layer = new DnnLayerSoftmax( m_layer_previous );
+        DnnLayerSoftmax *layer = new DnnLayerSoftmax( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerSupportVectorMachine( void ) {
-        DnnLayerSupportVectorMachine *layer = new DnnLayerSupportVectorMachine( m_layer_previous );
+        DnnLayerSupportVectorMachine *layer = new DnnLayerSupportVectorMachine( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
     bool
     Dnn::addLayerTanh( void ) {
-        DnnLayerTanh *layer = new DnnLayerTanh( m_layer_previous );
+        DnnLayerTanh *layer = new DnnLayerTanh( m_layer_previous, m_trainable );
         return addLayer( layer );
     }
     
@@ -192,36 +202,39 @@ namespace tfs {
     }
     
     bool
-    Dnn::forward( const Matrix &data, const Matrix &expectation ) {
+    Dnn::forward( const Matrix &data ) {
         // Forward propagate while training
         if( m_layer_input != 0 ) {
-            m_layer_input->forward( data );     // Calls each layer in the forward direction.
-        } else {
-            log_error( "No input layer" );
+            return m_layer_input->forward( data );      // Calls each layer in the forward direction.
         }
-        return true;
+        return log_error( "No input layer" );
     }
     
-    bool
-    Dnn::backprop( void ) {
+    DNN_NUMERIC
+    Dnn::backprop( const Matrix &expectation ) {
         // Back propagate while training
-        if( m_layer_output != 0 ) {
-            m_layer_output->backprop();     // Calls each layer in the backward direction.
-        } else {
+        if( m_layer_output == 0 ) {
             log_error( "No output layer" );
+            return 0.0;
         }
-        return true;
+        if( !m_layer_output->backprop()) {          // Calls each layer in the backward direction.
+            log_error( "Error performing back propagation" );
+            return 0.0;
+        }
+        DNN_NUMERIC loss = 0.0;
+        
+        // TODO:
+        
+        return loss;
     }
     
     bool
     Dnn::predict( const Matrix &data, Matrix &prediction ) {
         // Forward progagate when predicting
         if( m_layer_input != 0 ) {
-            m_layer_input->predict( data );     // Calls each layer in the forward direction.
-        } else {
-            log_error( "No input layer" );
+            return m_layer_input->predict( data );      // Calls each layer in the forward direction.
         }
-        return true;
+        return log_error( "No input layer" );
     }
 
     

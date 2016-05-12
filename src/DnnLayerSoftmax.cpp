@@ -15,7 +15,7 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerSoftmax::DnnLayerSoftmax( DnnLayer *previousLayer ):
+    DnnLayerSoftmax::DnnLayerSoftmax( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
     }

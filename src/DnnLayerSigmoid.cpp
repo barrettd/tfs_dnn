@@ -15,7 +15,7 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerSigmoid::DnnLayerSigmoid( DnnLayer *previousLayer ):
+    DnnLayerSigmoid::DnnLayerSigmoid( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
     }

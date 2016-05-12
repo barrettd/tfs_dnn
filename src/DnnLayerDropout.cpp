@@ -17,7 +17,7 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerDropout::DnnLayerDropout( DnnLayer *previousLayer ):
+    DnnLayerDropout::DnnLayerDropout( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
     }

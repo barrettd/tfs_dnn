@@ -17,7 +17,7 @@ namespace tfs {
     public:
         static const char *className( void );
 
-        DnnLayerMaxout( DnnLayer *previousLayer );
+        DnnLayerMaxout( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerMaxout( void );
         
     };

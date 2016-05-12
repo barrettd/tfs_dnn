@@ -14,9 +14,10 @@ namespace tfs {
     m_learning_rate( 0.01 ),
     m_l1_decay( 0.0 ),
     m_l2_decay( 0.0 ),
-    m_batch_size( 1 ),
     m_momentum( 0.9 ),
-    m_k( 0 ) {
+    m_loss(     0.0 ),
+    m_batch_size( 1 ),
+    m_k(          0 ) {
 //        this.gsum = []; // last iteration gradients (used for momentum calculations)
 //        this.xsum = []; // used in adam or adadelta
  
@@ -71,12 +72,12 @@ namespace tfs {
         return m_momentum = value;
     }
 
-    DNN_NUMERIC
+    unsigned long
     DnnTrainer::k( void ) const {
         return m_k;
     }
-    DNN_NUMERIC
-    DnnTrainer::k( DNN_NUMERIC value ) {
+    unsigned long
+    DnnTrainer::k( unsigned long value ) {
         return m_k = value;
     }
     

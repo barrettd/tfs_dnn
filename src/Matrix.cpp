@@ -11,7 +11,7 @@
 
 namespace tfs {     // Tree Frog Software
  
-    Matrix::Matrix( unsigned long xx, unsigned long yy, unsigned long zz ):
+    Matrix::Matrix( const unsigned long xx, const unsigned long yy, const unsigned long zz ):
     m_x( xx ), m_y( yy ), m_z( zz ), m_size( xx * yy * zz ) {
         // Constructor
         if( m_size > 0 ) {
@@ -49,6 +49,11 @@ namespace tfs {     // Tree Frog Software
     DNN_NUMERIC*
     Matrix::data( void ) {
         return m_data;          
+    }
+    
+    const DNN_NUMERIC*
+    Matrix::dataReadOnly( void ) const {
+        return m_data;
     }
     
     void

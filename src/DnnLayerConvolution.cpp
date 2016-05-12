@@ -16,7 +16,7 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerConvolution::DnnLayerConvolution( DnnLayer *previousLayer ):
+    DnnLayerConvolution::DnnLayerConvolution( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
     }

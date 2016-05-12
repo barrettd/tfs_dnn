@@ -26,6 +26,7 @@ namespace tfs {     // Tree Frog Software
         DnnLayerInput           *m_layer_input;
         DnnLayer                *m_layer_previous;      // Used during creation of the layer stack.
         DnnLayer                *m_layer_output;
+        bool                     m_trainable;           // Allocate gradiant arrays if true.
         
     protected:
         bool addLayer( DnnLayerInput *layer );
@@ -34,6 +35,9 @@ namespace tfs {     // Tree Frog Software
     public:
         Dnn( void );
         virtual ~Dnn( void );
+        
+        bool trainable( void ) const;
+        bool trainable( const bool value );
         
         void clear( void );                                 // Remove all of the layers.
         unsigned long count( void ) const;                  // Count of the layers.
@@ -56,13 +60,13 @@ namespace tfs {     // Tree Frog Software
         DnnLayerInput *getLayerInput(  void );
         DnnLayer      *getLayerOutput( void );
         
-        void initialize( void );                                        // Initialize for learning.
-        void randomize( void );                                         // Randomize weights and bias.
+        void initialize( void );                                // Initialize for learning.
+        void randomize( void );                                 // Randomize weights and bias.
 
-        bool forward( const Matrix &data, const Matrix &expectation );  // Forward propagate while training
-        bool backprop( void );                                          // Back propagate while training
+        bool forward(  const Matrix &data );                    // Forward propagate while training
+        DNN_NUMERIC backprop( const Matrix &expectation );      // Back propagate while training, returns loss.
         
-        bool predict( const Matrix &data, Matrix &prediction );         // Forward progagate when predicting
+        bool predict( const Matrix &data, Matrix &prediction ); // Forward progagate when predicting
 
         // Binary file I/O
         bool save( const char *file_path ) const;

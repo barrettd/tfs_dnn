@@ -15,9 +15,12 @@ namespace tfs {
         return NAME;
     }
     
-    DnnLayerRegression::DnnLayerRegression( DnnLayer *previousLayer ):
+    DnnLayerRegression::DnnLayerRegression( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
+        if( previousLayer != 0 ) {
+            setup( previousLayer->a(), trainable );
+        }
     }
     
     DnnLayerRegression::~DnnLayerRegression( void ) {

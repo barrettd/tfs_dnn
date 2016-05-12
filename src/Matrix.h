@@ -21,7 +21,7 @@ namespace tfs {     // Tree Frog Software
         DNN_NUMERIC  *m_data;
 
     public:
-        Matrix( unsigned long xx, unsigned long yy = 1, unsigned long zz = 1 );
+        Matrix( const unsigned long xx, const unsigned long yy = 1, const unsigned long zz = 1 );
         ~Matrix( void );
         
         unsigned long width(  void ) const; // x
@@ -29,6 +29,7 @@ namespace tfs {     // Tree Frog Software
         unsigned long depth(  void ) const; // z
         unsigned long size(   void ) const; // = x * w * h;  // Count of DNN_NUMERIC elements.
         DNN_NUMERIC*  data(   void );       // weights
+        const DNN_NUMERIC* dataReadOnly( void ) const;  // weights
         
         void randomize( void );
         void zero( void );

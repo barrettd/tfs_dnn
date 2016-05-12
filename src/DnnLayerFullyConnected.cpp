@@ -15,7 +15,7 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerFullyConnected::DnnLayerFullyConnected( DnnLayer *previousLayer ):
+    DnnLayerFullyConnected::DnnLayerFullyConnected( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
     }
