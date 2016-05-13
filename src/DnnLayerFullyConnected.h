@@ -31,7 +31,7 @@ namespace tfs {
         DNN_NUMERIC l2DecayMultiplier( void ) const;
         DNN_NUMERIC l2DecayMultiplier( DNN_NUMERIC value );
 
-        virtual bool forward( const Matrix &data );     // Forward propagate while training
+        virtual bool forward(  void );                  // Forward propagate while training
         virtual bool backprop( void );                  // Back propagate while training
         
         virtual bool predict( const Matrix &data );     // Forward progagate when predicting

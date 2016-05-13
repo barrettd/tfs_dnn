@@ -67,13 +67,12 @@ namespace tfs {
     bool
     DnnLayerInput::forward( const Matrix &data ) {
         // Forward propagate while training
+        // Generally all of the layers are configured to accept input from the previous layer activation.
+        // The input layer needs to pass the ever changing data as input to the next layer.
         if( m_size != data.size()) {
             return log_error( "Input matrix does not match expected size" );
         }
-        if( m_next_layer != 0 ) {
-            return m_next_layer->forward( data );
-        }
-        return true;
+        return DnnLayer::forward( data );   // Base class has a pass-through implementation that we can use.
     }
         
     bool

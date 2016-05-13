@@ -16,22 +16,22 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerFullyConnected::DnnLayerFullyConnected(DnnLayer     *previousLayer,
-                                                   unsigned long neuronCount,
-                                                   const bool    trainable ):
+    DnnLayerFullyConnected::DnnLayerFullyConnected( DnnLayer *previousLayer, unsigned long neuronCount, const bool trainable ):
     DnnLayer( NAME, previousLayer ),
     m_neuron_count( neuronCount ),
     m_l1_decay_mul( 0.0 ),
-    m_l2_decay_mul( 1.0 ) {
-        // Constructor
-        const unsigned long  inX = previousLayer->aX();   // previousLayer should not be null.
-        const unsigned long  inY = previousLayer->aY();
-        const unsigned long  inZ = previousLayer->aZ();
-        const unsigned long outX = 1;
-        const unsigned long outY = 1;
-        const unsigned long outZ = neuronCount;
-        
-        setup( inX, inY, inZ, outX, outY, outZ, trainable );
+    m_l2_decay_mul( 1.0 ) {         // Constructor
+        if( previousLayer != 0 ) {  // previousLayer should not be null.
+            const unsigned long  inX = previousLayer->aX();
+            const unsigned long  inY = previousLayer->aY();
+            const unsigned long  inZ = previousLayer->aZ();
+            const unsigned long outX = 1;
+            const unsigned long outY = 1;
+            const unsigned long outZ = neuronCount;
+            setup( inX, inY, inZ, outX, outY, outZ, trainable );
+        } else {
+            log_error( "previousLayer is null" );
+        }
     }
     
     DnnLayerFullyConnected::~DnnLayerFullyConnected( void ) {
@@ -79,15 +79,11 @@ namespace tfs {
     //},
 
     bool
-    DnnLayerFullyConnected::forward( const Matrix &data ) {
+    DnnLayerFullyConnected::forward( void ) {
         // Forward propagate while training
-        if( m_w == 0 || m_dw == 0 || m_a == 0 ) {
+        if( m_w == 0 || m_dw == 0 || m_a == 0 || m_pa == 0 ) {
             return log_error( "Not configured for training" );
         }
-        if( m_w->size() != data.size()) {
-            return log_error( "Input matrix does not match expected size" );
-        }
-        m_pa = &data;
         DNN_NUMERIC *activation    = m_a->data();
         DNN_NUMERIC *activationEnd = activation + m_a->size();
         while( activation < activationEnd ) {
@@ -95,7 +91,7 @@ namespace tfs {
             
         }
         if( m_next_layer != 0 ) {
-            return m_next_layer->forward( data );
+            return m_next_layer->forward();
         }
         return true;
     }

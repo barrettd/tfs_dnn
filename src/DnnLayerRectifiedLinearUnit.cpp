@@ -49,13 +49,16 @@ namespace tfs {
     }
    
     bool
-    DnnLayerRectifiedLinearUnit::forward( const Matrix &data ) {
+    DnnLayerRectifiedLinearUnit::forward( void ) {
         // Forward propagate while training
-        if( !threshold( data )) {
+        if( m_w == 0 || m_dw == 0 || m_a == 0 || m_pa == 0 ) {
+            return log_error( "Not configured for training" );
+        }
+        if( !threshold( *m_pa )) {
             return log_error( "Thresholding failed" );
         }
         if( m_next_layer != 0 ) {
-            return m_next_layer->forward( *m_a );
+            return m_next_layer->forward();
         }
         return true;
     }

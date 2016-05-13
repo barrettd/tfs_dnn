@@ -11,9 +11,9 @@
 
 namespace tfs {
     
-    class DnnLayer {                // Base class of all layers.
+    class DnnLayer {                  // Base class of all layers.
     protected:
-        const char *m_name;         // Used in serialization.
+        const char *m_name;           // Used in serialization.
         const Matrix *m_pa;           // Activations of previous layer, if any.
         Matrix       *m_w;            // Weights, to act on input activations from previous layer
         Matrix       *m_dw;           // Weight derivative, will be null when not training.
@@ -26,7 +26,9 @@ namespace tfs {
                     const bool trainable = true );
         void setup( const Matrix *activations, const bool trainable = true );
         void teardown( void );
-        
+
+        virtual bool forward( const Matrix &data );     // Forward propagate while training
+
     public:
         DnnLayer( const char *name );
         DnnLayer( const char *name, DnnLayer *previousLayer );
@@ -55,7 +57,7 @@ namespace tfs {
         virtual void initialize( void );                // Zero activations, gradiant and randomize weights. Forward calling.
         virtual void randomize(  void );                // Randomize gradiant. Forward calling.
         
-        virtual bool forward( const Matrix &data );     // Forward propagate while training
+        virtual bool forward(  void );                  // Forward propagate while training
         virtual bool backprop( void );                  // Back propagate while training
         
         virtual bool predict( const Matrix &data );     // Forward progagate when predicting

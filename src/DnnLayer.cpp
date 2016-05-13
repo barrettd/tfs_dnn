@@ -19,9 +19,9 @@ namespace tfs {
     DnnLayer::DnnLayer( const char *name, DnnLayer *previousLayer ) :
     m_name( name ),
     m_pa( 0 ), m_w( 0 ), m_dw( 0 ), m_a( 0 ),
-    m_prev_layer( previousLayer ), m_next_layer( 0 ) {
-        // Constructor
+    m_prev_layer( previousLayer ), m_next_layer( 0 ) {  // Constructor
         if( previousLayer != 0 ) {
+            m_pa = previousLayer->m_a;                  // Wire up to previous layer activations as input to forward() and predict()
             previousLayer->setNextLayer( this );
         } else {
             log_error( "Previous layer is null" );
@@ -174,12 +174,22 @@ namespace tfs {
         }
         return;
     }
-
+    
     bool
     DnnLayer::forward( const Matrix &data ) {
         // Forward propagate while training
         if( m_next_layer != 0 ) {
-            return m_next_layer->forward( data );
+            m_next_layer->m_pa = &data;
+            return m_next_layer->forward();
+        }
+        return true;
+    }
+
+    bool
+    DnnLayer::forward( void ) {
+        // Forward propagate while training
+        if( m_next_layer != 0 ) {
+            return m_next_layer->forward();
         }
         return true;
     }
