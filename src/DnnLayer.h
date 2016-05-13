@@ -20,7 +20,9 @@ namespace tfs {
         DnnLayer   *m_prev_layer;
         DnnLayer   *m_next_layer;
         
-        void setup( const unsigned long xx, const unsigned long yy, const unsigned long zz, const bool trainable = true );
+        void setup( const unsigned long  inX, const unsigned long  inY, const unsigned long  inZ,
+                    const unsigned long outX, const unsigned long outY, const unsigned long outZ,
+                    const bool trainable = true );
         void setup( const Matrix *activations, const bool trainable = true );
         void teardown( void );
         
@@ -34,6 +36,11 @@ namespace tfs {
         Matrix     *w(  void );             // Weights
         Matrix     *dw( void );             // Weight derivatives
         Matrix     *a(  void );             // Activations
+        
+        virtual unsigned long aX( void ) const; // Activation dimensions
+        virtual unsigned long aY( void ) const;
+        virtual unsigned long aZ( void ) const;
+        virtual unsigned long aSize( void ) const;
         
         // Linked list pointers:
         DnnLayer *getPreviousLayer( void ) const;

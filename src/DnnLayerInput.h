@@ -13,12 +13,23 @@
 namespace tfs {
     
     class DnnLayerInput : public DnnLayer {
+    protected:
+        unsigned long m_x;      // Width
+        unsigned long m_y;      // Height
+        unsigned long m_z;      // Depth
+        unsigned long m_size;   // = x * w * h;  // Count of DNN_NUMERIC elements.
+
     public:
         static const char *className( void );
         
         DnnLayerInput( unsigned long xx, unsigned long yy = 1, unsigned long zz = 1 );
         virtual ~DnnLayerInput( void );
        
+        virtual unsigned long aX( void ) const; // Activation dimensions
+        virtual unsigned long aY( void ) const;
+        virtual unsigned long aZ( void ) const;
+        virtual unsigned long aSize( void ) const;
+
         virtual void initialize( void );                // Zero activations, gradiant and randomize weights.
         virtual void randomize(  void );                // Randomize weights and bias.
 

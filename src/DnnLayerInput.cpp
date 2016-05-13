@@ -17,7 +17,8 @@ namespace tfs {
     }
     
     DnnLayerInput::DnnLayerInput( unsigned long xx, unsigned long yy, unsigned long zz ) :
-    DnnLayer( NAME ) {
+    DnnLayer( NAME ),
+    m_x( xx ), m_y( yy ), m_z( zz ), m_size( xx * yy * zz ) {
         // Constructor
     }
         
@@ -25,6 +26,26 @@ namespace tfs {
         // Destructor
     }
     
+    unsigned long
+    DnnLayerInput::aX( void ) const {
+        return m_x;
+    }
+    
+    unsigned long
+    DnnLayerInput::aY( void ) const {
+        return m_y;
+    }
+    
+    unsigned long
+    DnnLayerInput::aZ( void ) const {
+        return m_z;
+    }
+
+    unsigned long
+    DnnLayerInput::aSize( void ) const {
+        return m_size;
+    }
+
     void
     DnnLayerInput::initialize( void ) {
         // Do not intialize the input.
@@ -46,6 +67,9 @@ namespace tfs {
     bool
     DnnLayerInput::forward( const Matrix &data ) {
         // Forward propagate while training
+        if( m_size != data.size()) {
+            return log_error( "Input matrix does not match expected size" );
+        }
         if( m_next_layer != 0 ) {
             return m_next_layer->forward( data );
         }
@@ -55,6 +79,9 @@ namespace tfs {
     bool
     DnnLayerInput::predict( const Matrix &data ) {
         // Forward progagate when predicting
+        if( m_size != data.size()) {
+            return log_error( "Input matrix does not match expected size" );
+        }
         if( m_next_layer != 0 ) {
             return m_next_layer->predict( data );
         }

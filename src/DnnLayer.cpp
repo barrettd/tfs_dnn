@@ -5,6 +5,7 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
 #include "DnnLayer.h"
+#include "Error.h"
 
 namespace tfs {
     
@@ -22,6 +23,8 @@ namespace tfs {
         // Constructor
         if( previousLayer != 0 ) {
             previousLayer->setNextLayer( this );
+        } else {
+            log_error( "Previous layer is null" );
         }
     }
     
@@ -32,28 +35,32 @@ namespace tfs {
     }
     
     void
-    DnnLayer::setup( const unsigned long xx, const unsigned long yy, const unsigned long zz, const bool trainable ) {
+    DnnLayer::setup( const unsigned long  inX, const unsigned long  inY, const unsigned long  inZ,
+                     const unsigned long outX, const unsigned long outY, const unsigned long outZ,
+                     const bool trainable ) {
         teardown();
-        m_w = new Matrix( xx, yy, zz );
+        m_w = new Matrix( inX, inY, inZ );
         if( trainable ) {
-            m_dw = new Matrix( xx, yy, zz );
+            m_dw = new Matrix( inX, inY, inZ );
         }
-        m_a = new Matrix( xx, yy, zz );
+        m_a = new Matrix( outX, outY, outZ );
         return;
     }
     
     void
     DnnLayer::setup( const Matrix *activations, const bool trainable ) {
-        if( activations != 0 ) {
-            const unsigned long xx = activations->width();
-            const unsigned long yy = activations->height();
-            const unsigned long zz = activations->depth();
-            setup( xx, yy, zz, trainable );
+        if( activations == 0 ) {
+            log_error( "activations are null" );
+            return;
         }
+        const unsigned long  xx = activations->width();
+        const unsigned long  yy = activations->height();
+        const unsigned long  zz = activations->depth();
+        
+        setup( xx, yy, zz, xx, yy, zz, trainable );
         return;
     }
 
-    
     void
     DnnLayer::teardown( void ) {
         delete m_w;
@@ -85,6 +92,38 @@ namespace tfs {
         return m_a;             // Activations
     }
     
+    unsigned long
+    DnnLayer::aX( void ) const {
+        if( m_a == 0 ) {
+            return 0;
+        }
+        return m_a->width();
+    }
+    
+    unsigned long
+    DnnLayer::aY( void ) const {
+        if( m_a == 0 ) {
+            return 0;
+        }
+        return m_a->height();
+    }
+
+    unsigned long
+    DnnLayer::aZ( void ) const {
+        if( m_a == 0 ) {
+            return 0;
+        }
+        return m_a->depth();
+    }
+    
+    unsigned long
+    DnnLayer::aSize( void ) const {
+        if( m_a == 0 ) {
+            return 0;
+        }
+        return m_a->size();
+    }
+
     DnnLayer*
     DnnLayer::getPreviousLayer( void ) const {
         return m_prev_layer;

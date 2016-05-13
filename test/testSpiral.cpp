@@ -38,30 +38,31 @@ namespace tfs {
     
     static bool
     setupDnn( Dnn &dnn ) {
-        if( !dnn.addLayerInput( 1, 1, 2 )) {             // Input layer a single x, y data point.
+        if( !dnn.addLayerInput( 1, 1, 2 )) {                // Input layer a single x, y data point.
             return log_error( "Cannot add Input layer" );
         }
-        if( !dnn.addLayerFullyConnected( 8 )) {          // 8 Neurons
+        if( !dnn.addLayerFullyConnected( 8 )) {             // 8 Neurons
             return log_error( "Cannot add Fully Connected layer" );
         }
-        if( !dnn.addLayerTanh()) {                       // Activation function for fully connected layer.
+        if( !dnn.addLayerTanh()) {                          // Activation function for fully connected layer.
             return log_error( "Cannot add Tanh Activation layer" );
         }
-        if( !dnn.addLayerFullyConnected( 6 )) {          // 6 Neurons
+        if( !dnn.addLayerFullyConnected( 6 )) {             // 6 Neurons
             return log_error( "Cannot add Fully Connected layer" );
         }
-        if( !dnn.addLayerTanh()) {                       // Activation function for fully connected layer.
+        if( !dnn.addLayerTanh()) {                          // Activation function for fully connected layer.
             return log_error( "Cannot add Tanh Activation layer" );
         }
-        if( !dnn.addLayerFullyConnected( 2 )) {          // 2 Neurons
+        if( !dnn.addLayerFullyConnected( 2 )) {             // 2 Neurons
             return log_error( "Cannot add Fully Connected layer" );
         }
-        if( !dnn.addLayerTanh()) {                       // Activation function for fully connected layer.
+        if( !dnn.addLayerTanh()) {                          // Activation function for fully connected layer.
             return log_error( "Cannot add Tanh Activation layer" );
         }
-        if( !dnn.addLayerSoftmax( 2 )) {                  // Output classifier, 2 classes.
+        if( !dnn.addLayerSoftmax( 2 )) {                    // Output classifier, 2 classes.
             return log_error( "Cannot add Softmax layer" );
         }
+        dnn.initialize();                                   // Randomize the weights.
         const unsigned long count = dnn.count();
         log_info( "We have set up %lu layers", count );
         return true;
@@ -76,10 +77,10 @@ namespace tfs {
             return false;
         }
         DnnTrainerSGD trainer( &dnn );
-        trainer.learningRate( 0.01 );
-        trainer.momentum(  0.1 );
-        trainer.batchSize(  10 );
-        trainer.l2Decay( 0.001 );
+        trainer.learningRate( 0.01  );
+        trainer.momentum(     0.1   );
+        trainer.batchSize(   10     );
+        trainer.l2Decay(      0.001 );
         
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_NUMERIC > label;   // binary labels.

@@ -110,7 +110,7 @@ namespace tfs {
     
     bool
     Dnn::addLayerFullyConnected( unsigned long neuronCount ) {
-        DnnLayerFullyConnected *layer = new DnnLayerFullyConnected( m_layer_previous, m_trainable );
+        DnnLayerFullyConnected *layer = new DnnLayerFullyConnected( m_layer_previous, neuronCount, m_trainable );
         return addLayer( layer );
     }
     

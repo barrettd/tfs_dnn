@@ -12,7 +12,9 @@
 namespace tfs {     // Tree Frog Software
  
     Matrix::Matrix( const unsigned long xx, const unsigned long yy, const unsigned long zz ):
-    m_x( xx ), m_y( yy ), m_z( zz ), m_size( xx * yy * zz ) {
+    m_x( xx ), m_y( yy ), m_z( zz ),
+    m_size( xx * yy * zz ),
+    m_data( 0 ) {
         // Constructor
         if( m_size > 0 ) {
             m_data = new DNN_NUMERIC[m_size];   // Possibly random values.
