@@ -12,7 +12,7 @@
 
 namespace tfs {     // Tree Frog Software
 
-    class Matrix {
+    class Matrix {              // Possibly use Eigen matricies: https://eigen.tuxfamily.org/
     protected:
         unsigned long m_x;      // Width
         unsigned long m_y;      // Height
@@ -21,18 +21,22 @@ namespace tfs {     // Tree Frog Software
         DNN_NUMERIC  *m_data;
 
     public:
-        Matrix( const unsigned long xx, const unsigned long yy = 1, const unsigned long zz = 1 );
+         Matrix( const unsigned long xx, const unsigned long yy = 1, const unsigned long zz = 1 );
         ~Matrix( void );
         
         unsigned long width(  void ) const; // x
         unsigned long height( void ) const; // y
         unsigned long depth(  void ) const; // z
         unsigned long size(   void ) const; // = x * w * h;  // Count of DNN_NUMERIC elements.
-        DNN_NUMERIC*  data(   void );       // weights
-        const DNN_NUMERIC* dataReadOnly( void ) const;  // weights
         
-        void randomize( void );
-        void zero( void );
+              DNN_NUMERIC* data( void );
+        const DNN_NUMERIC* dataReadOnly( void ) const;
+        
+        void randomize( void );                     // Fill matrix with small, positive random values
+        void zero( void );                          // Fill matrix with zeros
+        
+        DNN_NUMERIC dot( const Matrix &rhs ) const; // Calculate the dot product.
+        
 
     };
     

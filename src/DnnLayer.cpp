@@ -11,14 +11,14 @@ namespace tfs {
     
     DnnLayer::DnnLayer( const char *name ):
     m_name( name ),
-    m_w( 0 ), m_dw( 0 ), m_a( 0 ),
+    m_pa( 0 ), m_w( 0 ), m_dw( 0 ), m_a( 0 ),
     m_prev_layer( 0 ), m_next_layer( 0 ) {
         // Constructor
     }
     
     DnnLayer::DnnLayer( const char *name, DnnLayer *previousLayer ) :
     m_name( name ),
-    m_w( 0 ), m_dw( 0 ), m_a( 0 ),
+    m_pa( 0 ), m_w( 0 ), m_dw( 0 ), m_a( 0 ),
     m_prev_layer( previousLayer ), m_next_layer( 0 ) {
         // Constructor
         if( previousLayer != 0 ) {
@@ -66,6 +66,7 @@ namespace tfs {
         delete m_w;
         delete m_dw;
         delete m_a;
+        m_pa   = 0;
         m_w    = 0;
         m_dw   = 0;
         m_a    = 0;
@@ -173,16 +174,6 @@ namespace tfs {
         }
         return;
     }
-
-    //forward: function(V, is_training) {
-    //    if(typeof(is_training) === 'undefined') is_training = false;
-    //    var act = this.layers[0].forward(V, is_training);
-    //    for(var i=1;i<this.layers.length;i++) {
-    //        act = this.layers[i].forward(act, is_training);
-    //    }
-    //    return act;
-    //},
-    
 
     bool
     DnnLayer::forward( const Matrix &data ) {

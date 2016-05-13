@@ -14,11 +14,12 @@ namespace tfs {
     class DnnLayer {                // Base class of all layers.
     protected:
         const char *m_name;         // Used in serialization.
-        Matrix     *m_w;            // Weights
-        Matrix     *m_dw;           // Weight derivative, will be null when not training.
-        Matrix     *m_a;            // Activations, output of a neuron.
-        DnnLayer   *m_prev_layer;
-        DnnLayer   *m_next_layer;
+        const Matrix *m_pa;           // Activations of previous layer, if any.
+        Matrix       *m_w;            // Weights, to act on input activations from previous layer
+        Matrix       *m_dw;           // Weight derivative, will be null when not training.
+        Matrix       *m_a;            // Activations, output of a neuron.
+        DnnLayer     *m_prev_layer;
+        DnnLayer     *m_next_layer;
         
         void setup( const unsigned long  inX, const unsigned long  inY, const unsigned long  inZ,
                     const unsigned long outX, const unsigned long outY, const unsigned long outZ,

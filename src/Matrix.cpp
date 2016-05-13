@@ -6,6 +6,7 @@
 // --------------------------------------------------------------------
 #include <cmath>        // sqrt()
 #include <cstring>      // memset()
+#include "Error.h"
 #include "Matrix.h"
 #include "Utility.h"
 
@@ -80,6 +81,22 @@ namespace tfs {     // Tree Frog Software
             memset( m_data, 0, length );    // Yields IEEE 0 for both integer and real valued variables.
         }
         return;
+    }
+    
+    DNN_NUMERIC
+    Matrix::dot( const Matrix &matrix ) const {   // Compute the dot product: scalar = lhs (dot) rhs;
+        if( matrix.m_size != m_size ) {
+            log_error( "Matricies not the same size" );
+            return 0.0;
+        }
+        const DNN_NUMERIC *lhs = m_data;
+        const DNN_NUMERIC *end = lhs + m_size;
+        const DNN_NUMERIC *rhs = matrix.m_data;
+              DNN_NUMERIC result = 0.0;
+        while( lhs < end ) {
+            result += *lhs++ * *rhs++;
+        }
+        return result;
     }
 
     

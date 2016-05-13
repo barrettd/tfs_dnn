@@ -5,6 +5,7 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
 #include "DnnLayerRegression.h"
+#include "Error.h"
 
 namespace tfs {
     

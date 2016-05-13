@@ -5,6 +5,7 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
 #include "DnnLayerPool.h"
+#include "Error.h"
 
 namespace tfs {
     
