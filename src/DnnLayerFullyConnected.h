@@ -11,12 +11,14 @@
 
 namespace tfs {
     
-    class DnnLayerFullyConnected : public DnnLayer {    // Always contains a bias for each neuron.
+    class DnnLayerFullyConnected : public DnnLayer {
     protected:
-        unsigned long m_neuron_count;
+        unsigned long m_neuron_count;   // Always contains a bias for each neuron.
         DNN_NUMERIC   m_l1_decay_mul;
         DNN_NUMERIC   m_l2_decay_mul;
         
+        void setup( DnnLayer *previousLayer, const bool trainable = true );
+
     public:
         static const char *className( void );
 

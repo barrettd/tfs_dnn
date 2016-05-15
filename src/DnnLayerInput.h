@@ -32,7 +32,7 @@ namespace tfs {
         virtual void initialize( void );                // Zero activations, gradiant and randomize weights.
         virtual void randomize(  void );                // Randomize weights and bias.
 
-        virtual bool forward( const Matrix &data );     // Forward propagate while training
+                bool forward( const Matrix &data );     // Forward propagate while training
         virtual bool predict( const Matrix &data );     // Forward progagate when predicting
 
     };

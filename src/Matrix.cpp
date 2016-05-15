@@ -15,10 +15,11 @@ namespace tfs {     // Tree Frog Software
     Matrix::Matrix( const unsigned long xx, const unsigned long yy, const unsigned long zz ):
     m_x( xx ), m_y( yy ), m_z( zz ),
     m_size( xx * yy * zz ),
-    m_data( 0 ) {
+    m_data( 0 ), m_end( 0 ) {
         // Constructor
         if( m_size > 0 ) {
             m_data = new DNN_NUMERIC[m_size];   // Possibly random values.
+            m_end  = m_data + m_size * sizeof( DNN_NUMERIC );
         }
     }
     
@@ -26,6 +27,7 @@ namespace tfs {     // Tree Frog Software
         // Destructor
         delete[] m_data;
         m_data = 0;
+        m_end  = 0;
         m_size = 0;
     }
 
@@ -55,6 +57,11 @@ namespace tfs {     // Tree Frog Software
     }
     
     const DNN_NUMERIC*
+    Matrix::end( void ) const {
+        return m_end;
+    }
+    
+    const DNN_NUMERIC*
     Matrix::dataReadOnly( void ) const {
         return m_data;
     }
@@ -65,8 +72,8 @@ namespace tfs {     // Tree Frog Software
         // otherwise neurons with a lot of incoming connections will have outputs with a larger variance
         if( m_data != 0 && m_size > 0 ) {
             const DNN_NUMERIC scale = sqrt( 1.0 / m_size );
-            DNN_NUMERIC *ptr = m_data;
-            const DNN_NUMERIC *end = m_data + m_size;
+                  DNN_NUMERIC *ptr = m_data;
+            const DNN_NUMERIC *end = m_end;
             while( ptr < end ) {
                 *ptr++ = random( scale );
             }
@@ -90,7 +97,7 @@ namespace tfs {     // Tree Frog Software
             return 0.0;
         }
         const DNN_NUMERIC *lhs = m_data;
-        const DNN_NUMERIC *end = lhs + m_size;
+        const DNN_NUMERIC *end = m_end;
         const DNN_NUMERIC *rhs = matrix.m_data;
               DNN_NUMERIC result = 0.0;
         while( lhs < end ) {

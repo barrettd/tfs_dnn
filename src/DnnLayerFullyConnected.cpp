@@ -22,13 +22,7 @@ namespace tfs {
     m_l1_decay_mul( 0.0 ),
     m_l2_decay_mul( 1.0 ) {         // Constructor
         if( previousLayer != 0 ) {  // previousLayer should not be null.
-            const unsigned long  inX = previousLayer->aX();
-            const unsigned long  inY = previousLayer->aY();
-            const unsigned long  inZ = previousLayer->aZ();
-            const unsigned long outX = 1;
-            const unsigned long outY = 1;
-            const unsigned long outZ = neuronCount;
-            setup( inX, inY, inZ, outX, outY, outZ, trainable );
+            setup( previousLayer, trainable );
         } else {
             log_error( "previousLayer is null" );
         }
@@ -36,6 +30,26 @@ namespace tfs {
     
     DnnLayerFullyConnected::~DnnLayerFullyConnected( void ) {
         // Destructor
+    }
+    
+    void
+    DnnLayerFullyConnected::setup( DnnLayer *previousLayer, const bool trainable ) {
+        // -----------------------------------------------------------------------------------
+        // n = number of neurons
+        // s = size of input data
+        //  w[n,s+1] = neuron weight + bias weight
+        // dw[n,s+1] = gradiant + d/dw bais
+        //  a[n]     = activations of each neuron
+        // -----------------------------------------------------------------------------------
+        teardown();
+        const unsigned long s = previousLayer->aSize();
+
+        m_w = new Matrix( m_neuron_count, s + 1, 1 );
+        if( trainable ) {
+            m_dw = new Matrix( m_neuron_count, s + 1, 1 );
+        }
+        m_a = new Matrix( m_neuron_count, 1, 1 );
+        return;
     }
     
     unsigned long
@@ -80,16 +94,32 @@ namespace tfs {
 
     bool
     DnnLayerFullyConnected::forward( void ) {
+        // -----------------------------------------------------------------------------------
         // Forward propagate while training
+        // n = number of neurons
+        // s = size of input data
+        // m_w[n,s+1] = neuron weight + bias weight
+        // m_a[n]     = activations of each neuron
+        // -----------------------------------------------------------------------------------
         if( m_w == 0 || m_dw == 0 || m_a == 0 || m_pa == 0 ) {
             return log_error( "Not configured for training" );
         }
-        DNN_NUMERIC *activation    = m_a->data();
-        DNN_NUMERIC *activationEnd = activation + m_a->size();
-        while( activation < activationEnd ) {
-            DNN_NUMERIC aa = 0.0;
-            
+        const DNN_NUMERIC *input = m_pa->dataReadOnly();
+        const DNN_NUMERIC *iEnd  = m_pa->end();
+        const DNN_NUMERIC *ww    = m_w->data();  // weights[n,s]
+              DNN_NUMERIC *aa    = m_a->data();  // activations[n] for the neurons in this layer
+        const DNN_NUMERIC *aEnd  = m_a->end();   // A pointer just past the end of the activations
+        
+        while( aa < aEnd ) {
+            *aa = 0.0;
+            const DNN_NUMERIC *in = input;
+            while( in < iEnd ) {
+                *aa += *ww++ * *in++;
+            }
+            *aa += *ww++;   // = 1.0 * bias
+            aa++;
         }
+
         if( m_next_layer != 0 ) {
             return m_next_layer->forward();
         }

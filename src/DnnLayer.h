@@ -27,7 +27,7 @@ namespace tfs {
         void setup( const Matrix *activations, const bool trainable = true );
         void teardown( void );
 
-        virtual bool forward( const Matrix &data );     // Forward propagate while training
+        bool forward( const Matrix &data );     // Forward propagate while training
 
     public:
         DnnLayer( const char *name );
