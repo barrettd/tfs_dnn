@@ -42,13 +42,14 @@ namespace tfs {
         //  a[n]     = activations of each neuron
         // -----------------------------------------------------------------------------------
         teardown();
-        const unsigned long s = previousLayer->aSize();
+        const unsigned long N = m_neuron_count;
+        const unsigned long S = previousLayer->aSize();
 
-        m_w = new Matrix( m_neuron_count, s + 1, 1 );
+        m_w = new Matrix( N, S + 1, 1 );
         if( trainable ) {
-            m_dw = new Matrix( m_neuron_count, s + 1, 1 );
+            m_dw = new Matrix( N, S + 1, 1 );
         }
-        m_a = new Matrix( m_neuron_count, 1, 1 );
+        m_a = new Matrix( N, 1, 1 );
         return;
     }
     
@@ -75,23 +76,6 @@ namespace tfs {
         return m_l2_decay_mul = value;
     }
     
-    //forward: function(V, is_training) {
-    //    this.in_act = V;
-    //    var A = new Vol(1, 1, this.out_depth, 0.0);
-    //    var Vw = V.w;
-    //    for(var i=0;i<this.out_depth;i++) {
-    //        var a = 0.0;
-    //        var wi = this.filters[i].w;
-    //        for(var d=0;d<this.num_inputs;d++) {
-    //            a += Vw[d] * wi[d]; // for efficiency use Vols directly for now
-    //        }
-    //        a += this.biases.w[i];
-    //        A.w[i] = a;
-    //    }
-    //    this.out_act = A;
-    //    return this.out_act;
-    //},
-
     bool
     DnnLayerFullyConnected::forward( void ) {
         // -----------------------------------------------------------------------------------
@@ -104,19 +88,19 @@ namespace tfs {
         if( m_w == 0 || m_dw == 0 || m_a == 0 || m_pa == 0 ) {
             return log_error( "Not configured for training" );
         }
-        const DNN_NUMERIC *input = m_pa->dataReadOnly();
-        const DNN_NUMERIC *iEnd  = m_pa->end();
-        const DNN_NUMERIC *ww    = m_w->data();  // weights[n,s]
-              DNN_NUMERIC *aa    = m_a->data();  // activations[n] for the neurons in this layer
-        const DNN_NUMERIC *aEnd  = m_a->end();   // A pointer just past the end of the activations
+        const DNN_NUMERIC *      input = m_pa->dataReadOnly();
+        const DNN_NUMERIC * const iEnd = m_pa->end(); // A pointer just past the end of the input
+        const DNN_NUMERIC *         ww = m_w->data(); // weights[n,s]
+              DNN_NUMERIC *         aa = m_a->data(); // activations[n] for the neurons in this layer
+        const DNN_NUMERIC * const aEnd = m_a->end();  // A pointer just past the end of the activations
         
-        while( aa < aEnd ) {
+        while( aa < aEnd ) {                    // Loop for each neuron activation
             *aa = 0.0;
             const DNN_NUMERIC *in = input;
-            while( in < iEnd ) {
+            while( in < iEnd ) {                // Loop for each input element
                 *aa += *ww++ * *in++;
             }
-            *aa += *ww++;   // = 1.0 * bias
+            *aa += *ww++;                       // Add the bias (1.0 * bias)
             aa++;
         }
 
@@ -144,7 +128,13 @@ namespace tfs {
 //
     bool
     DnnLayerFullyConnected::backprop( void ) {
+        // -----------------------------------------------------------------------------------
         // Back propagate while training
+        // n = number of neurons
+        // s = size of input data
+        // m_w[n,s+1] = neuron weight + bias weight
+        // m_a[n]     = activations of each neuron
+        // -----------------------------------------------------------------------------------
         if( m_w == 0 || m_dw == 0 || m_a == 0 || m_pa == 0 ) {
             return log_error( "Not configured for training" );
         }
