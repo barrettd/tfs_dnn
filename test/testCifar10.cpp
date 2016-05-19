@@ -68,11 +68,14 @@ namespace tfs {
         if( !dnn->addLayerFullyConnected( 10 )) {               //  1, 1, 10
             return log_error( "Cannot add Fully Connected layer" );
         }
-        if( !dnn->addLayerSoftmax( 10 )) {                  // Output classifier
+        if( !dnn->addLayerSoftmax()) {                          // Output classifier
             return log_error( "Cannot add Softmax layer" );
         }
         const unsigned long count = dnn->count();
         log_info( "We have set up %lu layers", count );
+        
+        dnn->initialize();
+        
         log_info( "Test Cifar10 - End" );
         return true;
     }

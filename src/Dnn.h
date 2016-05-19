@@ -53,7 +53,7 @@ namespace tfs {     // Tree Frog Software
         bool addLayerRectifiedLinearUnit( void );           // relu
         bool addLayerRegression( void );                    // regression
         bool addLayerSigmoid( void );                       // sigmoid
-        bool addLayerSoftmax( unsigned long classCount );   // softmax
+        bool addLayerSoftmax( void );                       // softmax
         bool addLayerSupportVectorMachine( void );          // svm
         bool addLayerTanh( void );                          // tanh
         

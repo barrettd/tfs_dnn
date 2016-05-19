@@ -34,33 +34,26 @@ namespace tfs {
         m_prev_layer = 0;
         m_next_layer = 0;
     }
-    
+
     void
-    DnnLayer::setup( const unsigned long  inX, const unsigned long  inY, const unsigned long  inZ,
-                     const unsigned long outX, const unsigned long outY, const unsigned long outZ,
-                     const bool trainable ) {
-        m_w = new Matrix( inX, inY, inZ );
-        if( trainable ) {
-            m_dw = new Matrix( inX, inY, inZ );
-        }
-        m_out_a = new Matrix( outX, outY, outZ );
-        if( trainable ) {
-            m_out_dw = new Matrix( outX, outY, outZ );
-        }
-        return;
-    }
-    
-    void
-    DnnLayer::setup( const Matrix *activations, const bool trainable ) {
-        if( activations == 0 ) {
-            log_error( "activations are null" );
+    DnnLayer::setup( const bool trainable ) {
+        // -----------------------------------------------------------------------------------
+        // S = size of input data
+        // out_a[S]  = activations of each neuron
+        // out_dw[S] = gradiant
+        // -----------------------------------------------------------------------------------
+        if( m_in_a == 0 ) {
+            log_error( "Input activation matrix is null" );
             return;
         }
-        const unsigned long  xx = activations->width();
-        const unsigned long  yy = activations->height();
-        const unsigned long  zz = activations->depth();
-        
-        setup( xx, yy, zz, xx, yy, zz, trainable );
+        if( trainable && m_in_dw == 0 ) {
+            log_error( "Input dw matrix is null" );
+            return;
+        }
+        m_out_a = new Matrix( *m_in_a );         // Output dimension matches input dimension
+        if( trainable ) {
+            m_out_dw = new Matrix( *m_in_dw );   // Output dimension matches input dimension
+        }
         return;
     }
 

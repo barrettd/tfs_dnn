@@ -13,13 +13,20 @@ namespace tfs {
     
     class DnnLayerSoftmax : public DnnLayer {
     protected:
+        Matrix *m_es;       // Exponentials
         
+        void setup( const bool trainable = true );
+
     public:
         static const char *className( void );
 
         DnnLayerSoftmax( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerSoftmax( void );
+      
+        virtual bool forward(  void );                  // Forward propagate while training
+        virtual bool backprop( void );                  // Back propagate while training
         
+        virtual bool predict( const Matrix &data );     // Forward progagate when predicting
     };
     
     

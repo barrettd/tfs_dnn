@@ -152,7 +152,7 @@ namespace tfs {
     }
     
     bool
-    Dnn::addLayerSoftmax( unsigned long classCount ) {
+    Dnn::addLayerSoftmax( void ) {
         DnnLayerSoftmax *layer = new DnnLayerSoftmax( m_layer_previous, m_trainable );
         return addLayer( layer );
     }

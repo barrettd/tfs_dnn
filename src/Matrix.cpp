@@ -12,6 +12,17 @@
 
 namespace tfs {     // Tree Frog Software
  
+    Matrix::Matrix( const Matrix &other ) :
+    m_x( other.m_x ), m_y( other.m_y ), m_z( other.m_z ),
+    m_size( other.m_size ),
+    m_data( 0 ), m_end( 0 ) {
+        // Constructor
+        if( m_size > 0 ) {
+            m_data = new DNN_NUMERIC[m_size];   // Possibly random values.
+            m_end  = m_data + m_size * sizeof( DNN_NUMERIC );
+        }
+    }
+    
     Matrix::Matrix( const unsigned long xx, const unsigned long yy, const unsigned long zz ):
     m_x( xx ), m_y( yy ), m_z( zz ),
     m_size( xx * yy * zz ),
@@ -92,16 +103,38 @@ namespace tfs {     // Tree Frog Software
     
     DNN_NUMERIC
     Matrix::dot( const Matrix &matrix ) const {   // Compute the dot product: scalar = lhs (dot) rhs;
+        if( m_data == 0 || m_end == 0 || m_size < 1 ) {
+            log_error( "empty matrix" );
+            return 0.0;
+        }
         if( matrix.m_size != m_size ) {
             log_error( "Matricies not the same size" );
             return 0.0;
         }
-        const DNN_NUMERIC *lhs = m_data;
-        const DNN_NUMERIC *end = m_end;
-        const DNN_NUMERIC *rhs = matrix.m_data;
-              DNN_NUMERIC result = 0.0;
+        const DNN_NUMERIC *       lhs = m_data;
+        const DNN_NUMERIC * const end = m_end;
+        const DNN_NUMERIC *        rhs = matrix.m_data;
+              DNN_NUMERIC       result = 0.0;
         while( lhs < end ) {
             result += *lhs++ * *rhs++;
+        }
+        return result;
+    }
+    
+    DNN_NUMERIC
+    Matrix::max( void ) const {
+        if( m_data == 0 || m_end == 0 || m_size < 1 ) {
+            log_error( "empty matrix" );
+            return 0.0;
+        }
+        const DNN_NUMERIC *      data = m_data;
+        const DNN_NUMERIC * const end = m_end;
+        DNN_NUMERIC       result = *data++;
+        while( data < end ) {
+            if( *data > result ) {
+                result = *data;
+            }
+            data++;
         }
         return result;
     }

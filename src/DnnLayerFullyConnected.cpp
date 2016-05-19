@@ -22,7 +22,7 @@ namespace tfs {
     m_l1_decay_mul( 0.0 ),
     m_l2_decay_mul( 1.0 ) {         // Constructor
         if( previousLayer != 0 ) {  // previousLayer should not be null.
-            setup( previousLayer, trainable );
+            setup( trainable );
         } else {
             log_error( "previousLayer is null" );
         }
@@ -33,7 +33,7 @@ namespace tfs {
     }
     
     void
-    DnnLayerFullyConnected::setup( DnnLayer *previousLayer, const bool trainable ) {
+    DnnLayerFullyConnected::setup( const bool trainable ) {
         // -----------------------------------------------------------------------------------
         // N = number of neurons
         // S = size of input data
@@ -172,7 +172,9 @@ namespace tfs {
     
     bool
     DnnLayerFullyConnected::predict( const Matrix &data ) {
+        // -----------------------------------------------------------------------------------
         // Forward progagate when predicting
+        // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 || m_out_a == 0 ) {
             return log_error( "Not configured for predicting" );
         }

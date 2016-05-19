@@ -59,7 +59,7 @@ namespace tfs {
         if( !dnn.addLayerTanh()) {                          // Activation function for fully connected layer.
             return log_error( "Cannot add Tanh Activation layer" );
         }
-        if( !dnn.addLayerSoftmax( 2 )) {                    // Output classifier, 2 classes.
+        if( !dnn.addLayerSoftmax( )) {                      // Output classifier, 2 classes.
             return log_error( "Cannot add Softmax layer" );
         }
         dnn.initialize();                                   // Randomize the weights.
@@ -87,7 +87,7 @@ namespace tfs {
         
         spiralSetUpData( data, label, 100 );
         
-        Matrix *input = trainer.getMatrixInput();   // x,y pair Matrix( 1, 1, 2 )
+        Matrix *input = trainer.getMatrixInput();       // get the input matrix: x,y pair Matrix( 1, 1, 2 )
         if( input == 0 ) {
             return log_error( "Unable to obtain input matrix." );
         }
@@ -97,7 +97,7 @@ namespace tfs {
 
         const unsigned long MAX_ITERATION = 20;
         const unsigned long DATA_COUNT    = label.size();
-        const DNN_NUMERIC target_loss  = 0.0001;
+        const DNN_NUMERIC   TARGET_LOSS   = 0.0001;
         DNN_NUMERIC average_loss = 0.0;
         do {
             average_loss = 0.0;
@@ -116,7 +116,7 @@ namespace tfs {
             }
             average_loss /= DATA_COUNT * MAX_ITERATION;
             log_info( "Average loss = %f", average_loss );
-        } while( average_loss > target_loss );
+        } while( average_loss > TARGET_LOSS );
 
         log_info( "Test Spiral - End" );
         return true;

@@ -22,6 +22,7 @@ namespace tfs {     // Tree Frog Software
         DNN_NUMERIC  *m_end;
 
     public:
+         Matrix( const Matrix &other );     // Does not copy contents.
          Matrix( const unsigned long xx, const unsigned long yy = 1, const unsigned long zz = 1 );
         ~Matrix( void );
         
@@ -37,6 +38,7 @@ namespace tfs {     // Tree Frog Software
         void randomize( void );                     // Fill matrix with small, positive random values
         void zero( void );                          // Fill matrix with zeros
         
+        DNN_NUMERIC max( void ) const;              // Return maximum value.
         DNN_NUMERIC dot( const Matrix &rhs ) const; // Calculate the dot product.
         
 

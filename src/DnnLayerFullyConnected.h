@@ -17,7 +17,7 @@ namespace tfs {
         DNN_NUMERIC   m_l1_decay_mul;
         DNN_NUMERIC   m_l2_decay_mul;
         
-        void setup( DnnLayer *previousLayer, const bool trainable = true );
+        void setup( const bool trainable = true );
 
     public:
         static const char *className( void );

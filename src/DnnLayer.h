@@ -23,10 +23,7 @@ namespace tfs {
         DnnLayer     *m_prev_layer;
         DnnLayer     *m_next_layer;
         
-        void setup( const unsigned long  inX, const unsigned long  inY, const unsigned long  inZ,
-                    const unsigned long outX, const unsigned long outY, const unsigned long outZ,
-                    const bool trainable = true );
-        void setup( const Matrix *activations, const bool trainable = true );
+        void setup( const bool trainable = true );
         void teardown( void );
 
     public:

@@ -20,7 +20,7 @@ namespace tfs {
     DnnLayer( NAME, previousLayer ) {
         // Constructor
         if( previousLayer != 0 ) {
-            setup( previousLayer->outA(), trainable );
+//            setup( previousLayer->outA(), trainable );
         }
     }
     
