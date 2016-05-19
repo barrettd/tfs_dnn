@@ -14,7 +14,7 @@ namespace tfs {
     m_layer_input(    0 ),
     m_layer_previous( 0 ),
     m_layer_output(   0 ),
-    m_trainable( true ) {
+    m_trainable(   true ) {
         // Constructor
     }
     
@@ -91,7 +91,7 @@ namespace tfs {
         if( xx < 1 || yy < 1 || zz < 1 ) {
             return log_error( "bad args" );
         }
-        DnnLayerInput *layer = new DnnLayerInput( xx, yy, zz );
+        DnnLayerInput *layer = new DnnLayerInput( xx, yy, zz, m_trainable );
         return addLayer( layer );
     }
     

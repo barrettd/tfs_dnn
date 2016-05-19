@@ -67,6 +67,7 @@ namespace tfs {
         delete m_dw;
         delete m_a;
         m_pa   = 0;
+        m_pdw  = 0;
         m_w    = 0;
         m_dw   = 0;
         m_a    = 0;
@@ -132,6 +133,10 @@ namespace tfs {
     
     DnnLayer*
     DnnLayer::setPreviousLayer( DnnLayer *layer ) {
+        if( layer != 0 ) {
+            m_pa  = layer->a();     // Remember previous activation layer
+            m_pdw = layer->dw();    // Remember previous gradiant array
+        }
         return m_prev_layer = layer;
     }
     

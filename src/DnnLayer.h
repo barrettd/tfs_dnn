@@ -15,6 +15,7 @@ namespace tfs {
     protected:
         const char *m_name;           // Used in serialization.
         const Matrix *m_pa;           // Activations of previous layer, if any.
+              Matrix *m_pdw;          // dw of previous layer, if any.
         Matrix       *m_w;            // Weights, to act on input activations from previous layer
         Matrix       *m_dw;           // Weight derivative, will be null when not training.
         Matrix       *m_a;            // Activations, output of a neuron.

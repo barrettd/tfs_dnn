@@ -16,10 +16,13 @@ namespace tfs {
         return NAME;
     }
     
-    DnnLayerInput::DnnLayerInput( unsigned long xx, unsigned long yy, unsigned long zz ) :
+    DnnLayerInput::DnnLayerInput( unsigned long xx, unsigned long yy, unsigned long zz, const bool trainable ) :
     DnnLayer( NAME ),
     m_x( xx ), m_y( yy ), m_z( zz ), m_size( xx * yy * zz ) {
         // Constructor
+        if( trainable ) {
+            m_dw = new Matrix( xx, yy, zz );    // dw is ignored for input, but here to satisfy lower layer write.
+        }
     }
         
     DnnLayerInput::~DnnLayerInput( void ) {
