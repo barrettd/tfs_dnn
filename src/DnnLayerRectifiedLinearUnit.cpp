@@ -27,16 +27,16 @@ namespace tfs {
     
     bool
     DnnLayerRectifiedLinearUnit::threshold( const Matrix &data ) {
-        if( m_a == 0 ) {
+        if( m_out_a == 0 ) {
             return log_error( "Activation matrix not allocated" );
         }
-        unsigned long count = m_a->size();
+        unsigned long count = m_out_a->size();
         if( count != data.size()) {
             return log_error( "Input matrix does not match activation matrix size" );
         }
         const DNN_NUMERIC *src = data.dataReadOnly();
-        const DNN_NUMERIC *end = src + count;
-              DNN_NUMERIC *dst = m_a->data();
+        const DNN_NUMERIC *end = data.end();
+              DNN_NUMERIC *dst = m_out_a->data();
         while( src < end ) {
             if( *src >= 0.0 ) {     // Threshold at 0.0
                 *dst++ = *src++;
@@ -51,10 +51,10 @@ namespace tfs {
     bool
     DnnLayerRectifiedLinearUnit::forward( void ) {
         // Forward propagate while training
-        if( m_w == 0 || m_dw == 0 || m_a == 0 || m_pa == 0 ) {
+        if( m_w == 0 || m_dw == 0 || m_out_a == 0 || m_in_a == 0 ) {
             return log_error( "Not configured for training" );
         }
-        if( !threshold( *m_pa )) {
+        if( !threshold( *m_in_a )) {
             return log_error( "Thresholding failed" );
         }
         if( m_next_layer != 0 ) {
@@ -79,7 +79,7 @@ namespace tfs {
             return log_error( "Thresholding failed" );
         }
         if( m_next_layer != 0 ) {
-            return m_next_layer->predict( *m_a );
+            return m_next_layer->predict( *m_out_a );
         }
         return true;
     }

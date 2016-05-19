@@ -28,6 +28,8 @@ namespace tfs {
         DnnTrainer( Dnn *dnn );
         virtual ~DnnTrainer( void );
         
+        Matrix*        getMatrixInput( void );
+
         DNN_NUMERIC   learningRate( void ) const;
         DNN_NUMERIC   learningRate( DNN_NUMERIC value );
         
@@ -49,7 +51,7 @@ namespace tfs {
         unsigned long   k( void ) const;
         unsigned long   k( unsigned long value );
         
-        virtual DNN_NUMERIC train( const Matrix &data, const Matrix &expectation );     // Returns loss.
+        virtual DNN_NUMERIC train( const Matrix &expectation );     // Returns loss.
         
         
     };

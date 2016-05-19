@@ -87,7 +87,10 @@ namespace tfs {
         
         spiralSetUpData( data, label, 100 );
         
-        Matrix input(  1, 1, 2 );   // x,y
+        Matrix *input = trainer.getMatrixInput();   // x,y pair Matrix( 1, 1, 2 )
+        if( input == 0 ) {
+            return log_error( "Unable to obtain input matrix." );
+        }
         Matrix output( 1, 1, 1 );   // label ( 0 or 1 )
         
         DNN_NUMERIC *outPtr = output.data();
@@ -104,11 +107,11 @@ namespace tfs {
                 const DNN_NUMERIC *ePtr = lPtr + DATA_COUNT;
                 
                 while( lPtr < ePtr ) {
-                    DNN_NUMERIC *inPtr = input.data();
+                    DNN_NUMERIC *inPtr = input->data();
                     *inPtr++ = *dPtr++;     // x
                     *inPtr++ = *dPtr++;     // y
                     *outPtr  = *lPtr++;     // label
-                    average_loss += trainer.train( input, output );
+                    average_loss += trainer.train( output );
                 }
             }
             average_loss /= DATA_COUNT * MAX_ITERATION;

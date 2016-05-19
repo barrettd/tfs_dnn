@@ -19,13 +19,14 @@ namespace tfs {
     }
     
     DNN_NUMERIC
-    DnnTrainerSGD::train( const Matrix &data, const Matrix &expectation ) {
+    DnnTrainerSGD::train( const Matrix &expectation ) {
+        // Input matrix already set for the DNN
         m_loss = 0.0;
         if( m_dnn == 0 ) {
             log_error( "No DNN set" );
             return m_loss;
         }
-        if( !m_dnn->forward( data )) {
+        if( !m_dnn->forward()) {
             return m_loss;
         }
         m_loss = m_dnn->backprop( expectation );

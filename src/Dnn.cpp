@@ -169,6 +169,16 @@ namespace tfs {
         return addLayer( layer );
     }
     
+    Matrix*
+    Dnn::getMatrixInput( void ) {
+        Matrix *matrix = 0;
+        if( m_layer_input != 0 ) {
+            matrix = m_layer_input->outA();     // The output activation matrix is the input layer.
+        }
+        return matrix;
+    }
+
+    
     DnnLayerInput*
     Dnn::getLayerInput(  void ) {
         return m_layer_input;
@@ -202,10 +212,10 @@ namespace tfs {
     }
     
     bool
-    Dnn::forward( const Matrix &data ) {
+    Dnn::forward( void ) {
         // Forward propagate while training
         if( m_layer_input != 0 ) {
-            return m_layer_input->forward( data );      // Calls each layer in the forward direction.
+            return m_layer_input->forward();      // Calls each layer in the forward direction.
         }
         return log_error( "No input layer" );
     }

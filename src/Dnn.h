@@ -57,13 +57,14 @@ namespace tfs {     // Tree Frog Software
         bool addLayerSupportVectorMachine( void );          // svm
         bool addLayerTanh( void );                          // tanh
         
+        Matrix        *getMatrixInput( void );
         DnnLayerInput *getLayerInput(  void );
         DnnLayer      *getLayerOutput( void );
         
         void initialize( void );                                // Initialize for learning.
         void randomize( void );                                 // Randomize weights and bias.
 
-        bool forward(  const Matrix &data );                    // Forward propagate while training
+        bool forward( void );                                   // Forward propagate while training
         DNN_NUMERIC backprop( const Matrix &expectation );      // Back propagate while training, returns loss.
         
         bool predict( const Matrix &data, Matrix &prediction ); // Forward progagate when predicting

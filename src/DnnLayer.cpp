@@ -11,17 +11,18 @@ namespace tfs {
     
     DnnLayer::DnnLayer( const char *name ):
     m_name( name ),
-    m_pa( 0 ), m_w( 0 ), m_dw( 0 ), m_a( 0 ),
+    m_in_a( 0 ), m_in_dw( 0 ), m_w( 0 ), m_dw( 0 ), m_out_a( 0 ), m_out_dw( 0 ),
     m_prev_layer( 0 ), m_next_layer( 0 ) {
         // Constructor
     }
     
     DnnLayer::DnnLayer( const char *name, DnnLayer *previousLayer ) :
     m_name( name ),
-    m_pa( 0 ), m_w( 0 ), m_dw( 0 ), m_a( 0 ),
+    m_in_a( 0 ), m_in_dw( 0 ), m_w( 0 ), m_dw( 0 ), m_out_a( 0 ), m_out_dw( 0 ),
     m_prev_layer( previousLayer ), m_next_layer( 0 ) {  // Constructor
         if( previousLayer != 0 ) {
-            m_pa = previousLayer->m_a;                  // Wire up to previous layer activations as input to forward() and predict()
+            m_in_a  = previousLayer->m_out_a;            // Wire up to previous layer activations as input to forward() and predict()
+            m_in_dw = previousLayer->m_out_dw;
             previousLayer->setNextLayer( this );
         } else {
             log_error( "Previous layer is null" );
@@ -38,12 +39,14 @@ namespace tfs {
     DnnLayer::setup( const unsigned long  inX, const unsigned long  inY, const unsigned long  inZ,
                      const unsigned long outX, const unsigned long outY, const unsigned long outZ,
                      const bool trainable ) {
-        teardown();
         m_w = new Matrix( inX, inY, inZ );
         if( trainable ) {
             m_dw = new Matrix( inX, inY, inZ );
         }
-        m_a = new Matrix( outX, outY, outZ );
+        m_out_a = new Matrix( outX, outY, outZ );
+        if( trainable ) {
+            m_out_dw = new Matrix( outX, outY, outZ );
+        }
         return;
     }
     
@@ -65,12 +68,14 @@ namespace tfs {
     DnnLayer::teardown( void ) {
         delete m_w;
         delete m_dw;
-        delete m_a;
-        m_pa   = 0;
-        m_pdw  = 0;
-        m_w    = 0;
-        m_dw   = 0;
-        m_a    = 0;
+        delete m_out_a;
+        delete m_out_dw;
+        m_in_a   = 0;
+        m_in_dw  = 0;
+        m_w      = 0;
+        m_dw     = 0;
+        m_out_a  = 0;
+        m_out_dw = 0;
         return;
     }
 
@@ -80,52 +85,10 @@ namespace tfs {
     }
     
     Matrix*
-    DnnLayer::w( void ) {
-        return m_w;             // Weights
+    DnnLayer::outA( void ) {
+        return m_out_a;             // Output Activations
     }
     
-    Matrix*
-    DnnLayer::dw( void ) {
-        return m_dw;            // Weight derivatives
-    }
-    
-    Matrix*
-    DnnLayer::a( void ) {
-        return m_a;             // Activations
-    }
-    
-    unsigned long
-    DnnLayer::aX( void ) const {
-        if( m_a == 0 ) {
-            return 0;
-        }
-        return m_a->width();
-    }
-    
-    unsigned long
-    DnnLayer::aY( void ) const {
-        if( m_a == 0 ) {
-            return 0;
-        }
-        return m_a->height();
-    }
-
-    unsigned long
-    DnnLayer::aZ( void ) const {
-        if( m_a == 0 ) {
-            return 0;
-        }
-        return m_a->depth();
-    }
-    
-    unsigned long
-    DnnLayer::aSize( void ) const {
-        if( m_a == 0 ) {
-            return 0;
-        }
-        return m_a->size();
-    }
-
     DnnLayer*
     DnnLayer::getPreviousLayer( void ) const {
         return m_prev_layer;
@@ -134,8 +97,8 @@ namespace tfs {
     DnnLayer*
     DnnLayer::setPreviousLayer( DnnLayer *layer ) {
         if( layer != 0 ) {
-            m_pa  = layer->a();     // Remember previous activation layer
-            m_pdw = layer->dw();    // Remember previous gradiant array
+            m_in_a  = layer->m_out_a;     // Remember previous activation layer
+            m_in_dw = layer->m_out_dw;    // Remember previous gradiant array
         }
         return m_prev_layer = layer;
     }
@@ -159,8 +122,11 @@ namespace tfs {
         if( m_dw != 0 ) {
             m_dw->zero();
         }
-        if( m_a != 0 ) {
-            m_a->zero();
+        if( m_out_a != 0 ) {
+            m_out_a->zero();
+        }
+        if( m_out_dw != 0 ) {
+            m_out_dw->zero();
         }
         if( m_next_layer != 0 ) {
             m_next_layer->initialize();  // Forward propagate
@@ -180,16 +146,6 @@ namespace tfs {
         return;
     }
     
-    bool
-    DnnLayer::forward( const Matrix &data ) {
-        // Forward propagate while training
-        if( m_next_layer != 0 ) {
-            m_next_layer->m_pa = &data;
-            return m_next_layer->forward();
-        }
-        return true;
-    }
-
     bool
     DnnLayer::forward( void ) {
         // Forward propagate while training

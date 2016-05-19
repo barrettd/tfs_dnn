@@ -27,6 +27,15 @@ namespace tfs {
         m_dnn = 0;
     }
     
+    Matrix*
+    DnnTrainer::getMatrixInput( void ) {
+        Matrix *matrix = 0;
+        if( m_dnn != 0 ) {
+            matrix = m_dnn->getMatrixInput();
+        }
+        return matrix;
+    }
+    
     DNN_NUMERIC
     DnnTrainer::learningRate( void ) const {
         return m_learning_rate;
@@ -91,7 +100,7 @@ namespace tfs {
     }
 
     DNN_NUMERIC
-    DnnTrainer::train( const Matrix &data, const Matrix &expectation ) {
+    DnnTrainer::train( const Matrix &expectation ) {    // Input from input matrix.
         m_loss = 0.0;
         return m_loss;
     }

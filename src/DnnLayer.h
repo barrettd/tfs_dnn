@@ -14,11 +14,12 @@ namespace tfs {
     class DnnLayer {                  // Base class of all layers.
     protected:
         const char *m_name;           // Used in serialization.
-        const Matrix *m_pa;           // Activations of previous layer, if any.
-              Matrix *m_pdw;          // dw of previous layer, if any.
-        Matrix       *m_w;            // Weights, to act on input activations from previous layer
-        Matrix       *m_dw;           // Weight derivative, will be null when not training.
-        Matrix       *m_a;            // Activations, output of a neuron.
+        const Matrix *m_in_a;         // Input:    Activations of previous layer, if any.
+              Matrix *m_in_dw;        // Input:    dw of previous layer, if any.
+        Matrix       *m_w;            // Internal: Weights, to act on input activations from previous layer
+        Matrix       *m_dw;           // Internal: Weight derivative, will be null when not training.
+        Matrix       *m_out_a;        // Output:   Activations, output of a neuron.
+        Matrix       *m_out_dw;       // Output:   Weight derivative, will be null when not training.
         DnnLayer     *m_prev_layer;
         DnnLayer     *m_next_layer;
         
@@ -28,8 +29,6 @@ namespace tfs {
         void setup( const Matrix *activations, const bool trainable = true );
         void teardown( void );
 
-        bool forward( const Matrix &data );     // Forward propagate while training
-
     public:
         DnnLayer( const char *name );
         DnnLayer( const char *name, DnnLayer *previousLayer );
@@ -37,14 +36,7 @@ namespace tfs {
         
         // Layer attributes:
         const char *name( void ) const;
-        Matrix     *w(  void );             // Weights
-        Matrix     *dw( void );             // Weight derivatives
-        Matrix     *a(  void );             // Activations
-        
-        virtual unsigned long aX( void ) const; // Activation dimensions
-        virtual unsigned long aY( void ) const;
-        virtual unsigned long aZ( void ) const;
-        virtual unsigned long aSize( void ) const;
+        Matrix     *outA( void );               // Output Activations
         
         // Linked list pointers:
         DnnLayer *getPreviousLayer( void ) const;
