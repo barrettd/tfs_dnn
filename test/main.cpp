@@ -6,8 +6,9 @@
 // --------------------------------------------------------------------
 #include <iostream>
 #include "testCifar10.hpp"
-#include "testSpiral.hpp"
+#include "testFullyConnected.hpp"
 #include "TestMatrix.hpp"
+#include "testSpiral.hpp"
 
 
 
@@ -17,6 +18,7 @@ main( int argc, const char * argv[] ) {
     std::cout << "Test DNN begin\n";
     
     testMatrix();
+    testFullyConnected();
     testCifar10();
     testSpiral();
     

@@ -178,6 +178,14 @@ namespace tfs {
         return matrix;
     }
 
+    Matrix*
+    Dnn::getMatrixOutput( void ) {
+        Matrix *matrix = 0;
+        if( m_layer_output != 0 ) {
+            matrix = m_layer_output->outA();    // The output activation matrix of the output layer.
+        }
+        return matrix;
+    }
     
     DnnLayerInput*
     Dnn::getLayerInput(  void ) {
