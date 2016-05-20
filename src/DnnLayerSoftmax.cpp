@@ -99,24 +99,8 @@ namespace tfs {
         return true;
     }
     
-//backward: function(y) {
-//    
-//    // compute and accumulate gradient wrt weights and bias of this layer
-//    var x = this.in_act;
-//    x.dw = global.zeros(x.w.length); // zero out the gradient of input Vol
-//    
-//    for(var i=0;i<this.out_depth;i++) {
-//        var indicator = i === y ? 1.0 : 0.0;
-//        var mul = -(indicator - this.es[i]);
-//        x.dw[i] = mul;
-//    }
-//    
-//    // loss is the class negative log likelihood
-//    return -Math.log(this.es[y]);
-//},
-    
     DNN_NUMERIC
-    DnnLayerSoftmax::backprop( const unsigned long expectation ) {
+    DnnLayerSoftmax::backprop( const DMatrix &expectation ) {
         // -----------------------------------------------------------------------------------
         // Back propagate while training
         // S = size of input data
@@ -126,42 +110,29 @@ namespace tfs {
         // m_out_a[N]   Output activations
         // m_out_dw[N]
         // -----------------------------------------------------------------------------------
-        if( m_in_a == 0 || m_in_dw == 0 || m_w == 0 || m_dw == 0 || m_out_a == 0 || m_out_dw == 0 ) {
+        if( expectation.isEmpty() || m_in_dw == 0 || m_es == 0 ) {
             log_error( "Not configured for training" );
             return 0.0;
         }
-        if( expectation >= m_es->size()) {
+        const DNN_INTEGER yy = *(expectation.dataReadOnly());
+        if( yy >= m_es->size()) {
             log_error( "Expectation is too large" );
             return 0.0;
         }
+              DNN_NUMERIC *inputDw = m_in_dw->data();
+        const DNN_INTEGER    count = m_in_dw->size();
+        const DNN_NUMERIC      *es = m_es->data();
+        
+        DNN_NUMERIC delta;
         DNN_NUMERIC loss = 0.0;
-        const DNN_NUMERIC *          input = m_in_a->dataReadOnly();
-        const DNN_NUMERIC * const    inEnd = m_in_a->end();             // A pointer just past the end of the input
-        DNN_NUMERIC *        inputDw = m_in_dw->data();
-        const DNN_NUMERIC *             ww = m_w->dataReadOnly();       // weights[n,s]
-        DNN_NUMERIC *             dw = m_dw->data();              // dw[n,s]
-        const DNN_NUMERIC *          outDw = m_out_dw->dataReadOnly();
-        const DNN_NUMERIC * const outDwEnd = m_out_dw->end();
-        
-        m_in_dw->zero();                            // Zero previous back propagation result.
-        
-        while( outDw < outDwEnd ) {                 // for ii = 0 to N: Loop for each neuron activation
-            const DNN_NUMERIC   *in = input;
-            DNN_NUMERIC *inDw = inputDw;
-            const DNN_NUMERIC  grad = *outDw++;
-            
-            while( in < inEnd ) {                   // Loop for each input element
-                *inDw++ += *ww++ * grad;
-                *dw++   += *in++ * grad;
+        for( DNN_INTEGER ii = 0; ii < count; ii++ ) {
+            if( ii == yy ) {
+                loss  = log( *es );
+                delta = *es++ - 1.0;
+            } else {
+                delta = *es++;
             }
-            *dw++ += grad;                          // bias dw
-            ww++;                                   // bias weight (skip)
-        }
-        
-        if( m_prev_layer != 0 ) {
-            if( !m_prev_layer->backprop()) {
-                log_error( "problem during backpropagation" );
-            }
+            *inputDw++ = delta;
         }
         return loss;
     }

@@ -230,6 +230,16 @@ namespace tfs {
         return m_layer_output->backprop( expectation ); // Calls each layer in the backward direction.
     }
     
+    DNN_NUMERIC
+    Dnn::backprop( const DMatrix &expectation ) {
+        // Back propagate while training
+        if( m_layer_output == 0 ) {
+            log_error( "No output layer" );
+            return 0.0;
+        }
+        return m_layer_output->backprop( expectation ); // Calls each layer in the backward direction.
+    }
+    
     bool
     Dnn::predict( const Matrix &data, Matrix &prediction ) {
         // Forward progagate when predicting

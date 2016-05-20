@@ -24,7 +24,7 @@ namespace tfs {
         virtual ~DnnLayerSoftmax( void );
       
         virtual bool forward(  void );                  // Forward propagate while training
-         virtual DNN_NUMERIC backprop( const unsigned long expectation );  // Last layer
+         virtual DNN_NUMERIC backprop( const DMatrix &expectation );  // Last layer
         
         virtual bool predict( const Matrix &data );     // Forward progagate when predicting
     };
