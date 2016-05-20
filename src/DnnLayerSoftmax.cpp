@@ -44,7 +44,7 @@ namespace tfs {
             log_error( "input A is null" );
             return;
         }
-        const unsigned long classCount = m_in_a->size();    // 1d input, S elements.
+        const unsigned long classCount = m_in_a->count();    // 1d input, S elements.
         if( classCount < 1 ) {
             log_error( "input size < 1" );
             return;
@@ -115,12 +115,12 @@ namespace tfs {
             return 0.0;
         }
         const DNN_INTEGER yy = *(expectation.dataReadOnly());
-        if( yy >= m_es->size()) {
+        if( yy >= m_es->count()) {
             log_error( "Expectation is too large" );
             return 0.0;
         }
               DNN_NUMERIC *inputDw = m_in_dw->data();
-        const DNN_INTEGER    count = m_in_dw->size();
+        const DNN_INTEGER    count = m_in_dw->count();
         const DNN_NUMERIC      *es = m_es->data();
         
         DNN_NUMERIC delta;
@@ -145,7 +145,7 @@ namespace tfs {
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 || m_out_a == 0 ) {
             return log_error( "Not configured for predicting" );
         }
-        if( m_w->size() != data.size()) {
+        if( m_w->count() != data.count()) {
             return log_error( "Input matrix does not match expected size" );
         }
         if( m_next_layer != 0 ) {

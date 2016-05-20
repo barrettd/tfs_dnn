@@ -94,7 +94,7 @@ namespace tfs {
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 || m_out_a == 0 ) {
             return log_error( "Not configured for predicting" );
         }
-        if( m_w->size() != data.size()) {
+        if( m_w->count() != data.count()) {
             return log_error( "Input matrix does not match expected size" );
         }
         if( m_next_layer != 0 ) {

@@ -30,8 +30,8 @@ namespace tfs {
         if( m_out_a == 0 ) {
             return log_error( "Activation matrix not allocated" );
         }
-        unsigned long count = m_out_a->size();
-        if( count != data.size()) {
+        unsigned long count = m_out_a->count();
+        if( count != data.count()) {
             return log_error( "Input matrix does not match activation matrix size" );
         }
         const DNN_NUMERIC *src = data.dataReadOnly();
