@@ -95,7 +95,7 @@ namespace tfs {
         
         DNN_INTEGER *outPtr = output.data();
 
-        const unsigned long MAX_ITERATION = 20;
+        const unsigned long MAX_ITERATION = 200;
         const unsigned long DATA_COUNT    = label.size();
         const DNN_NUMERIC   TARGET_LOSS   = 0.0001;
         DNN_NUMERIC average_loss = 0.0;

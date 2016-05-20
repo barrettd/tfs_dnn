@@ -90,8 +90,7 @@ namespace tfs {
         }
         es = esStart;
         while( output < outEnd ) {  // normalize
-            *es /= esum;
-            *output++ = *es++;
+            *output++ = *es++ / esum;
         }
         if( m_next_layer != 0 ) {
             return m_next_layer->forward();
@@ -114,9 +113,9 @@ namespace tfs {
             log_error( "Not configured for training" );
             return 0.0;
         }
-        const DNN_INTEGER yy = *(expectation.dataReadOnly());
-        if( yy >= m_es->count()) {
-            log_error( "Expectation is too large" );
+        const DNN_INTEGER yy = *(expectation.dataReadOnly());   // We expect a single value.
+        if( yy < 0 || yy >= m_es->count()) {
+            log_error( "Expectation is out of range" );
             return 0.0;
         }
               DNN_NUMERIC *inputDw = m_in_dw->data();

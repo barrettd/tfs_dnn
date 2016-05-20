@@ -138,7 +138,7 @@ namespace tfs {
         // m_out_a[N]  = activations of each neuron
         // m_out_dw[N]
         // -----------------------------------------------------------------------------------
-        if( m_in_a == 0 || m_in_dw == 0 || m_w == 0 || m_dw == 0 || m_out_a == 0 || m_out_dw == 0 ) {
+        if( m_in_a == 0 || m_in_dw == 0 || m_w == 0 || m_dw == 0 || m_out_dw == 0 ) {
             return log_error( "Not configured for training" );
         }
         const DNN_NUMERIC *          input = m_in_a->dataReadOnly();

@@ -34,9 +34,9 @@ namespace tfs {
         if( count != data.count()) {
             return log_error( "Input matrix does not match activation matrix size" );
         }
-        const DNN_NUMERIC *src = data.dataReadOnly();
-        const DNN_NUMERIC *end = data.end();
-              DNN_NUMERIC *dst = m_out_a->data();
+        const DNN_NUMERIC *       src = data.dataReadOnly();
+        const DNN_NUMERIC * const end = data.end();
+              DNN_NUMERIC *       dst = m_out_a->data();
         while( src < end ) {
             if( *src >= 0.0 ) {     // Threshold at 0.0
                 *dst++ = *src++;

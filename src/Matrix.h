@@ -23,13 +23,13 @@ namespace tfs {         // Tree Frog Software
         unsigned long m_z;      // Depth
         unsigned long m_count;  // = x * w * h;  // Count of DNN_NUMERIC elements.
         unsigned long m_length; // = count * sizeof( T )
-        T            *m_data;   // Pointer to data[] array
-        T            *m_end;    // Pointer to one element past the end of the array.
+        T            *m_data;   // Pointer to data[] array:     = &data[0];
+        T            *m_end;    // Pointer to end of the array: = &data[m_count];
         
         void allocate( void ) {
             if( m_count > 0 ) {
                 m_length = m_count * sizeof( T );   // Length in bytes
-                m_data   = new T[m_count];          // Possibly random values.
+                m_data   = new T[m_count];          // = &data[0];          Possibly random values.
                 m_end    = m_data + m_count;        // = &m_data[m_count];
             }
         }
