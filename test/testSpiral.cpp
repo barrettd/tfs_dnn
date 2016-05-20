@@ -104,7 +104,7 @@ namespace tfs {
             for( unsigned long ii = 0; ii < MAX_ITERATION; ii++ ) {
                 const DNN_NUMERIC *dPtr = data.data();
                 const DNN_INTEGER *lPtr = label.data();
-                const DNN_INTEGER *ePtr = lPtr + DATA_COUNT * sizeof( DNN_INTEGER );
+                const DNN_INTEGER *ePtr = lPtr + DATA_COUNT;
                 
                 while( lPtr < ePtr ) {
                     DNN_NUMERIC *inPtr = input->data();
