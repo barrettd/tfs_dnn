@@ -17,7 +17,7 @@ namespace tfs {
         
         DnnLayerInput( unsigned long xx, unsigned long yy = 1, unsigned long zz = 1, const bool trainable = true );
         virtual ~DnnLayerInput( void );
-       
+               
     };
     
 

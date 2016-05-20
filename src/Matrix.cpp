@@ -139,5 +139,135 @@ namespace tfs {     // Tree Frog Software
         return result;
     }
 
+    // -----------------------------------------------------------------------------------------------
+    // DMatrix
+    // -----------------------------------------------------------------------------------------------
+    
+    DMatrix::DMatrix( const DMatrix &other ) :
+    m_x( other.m_x ), m_y( other.m_y ), m_z( other.m_z ),
+    m_size( other.m_size ),
+    m_data( 0 ), m_end( 0 ) {
+        // Constructor
+        if( m_size > 0 ) {
+            m_data = new DNN_INTEGER[m_size];   // Possibly random values.
+            m_end  = m_data + m_size * sizeof( DNN_INTEGER );
+        }
+    }
+    
+    DMatrix::DMatrix( const unsigned long xx, const unsigned long yy, const unsigned long zz ):
+    m_x( xx ), m_y( yy ), m_z( zz ),
+    m_size( xx * yy * zz ),
+    m_data( 0 ), m_end( 0 ) {
+        // Constructor
+        if( m_size > 0 ) {
+            m_data = new DNN_INTEGER[m_size];   // Possibly random values.
+            m_end  = m_data + m_size * sizeof( DNN_INTEGER );
+        }
+    }
+    
+    DMatrix::~DMatrix( void ) {
+        // Destructor
+        delete[] m_data;
+        m_data = 0;
+        m_end  = 0;
+        m_size = 0;
+    }
+    
+    unsigned long
+    DMatrix::width( void ) const {
+        return m_x;
+    }
+    
+    unsigned long
+    DMatrix::height( void ) const {
+        return m_y;
+    }
+    
+    unsigned long
+    DMatrix::depth( void ) const {
+        return m_z;
+    }
+    
+    unsigned long
+    DMatrix::size(   void ) const {
+        return m_size;          // = x * w * h;  // Count of DNN_INTEGER elements.
+    }
+    
+    DNN_INTEGER*
+    DMatrix::data( void ) {
+        return m_data;
+    }
+    
+    const DNN_INTEGER*
+    DMatrix::end( void ) const {
+        return m_end;
+    }
+    
+    const DNN_INTEGER*
+    DMatrix::dataReadOnly( void ) const {
+        return m_data;
+    }
+    
+    void
+    DMatrix::randomize( void ) {
+        // Weight normalization is done to equalize the output variance of every neuron,
+        // otherwise neurons with a lot of incoming connections will have outputs with a larger variance
+        if( m_data != 0 && m_size > 0 ) {
+            const DNN_INTEGER scale = sqrt( 1.0 / m_size );
+            DNN_INTEGER *ptr = m_data;
+            const DNN_INTEGER *end = m_end;
+            while( ptr < end ) {
+                *ptr++ = random( scale );
+            }
+        }
+        return;
+    }
+    
+    void
+    DMatrix::zero( void ) {
+        if( m_data != 0 && m_size > 0 ) {
+            const unsigned long length = m_size * sizeof( DNN_INTEGER );
+            memset( m_data, 0, length );    // Yields IEEE 0 for both integer and real valued variables.
+        }
+        return;
+    }
+    
+    DNN_INTEGER
+    DMatrix::dot( const DMatrix &matrix ) const {   // Compute the dot product: scalar = lhs (dot) rhs;
+        if( m_data == 0 || m_end == 0 || m_size < 1 ) {
+            log_error( "empty matrix" );
+            return 0.0;
+        }
+        if( matrix.m_size != m_size ) {
+            log_error( "Matricies not the same size" );
+            return 0.0;
+        }
+        const DNN_INTEGER *       lhs = m_data;
+        const DNN_INTEGER * const end = m_end;
+        const DNN_INTEGER *        rhs = matrix.m_data;
+        DNN_INTEGER       result = 0.0;
+        while( lhs < end ) {
+            result += *lhs++ * *rhs++;
+        }
+        return result;
+    }
+    
+    DNN_INTEGER
+    DMatrix::max( void ) const {
+        if( m_data == 0 || m_end == 0 || m_size < 1 ) {
+            log_error( "empty matrix" );
+            return 0.0;
+        }
+        const DNN_INTEGER *      data = m_data;
+        const DNN_INTEGER * const end = m_end;
+        DNN_INTEGER       result = *data++;
+        while( data < end ) {
+            if( *data > result ) {
+                result = *data;
+            }
+            data++;
+        }
+        return result;
+    }
     
 }   // namespace tfs

@@ -51,7 +51,8 @@ namespace tfs {
         unsigned long   k( void ) const;
         unsigned long   k( unsigned long value );
         
-        virtual DNN_NUMERIC train( const Matrix &expectation );     // Returns loss.
+        virtual DNN_NUMERIC train( const  Matrix &expectation );     // Returns loss.
+        virtual DNN_NUMERIC train( const DMatrix &expectation );     // Returns loss.
         
         
     };

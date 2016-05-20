@@ -138,7 +138,7 @@ namespace tfs {
         }
         return;
     }
-    
+
     bool
     DnnLayer::forward( void ) {
         // Forward propagate while training
@@ -155,7 +155,23 @@ namespace tfs {
         }
         return true;
     }
+    
+    DNN_NUMERIC
+    DnnLayer::backprop( const Matrix &expectation ) {
+        if( m_prev_layer != 0 ) {
+            return m_prev_layer->backprop();
+        }
+        return 0.0;
+    }
 
+    DNN_NUMERIC
+    DnnLayer::backprop( const unsigned long expectation ) {
+        if( m_prev_layer != 0 ) {
+            return m_prev_layer->backprop();
+        }
+        return 0.0;
+    }
+    
     bool
     DnnLayer::predict( const Matrix &data ) {
         // Forward progagate when predicting
@@ -164,7 +180,6 @@ namespace tfs {
         }
         return true;
     }
-
 
     
 }   // namespace tfs

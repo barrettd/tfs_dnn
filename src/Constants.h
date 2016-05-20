@@ -14,6 +14,7 @@ namespace tfs {     // Tree Frog Software
     // It is fast with most "big" CPUs.
     // Embedded systems may require different native data types.
     typedef double DNN_NUMERIC;
+    typedef long   DNN_INTEGER;
 
 }   // namespace tfs
 

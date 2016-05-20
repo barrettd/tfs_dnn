@@ -104,6 +104,12 @@ namespace tfs {
         m_loss = 0.0;
         return m_loss;
     }
-    
+
+    DNN_NUMERIC
+    DnnTrainer::train( const DMatrix &expectation ) {   // Input from input matrix.
+        m_loss = 0.0;
+        return m_loss;
+    }
+
     
 }   // namespace tfs

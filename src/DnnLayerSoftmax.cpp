@@ -99,8 +99,24 @@ namespace tfs {
         return true;
     }
     
-    bool
-    DnnLayerSoftmax::backprop( void ) {
+//backward: function(y) {
+//    
+//    // compute and accumulate gradient wrt weights and bias of this layer
+//    var x = this.in_act;
+//    x.dw = global.zeros(x.w.length); // zero out the gradient of input Vol
+//    
+//    for(var i=0;i<this.out_depth;i++) {
+//        var indicator = i === y ? 1.0 : 0.0;
+//        var mul = -(indicator - this.es[i]);
+//        x.dw[i] = mul;
+//    }
+//    
+//    // loss is the class negative log likelihood
+//    return -Math.log(this.es[y]);
+//},
+    
+    DNN_NUMERIC
+    DnnLayerSoftmax::backprop( const unsigned long expectation ) {
         // -----------------------------------------------------------------------------------
         // Back propagate while training
         // S = size of input data
@@ -111,8 +127,14 @@ namespace tfs {
         // m_out_dw[N]
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_in_dw == 0 || m_w == 0 || m_dw == 0 || m_out_a == 0 || m_out_dw == 0 ) {
-            return log_error( "Not configured for training" );
+            log_error( "Not configured for training" );
+            return 0.0;
         }
+        if( expectation >= m_es->size()) {
+            log_error( "Expectation is too large" );
+            return 0.0;
+        }
+        DNN_NUMERIC loss = 0.0;
         const DNN_NUMERIC *          input = m_in_a->dataReadOnly();
         const DNN_NUMERIC * const    inEnd = m_in_a->end();             // A pointer just past the end of the input
         DNN_NUMERIC *        inputDw = m_in_dw->data();
@@ -137,9 +159,11 @@ namespace tfs {
         }
         
         if( m_prev_layer != 0 ) {
-            return m_prev_layer->backprop();
+            if( !m_prev_layer->backprop()) {
+                log_error( "problem during backpropagation" );
+            }
         }
-        return true;
+        return loss;
     }
     
     bool

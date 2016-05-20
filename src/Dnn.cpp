@@ -227,15 +227,7 @@ namespace tfs {
             log_error( "No output layer" );
             return 0.0;
         }
-        if( !m_layer_output->backprop()) {          // Calls each layer in the backward direction.
-            log_error( "Error performing back propagation" );
-            return 0.0;
-        }
-        DNN_NUMERIC loss = 0.0;
-        
-        // TODO:
-        
-        return loss;
+        return m_layer_output->backprop( expectation ); // Calls each layer in the backward direction.
     }
     
     bool

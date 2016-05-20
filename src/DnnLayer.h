@@ -11,15 +11,15 @@
 
 namespace tfs {
     
-    class DnnLayer {                  // Base class of all layers.
+    class DnnLayer {                    // Base class of all layers.
     protected:
-        const char *m_name;           // Used in serialization.
-        const Matrix *m_in_a;         // Input:    Activations of previous layer, if any.
-              Matrix *m_in_dw;        // Input:    dw of previous layer, if any.
-        Matrix       *m_w;            // Internal: Weights, to act on input activations from previous layer
-        Matrix       *m_dw;           // Internal: Weight derivative, will be null when not training.
-        Matrix       *m_out_a;        // Output:   Activations, output of a neuron.
-        Matrix       *m_out_dw;       // Output:   Weight derivative, will be null when not training.
+        const char *m_name;             // Used in serialization.
+        const Matrix *m_in_a;           // Input:    Activations of previous layer, if any.
+              Matrix *m_in_dw;          // Input:    dw of previous layer, if any.
+        Matrix       *m_w;              // Internal: Weights, to act on input activations from previous layer
+        Matrix       *m_dw;             // Internal: Weight derivative, will be null when not training.
+        Matrix       *m_out_a;          // Output:   Activations, output of a neuron.
+        Matrix       *m_out_dw;         // Output:   Weight derivative, will be null when not training.
         DnnLayer     *m_prev_layer;
         DnnLayer     *m_next_layer;
         
@@ -49,6 +49,8 @@ namespace tfs {
         
         virtual bool forward(  void );                  // Forward propagate while training
         virtual bool backprop( void );                  // Back propagate while training
+        virtual DNN_NUMERIC backprop( const Matrix       &expectation );    // Last layer
+        virtual DNN_NUMERIC backprop( const unsigned long expectation );    // Last layer
         
         virtual bool predict( const Matrix &data );     // Forward progagate when predicting
         

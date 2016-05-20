@@ -14,7 +14,7 @@
 namespace tfs {
     
     static void
-    spiralSetUpData( std::vector< DNN_NUMERIC > &data, std::vector< DNN_NUMERIC > &label, const int count ) {
+    spiralSetUpData( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label, const int count ) {
         for( int ii = 0; ii < count; ii++ ) {
             const DNN_NUMERIC rr = ii / ( count * 5.0 ) + random( -0.1, 0.1 );
             const DNN_NUMERIC aa = 1.25 * ii / count * 2.0 * M_PI;
@@ -25,13 +25,13 @@ namespace tfs {
             DNN_NUMERIC yy = rr * cos( t0 );
             data.push_back( xx );       // x,y pair
             data.push_back( yy );
-            label.push_back( 0.0 );     // label
+            label.push_back( 0 );       // label
             
             xx = rr * sin( t1 );
             yy = rr * cos( t1 );
             data.push_back( xx );       // x,y pair
             data.push_back( yy );
-            label.push_back( 1.0 );     // label
+            label.push_back( 1 );       // label
         }
         return;
     }
@@ -83,7 +83,7 @@ namespace tfs {
         trainer.l2Decay(      0.001 );
         
         std::vector< DNN_NUMERIC > data;    // x,y pairs
-        std::vector< DNN_NUMERIC > label;   // binary labels.
+        std::vector< DNN_INTEGER > label;   // binary labels.
         
         spiralSetUpData( data, label, 100 );
         
@@ -91,9 +91,9 @@ namespace tfs {
         if( input == 0 ) {
             return log_error( "Unable to obtain input matrix." );
         }
-        Matrix output( 1, 1, 1 );   // label ( 0 or 1 )
+        DMatrix output( 1, 1, 1 );   // label ( 0 or 1 )
         
-        DNN_NUMERIC *outPtr = output.data();
+        DNN_INTEGER *outPtr = output.data();
 
         const unsigned long MAX_ITERATION = 20;
         const unsigned long DATA_COUNT    = label.size();
@@ -103,8 +103,8 @@ namespace tfs {
             average_loss = 0.0;
             for( unsigned long ii = 0; ii < MAX_ITERATION; ii++ ) {
                 const DNN_NUMERIC *dPtr = data.data();
-                const DNN_NUMERIC *lPtr = label.data();
-                const DNN_NUMERIC *ePtr = lPtr + DATA_COUNT;
+                const DNN_INTEGER *lPtr = label.data();
+                const DNN_INTEGER *ePtr = lPtr + DATA_COUNT * sizeof( DNN_INTEGER );
                 
                 while( lPtr < ePtr ) {
                     DNN_NUMERIC *inPtr = input->data();
