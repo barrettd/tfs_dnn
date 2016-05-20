@@ -35,10 +35,13 @@ namespace tfs {         // Tree Frog Software
         }
 
     public:
-        TMatrix( const TMatrix &other ) :       // Constructor
+        TMatrix( const TMatrix &other, bool copyOther = false ) :       // Constructor
         m_x( other.m_x ), m_y( other.m_y ), m_z( other.m_z ), m_count( other.m_count ),
         m_length( 0 ), m_data( 0 ), m_end( 0 ) {
             allocate();
+            if( copyOther ) {
+                copy( other );
+            }
         }
 
         TMatrix( const unsigned long xx, const unsigned long yy = 1, const unsigned long zz = 1 ):  // Constructor
@@ -88,6 +91,20 @@ namespace tfs {         // Tree Frog Software
             }
         }
         
+        void copy( const TMatrix &matrix ) {        // Copy the contents another matrix.
+            if( m_data != 0 && matrix.m_data != 0 && m_length > 0  && m_length == matrix.m_length ) {
+                memcpy( m_data, matrix.m_data, m_length );
+            }
+        }
+        
+        bool equal( const TMatrix &matrix ) const { // Return true if matricies same dimension and contents.
+            if( m_data == 0 || matrix.m_data == 0 || m_length < 1 || m_length != matrix.m_length ||
+               m_x != matrix.m_x || m_y != matrix.m_y || m_z != matrix.m_z ) {
+                return false;
+            }
+            return memcmp( m_data, matrix.m_data, m_length ) == 0;
+        }
+
         inline T dot( const TMatrix &matrix ) const { // Calculate the dot product: scalar = lhs (dot) rhs;
             if( isEmpty()) {
                 log_error( "empty matrix" );
@@ -124,6 +141,7 @@ namespace tfs {         // Tree Frog Software
             }
             return result;
         }
+        
         
     };
     

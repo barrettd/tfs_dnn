@@ -85,12 +85,51 @@ namespace tfs {
     }
     
     static bool
+    localTestMatricCopy( void ) {
+        Matrix aa = Matrix( 3, 2, 1 );
+              DNN_NUMERIC *       data = aa.data();
+        const DNN_NUMERIC * const end = aa.end();
+        
+        DNN_NUMERIC value = 0.0;
+        while( data < end ) {
+            *data++ = value += 1.0;
+        }
+        
+        Matrix bb = Matrix( aa, true );
+        
+        if( !aa.equal( bb )) {
+            return log_error( "aa && bb matrices are not the same." );
+        }
+        
+        bb.randomize();
+        if( aa.equal( bb )) {
+            return log_error( "aa && bb matrices are the same." );
+        }
+        
+        Matrix cc = Matrix( 1, 2, 3 );
+        cc.copy( aa );                  // Same contents, different dimensions
+        if( aa.equal( cc )) {
+            return log_error( "aa && cc matrices are the same." );
+        }
+        Matrix dd = Matrix( 1, 2, 3 );
+        dd.copy( aa );
+        if( !cc.equal( dd )) {
+            return log_error( "cc && dd matrices are not the same." );
+        }
+        
+        return true;
+    }
+    
+    static bool
     localTestMatrix( void ) {
         log_info( "Test Matrix - Start" );
         if( !localTestMatrixSize()) {
             return false;
         }
         if( !localTestMatrixMath()) {
+            return false;
+        }
+        if( !localTestMatricCopy()) {
             return false;
         }
         log_info( "Test Matrix - End" );

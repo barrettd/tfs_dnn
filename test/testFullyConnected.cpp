@@ -144,19 +144,23 @@ namespace tfs {
             if( !dnn.forward()) {
                 return log_error( "Error during feed forward" );
             }
-            const DNN_NUMERIC *       expect    = output->data();
-            const DNN_NUMERIC * const expectEnd = output->end();
-            if( expect == 0 ) {
-                return log_error( "Output expect is null" );
+            Matrix previous = Matrix( *output, true );      // Copy output
+            DNN_INTEGER index = floor( random( 3.0 ));      // Index 0 to 2.
+            if( index < 0 || index > 3 ) {
+                return log_error( "Index out of range: %ld", index );
             }
-            if( expectEnd == 0 ) {
-                return log_error( "Output expectEnd is null" );
+            trainer.train( index );
+            if( !dnn.forward()) {
+                return log_error( "Error during feed forward" );
             }
-            if( expect >= expectEnd ) {
-                return log_error( "Output expect >= expectEnd" );
+            const DNN_NUMERIC *prev = previous.dataReadOnly();
+            const DNN_NUMERIC *curr = output->dataReadOnly();
+            if( prev == 0 || curr == 0 ) {
+                return log_error( "Null data" );
             }
-            DNN_INTEGER target = floor( random( 3.0 ));
-            trainer.train( target );
+            if( curr[index] <= prev[index] ) {
+                return log_error( "Current weight (%f) should be larger than previous (%f).", curr[index], prev[index] );
+            }
             
         }
         return true;
