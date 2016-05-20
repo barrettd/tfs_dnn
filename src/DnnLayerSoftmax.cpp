@@ -121,16 +121,14 @@ namespace tfs {
         const DNN_INTEGER    count = m_in_dw->count();
         const DNN_NUMERIC      *es = m_es->data();
         
-        DNN_NUMERIC delta;
         DNN_NUMERIC loss = 0.0;
         for( DNN_INTEGER ii = 0; ii < count; ii++ ) {
             if( ii == yy ) {
                 loss  = log( *es );
-                delta = *es++ - 1.0;
+                *inputDw++ = *es++ - 1.0;
             } else {
-                delta = *es++;
+                *inputDw++ = *es++;
             }
-            *inputDw++ = delta;
         }
         return loss;
     }

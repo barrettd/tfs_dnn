@@ -92,10 +92,10 @@ namespace tfs {
         
         DNN_NUMERIC value = 0.0;
         while( data < end ) {
-            *data++ = value += 1.0;
+            *data++ = value += 1.0;     // Fill with predictable contents.
         }
         
-        Matrix bb = Matrix( aa, true );
+        Matrix bb = Matrix( aa, true ); // Clone matrix aa
         
         if( !aa.equal( bb )) {
             return log_error( "aa && bb matrices are not the same." );
@@ -111,8 +111,8 @@ namespace tfs {
         if( aa.equal( cc )) {
             return log_error( "aa && cc matrices are the same." );
         }
-        Matrix dd = Matrix( 1, 2, 3 );
-        dd.copy( aa );
+        Matrix dd = Matrix( cc );       // Create a matrix with the same dimension as dd, but do not copy.
+        dd.copy( aa );                  // Copy contents from aa
         if( !cc.equal( dd )) {
             return log_error( "cc && dd matrices are not the same." );
         }
