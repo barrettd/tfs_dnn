@@ -44,26 +44,10 @@ namespace tfs {
         return true;
     }
     
-//    it("should forward prop volumes to probabilities", function() {
-//        
-//        var x = new convnetjs.Vol([0.2, -0.3]);
-//        var probability_volume = net.forward(x);
-//        
-//        expect(probability_volume.w.length).toEqual(3); // 3 classes output
-//        var w = probability_volume.w;
-//        for(var i=0;i<3;i++) {
-//            expect(w[i]).toBeGreaterThan(0);
-//            expect(w[i]).toBeLessThan(1.0);
-//        }
-//        expect(w[0]+w[1]+w[2]).toBeCloseTo(1.0);
-//        
-//    });
-
     static bool
     closeTo( DNN_NUMERIC value, DNN_NUMERIC target ) {
-        const DNN_NUMERIC precision  = -2.0;
         const DNN_NUMERIC difference = fabs( value - target );
-        return difference < (pow( 10.0, precision ) / 2.0);
+        return difference < (pow( 10.0, -2.0 ) / 2.0);
     }
     
     static bool
@@ -110,12 +94,11 @@ namespace tfs {
             if( *expect >= 1.0 ) {
                 return log_error( "expect >= 1.0: %f", *expect );
             }
-            sum = *expect++;
+            sum += *expect++;       // Each is about 0.3...something...
         }
         if( !closeTo( sum, 1.0 )) {
             return log_error( "sum not close to 1.0, was %f", sum );
         }
-//        log_info( "sum = %f", sum );
         return true;
     }
     
