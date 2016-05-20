@@ -239,7 +239,7 @@ namespace tfs {
     }
     
     DNN_NUMERIC
-    Dnn::backprop( const DMatrix &expectation ) {
+    Dnn::backprop( const DNN_INTEGER expectation ) {
         // Back propagate while training
         if( m_layer_output == 0 ) {
             log_error( "No output layer" );

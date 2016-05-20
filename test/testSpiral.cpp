@@ -91,9 +91,11 @@ namespace tfs {
         if( input == 0 ) {
             return log_error( "Unable to obtain input matrix." );
         }
-        DMatrix output( 1, 1, 1 );   // label ( 0 or 1 )
-        
-        DNN_INTEGER *outPtr = output.data();
+        DNN_INTEGER *outPtr = label.data();
+        if( outPtr == 0 ) {
+            return log_error( "Unable to obtain output labels." );
+        }
+        DNN_INTEGER output = *outPtr;   // label ( 0 or 1 )
 
         const unsigned long MAX_ITERATION = 200;
         const unsigned long DATA_COUNT    = label.size();

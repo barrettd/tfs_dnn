@@ -165,7 +165,7 @@ namespace tfs {
     }
 
     DNN_NUMERIC
-    DnnLayer::backprop( const DMatrix &expectation ) {
+    DnnLayer::backprop( const DNN_INTEGER expectation ) {
         if( m_prev_layer != 0 ) {
             return m_prev_layer->backprop();
         }

@@ -110,6 +110,11 @@ namespace tfs {
         m_loss = 0.0;
         return m_loss;
     }
+    
+    DNN_NUMERIC
+    DnnTrainer::train( const DNN_INTEGER expectation ) {
+        return 0.0;
+    }
 
     
 }   // namespace tfs

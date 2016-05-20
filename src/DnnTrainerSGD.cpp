@@ -19,7 +19,7 @@ namespace tfs {
     }
     
     DNN_NUMERIC
-    DnnTrainerSGD::train( const DMatrix &expectation ) {
+    DnnTrainerSGD::train( const DNN_INTEGER expectation ) {
         // Input matrix already set for the DNN
         m_loss = 0.0;
         if( m_dnn == 0 ) {

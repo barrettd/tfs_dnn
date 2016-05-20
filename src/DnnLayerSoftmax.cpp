@@ -99,7 +99,7 @@ namespace tfs {
     }
     
     DNN_NUMERIC
-    DnnLayerSoftmax::backprop( const DMatrix &expectation ) {
+    DnnLayerSoftmax::backprop( const DNN_INTEGER yy ) {
         // -----------------------------------------------------------------------------------
         // Back propagate while training
         // S = size of input data
@@ -109,11 +109,10 @@ namespace tfs {
         // m_out_a[N]   Output activations
         // m_out_dw[N]
         // -----------------------------------------------------------------------------------
-        if( expectation.isEmpty() || m_in_dw == 0 || m_es == 0 ) {
+        if( m_in_dw == 0 || m_es == 0 ) {
             log_error( "Not configured for training" );
             return 0.0;
         }
-        const DNN_INTEGER yy = *(expectation.dataReadOnly());   // We expect a single value.
         if( yy < 0 || yy >= m_es->count()) {
             log_error( "Expectation is out of range" );
             return 0.0;

@@ -18,7 +18,12 @@ namespace tfs {     // Tree Frog Software
     randomSeed( unsigned int seed ) {
         srand( seed );
     }
-    
+
+    DNN_NUMERIC
+    random( void ) {    // 0.0 to 1.0
+        return (DNN_NUMERIC) rand() / (RAND_MAX);
+    }
+
     DNN_NUMERIC
     random( const DNN_NUMERIC maxValue ) {    // 0.0 to maxValue
         return ((DNN_NUMERIC) rand() / (RAND_MAX)) * maxValue;
