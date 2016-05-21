@@ -62,15 +62,35 @@ namespace tfs {
         if( result != 12.0 ) {
             return log_error( "dot product is not 12.0, it was %f", result );
         }
+        result = aa.min();
+        if( result != 1.0 ) {
+            return log_error( "min is not 1.0, it was %f", result );
+        }
         result = aa.max();
         if( result != 3.0 ) {
             return log_error( "max is not 3.0, it was %f", result );
+        }
+        result = aa.sum();
+        if( result != 6.0 ) {
+            return log_error( "sum is not 6.0, it was %f", result );
+        }
+        result = bb.min();
+        if( result != -5.0 ) {
+            return log_error( "min is not -5.0, it was %f", result );
         }
         result = bb.max();
         if( result != 6.0 ) {
             return log_error( "max is not 6.0, it was %f", result );
         }
+        result = bb.sum();
+        if( result != 5.0 ) {
+            return log_error( "sum is not 5.0, it was %f", result );
+        }
         bb.zero();
+        result = bb.min();
+        if( result != 0.0 ) {
+            return log_error( "min is not 0.0, it was %f", result );
+        }
         result = bb.max();
         if( result != 0.0 ) {
             return log_error( "max is not 0.0, it was %f", result );

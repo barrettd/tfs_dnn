@@ -124,6 +124,24 @@ namespace tfs {         // Tree Frog Software
             return result;
         }
         
+        inline T min( void ) const {                // Return minimum value.
+            if( isEmpty()) {
+                log_error( "empty matrix" );
+                return 0;
+            }
+            const T *      data = m_data;
+            const T * const end = m_end;
+            
+            T result = *data++;
+            while( data < end ) {
+                if( *data < result ) {
+                    result = *data;
+                }
+                data++;
+            }
+            return result;
+        }
+        
         inline T max( void ) const {                // Return maximum value.
             if( isEmpty()) {
                 log_error( "empty matrix" );
@@ -141,6 +159,21 @@ namespace tfs {         // Tree Frog Software
             }
             return result;
         }
+ 
+        inline T sum( void ) const {                // Return sum of matrix elements.
+            if( isEmpty()) {
+                return 0;
+            }
+            const T *      data = m_data;
+            const T * const end = m_end;
+            
+            T result = *data++;
+            while( data < end ) {
+                result += *data++;
+            }
+            return result;
+        }
+
         
         
     };

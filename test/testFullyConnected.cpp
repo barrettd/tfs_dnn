@@ -102,22 +102,6 @@ namespace tfs {
         return true;
     }
     
-//    it("should increase probabilities for ground truth class when trained", function() {
-//        
-//        // lets test 100 random point and label settings
-//        // note that this should work since l2 and l1 regularization are off
-//        // an issue is that if step size is too high, this could technically fail...
-//        for(var k=0;k<100;k++) {
-//            var x = new convnetjs.Vol([Math.random() * 2 - 1, Math.random() * 2 - 1]);
-//            var pv = net.forward(x);
-//            var gti = Math.floor(Math.random() * 3);
-//            trainer.train(x, gti);
-//            var pv2 = net.forward(x);
-//            expect(pv2.w[gti]).toBeGreaterThan(pv.w[gti]);
-//        }
-//        
-//    });
-
     static bool
     localTestTrainer( DnnTrainerSGD &trainer, Dnn &dnn ) {
         for( int ii = 0; ii < 100; ii++ ) {
@@ -140,7 +124,7 @@ namespace tfs {
                 return log_error( "Input data is null" );
             }
             *data++ = random( -1.0, 1.0 );
-            *data++ = random( -1.0, 1.0 );
+            *data   = random( -1.0, 1.0 );
             if( !dnn.forward()) {
                 return log_error( "Error during feed forward" );
             }
@@ -174,7 +158,7 @@ namespace tfs {
         if( !setupDnn( dnn )) {
             return false;
         }
-        DnnTrainerSGD trainer( &dnn );
+        DnnTrainerSGD trainer(  &dnn );
         trainer.learningRate( 0.0001 );
         trainer.momentum(     0.0    );
         trainer.batchSize(    1      );
