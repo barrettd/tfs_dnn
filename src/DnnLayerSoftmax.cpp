@@ -131,7 +131,7 @@ namespace tfs {
             }
         }
         if( m_prev_layer != 0 ) {
-            return m_prev_layer->backprop();
+            m_prev_layer->backprop();
         }
         return loss;
     }
