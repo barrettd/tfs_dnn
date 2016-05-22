@@ -92,13 +92,12 @@ namespace tfs {
         const DNN_NUMERIC * const outEnd = m_out_a->end();    // A pointer just past the end of the activations
         
         while( output < outEnd ) {              // for( i = 0; i < N; ) Loop for each neuron activation
-            *output = 0.0;                      // a[i] = 0; Start with zero activation for this neuron.
+            DNN_NUMERIC aa = 0.0;               // a[i] = 0; Start with zero activation for this neuron.
             const DNN_NUMERIC *in = input;      // Beginning of the input data
             while( in < inEnd ) {               // for( j = 0; j < S; ) Loop for each input element
-                *output += *ww++ * *in++;       // a[i] += w[i][j] * in[j];
+                aa += *ww++ * *in++;            // a[i] += w[i][j] * in[j];
             }
-            *output += *ww++;                   // Add the bias (1.0 * bias)
-            output++;                           // i++
+            *output++ = aa + *ww++;             // Add the bias (1.0 * bias)
         }
 
         if( m_next_layer != 0 ) {

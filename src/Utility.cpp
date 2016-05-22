@@ -4,6 +4,7 @@
 //  Created by Barrett Davis on 5/11/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
+#include <cmath>        // log()
 #include <cstdlib>      // rand(), srand(), RAND_MAX
 #include "Utility.h"
 
@@ -45,6 +46,27 @@ namespace tfs {     // Tree Frog Software
     randomTanh( void ) {  // -1.0 to 1.0
         return (((DNN_NUMERIC) rand() / (RAND_MAX)) * 2.0) - 1.0;
     }
+    
+    DNN_NUMERIC
+    randomGauss( void ) {   // 0.0 to 1.0, gausian distribution.
+        static bool return_v = false;
+        static DNN_NUMERIC value = 0.0;
+        if( return_v ) {
+            return_v = false;
+            return value;
+        }
+        const DNN_NUMERIC u = 2.0 * ((DNN_NUMERIC) rand() / (RAND_MAX)) -1.0;     // [ -1.0, 1.0 ]
+        const DNN_NUMERIC v = 2.0 * ((DNN_NUMERIC) rand() / (RAND_MAX)) -1.0;
+        const DNN_NUMERIC r = u*u + v*v;
+        if( r == 0.0 || r > 1.0 ) {
+            return randomGauss();
+        }
+        const DNN_NUMERIC c = sqrt( -2.0 * log( r ) / r );
+        value = v * c;          // cache this
+        return_v = true;
+        return u * c;
+    }
+
 
     
     

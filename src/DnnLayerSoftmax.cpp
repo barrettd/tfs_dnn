@@ -85,7 +85,7 @@ namespace tfs {
             esum += ee;
         }
         if( esum == 0.0 ) {
-            log_error( "esum == 0.0" );     // Avoid a divide by zero problem...
+            log_error( "esum == 0.0 - divide by zero problem" );     // Avoid a divide by zero problem...
             esum = 0.0001;
         }
         es = esStart;

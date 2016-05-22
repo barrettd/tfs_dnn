@@ -21,6 +21,12 @@ namespace tfs {     // Tree Frog Software
     
     DNN_NUMERIC randomSigmoid( void );  //  0.0 to 1.0
     DNN_NUMERIC randomTanh(    void );  // -1.0 to 1.0
+    
+    DNN_NUMERIC randomGauss( void );
+    
+    inline DNN_NUMERIC randn( DNN_NUMERIC spread ) { return randomGauss() * spread; }
+    inline DNN_NUMERIC randn( DNN_NUMERIC mu, DNN_NUMERIC spread ) { return mu + randomGauss() * spread; }
+
 
 }   // namespace tfs
 
