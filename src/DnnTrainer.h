@@ -7,6 +7,7 @@
 #ifndef dnnTrainer_h
 #define dnnTrainer_h
 
+#include <vector>
 #include "Dnn.h"
 
 namespace tfs {
@@ -21,14 +22,18 @@ namespace tfs {
         DNN_NUMERIC   m_loss;
         unsigned long m_batch_size;
         unsigned long m_k;            // iteration counter
+        Trainable               **m_trainable_handle;
+        Trainable               **m_trainable_end;
+        std::vector< Trainable* > m_trainables;
         
+        void setUpTrainables( void );
 //        this.gsum = []; // last iteration gradients (used for momentum calculations)
         
     public:
         DnnTrainer( Dnn *dnn );
         virtual ~DnnTrainer( void );
         
-        Matrix*        getMatrixInput( void );
+        Matrix*       getMatrixInput( void );
 
         DNN_NUMERIC   learningRate( void ) const;
         DNN_NUMERIC   learningRate( DNN_NUMERIC value );

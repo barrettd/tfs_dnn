@@ -82,6 +82,16 @@ namespace tfs {
         return m_out_a;             // Output Activations
     }
     
+    Matrix*
+    DnnLayer::weights( void ) {     // Internal Neuron connection weights    (w)
+        return m_w;
+    }
+    
+    Matrix*
+    DnnLayer::gradiants( void ) {   // Internal Neuron connection gradiants (dw)
+        return m_dw;
+    }
+    
     DnnLayer*
     DnnLayer::getPreviousLayer( void ) const {
         return m_prev_layer;

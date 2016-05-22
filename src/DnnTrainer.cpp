@@ -4,7 +4,7 @@
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-
+#include "DnnLayer.h"
 #include "DnnTrainer.h"
 
 namespace tfs {
@@ -17,14 +17,54 @@ namespace tfs {
     m_momentum( 0.9 ),
     m_loss(     0.0 ),
     m_batch_size( 1 ),
-    m_k(          0 ) {
+    m_k(          0 ),
+    m_trainable_handle( 0 ),
+    m_trainable_end(    0 ) {
 //        this.gsum = []; // last iteration gradients (used for momentum calculations)
 //        this.xsum = []; // used in adam or adadelta
- 
+        setUpTrainables();
     }
     
     DnnTrainer::~DnnTrainer( void ) {
+        m_trainable_handle = 0;
+        m_trainable_end    = 0;
+        std::vector< Trainable* >::const_iterator trainer_end = m_trainables.end();
+        for( std::vector< Trainable* >::const_iterator it = m_trainables.begin(); it != trainer_end; it++ ) {
+            Trainable *trainable = *it;
+            delete trainable;
+        }
+        m_trainables.clear();
         m_dnn = 0;
+    }
+    
+    void
+    DnnTrainer::setUpTrainables( void ) {
+        if( m_dnn == 0 ) {
+            return;
+        }
+        DnnLayer *layer = (DnnLayer*) m_dnn->getLayerInput();
+        while( layer != 0 ) {
+            Matrix *weights   = layer->weights();
+            Matrix *gradiants = layer->gradiants();
+            if( weights != 0 && gradiants != 0 ) {
+                Trainable *trainable = new Trainable( weights, gradiants );
+                if( trainable->ok()) {
+                    m_trainables.push_back( trainable );
+                } else {
+                    log_error( "Bad trainable detected." );
+                    delete trainable;
+                }
+            }
+            layer = layer->getNextLayer();
+        }
+        const unsigned long trainableCount = m_trainables.size();
+        if( trainableCount < 1 ) {
+            log_error( "No trainable layers found" );
+            return;
+        }
+        m_trainable_handle = m_trainables.data();
+        m_trainable_end    = m_trainable_handle + trainableCount;
+        return;
     }
     
     Matrix*

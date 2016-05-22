@@ -33,7 +33,9 @@ namespace tfs {
         
         // Layer attributes:
         const char *name( void ) const;
-        Matrix     *outA( void );               // Output Activations
+        Matrix     *outA( void );               // Output Neuron Activations
+        Matrix     *weights( void );            // Internal Neuron connection weights    (w)
+        Matrix     *gradiants( void );          // Internal Neuron connection gradiants (dw)
         
         // Linked list pointers:
         DnnLayer *getPreviousLayer( void ) const;

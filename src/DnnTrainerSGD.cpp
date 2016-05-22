@@ -20,7 +20,7 @@ namespace tfs {
     
     DNN_NUMERIC
     DnnTrainerSGD::train( const DNN_INTEGER expectation ) {
-        // Input matrix already set for the DNN
+        // Assume: Input matrix already set for the DNN
         m_loss = 0.0;
         if( m_dnn == 0 ) {
             log_error( "No DNN set" );
@@ -34,9 +34,25 @@ namespace tfs {
         if( m_k % m_batch_size ) {
             return m_loss;
         }
-        
+        // Set up for modifying the gradiants.
         DNN_NUMERIC l1_decay_loss = 0.0;
         DNN_NUMERIC l2_decay_loss = 0.0;
+        
+        Trainable **trainableHandle = m_trainable_handle;
+        Trainable **trainableEnd    = m_trainable_end;
+        
+        while( trainableHandle < trainableEnd ) {
+            Trainable *trainable = *trainableHandle++;              // trainable != 0 & ok()
+                  DNN_NUMERIC *weight    = trainable->weightStart;
+            const DNN_NUMERIC *weightEnd = trainable->weightEnd;
+                  DNN_NUMERIC *gradiant  = trainable->gradiantStart;
+            while( weight < weightEnd ) {
+                
+                weight++;
+                gradiant++;
+            }
+            
+        }
 
         //        var pglist = this.net.getParamsAndGrads();
 

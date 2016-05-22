@@ -174,12 +174,61 @@ namespace tfs {         // Tree Frog Software
             return result;
         }
 
+        inline void multiply( T value ) const {     // Multiple each element by a scalar.
+            if( isEmpty()) {
+                return ;
+            }
+            const T *      data = m_data;
+            const T * const end = m_end;
+            
+            while( data < end ) {
+                *data++ *= value;
+            }
+            return;
+        }
         
+    };  // class TMatrix
+    
+    template <typename T> struct TTrainable {
+              T *weightStart;
+        const T *weightEnd;
+              T *gradiantStart;
+        const T *gradiantEnd;
         
-    };
+        TTrainable( void ):
+        weightStart( 0 ), weightEnd( 0 ), gradiantStart( 0 ), gradiantEnd( 0 ) {
+        }
+        
+        TTrainable( TMatrix< T > *weights, TMatrix< T > *gradiants ) {
+            setWeight(   weights   );
+            setGRadiant( gradiants );
+        }
+        
+        inline bool ok( void ) const {
+            return weightStart != 0 && weightStart < weightEnd && gradiantStart != 0 && gradiantStart < gradiantEnd;
+        }
+        
+        void setWeight( TMatrix< T > *matrix ) {
+            if( matrix != 0 ) {
+                weightStart = matrix->data();
+                weightEnd   = matrix->end();
+            }
+        }
+
+        void setGRadiant( TMatrix< T > *matrix ) {
+            if( matrix != 0 ) {
+                gradiantStart = matrix->data();
+                gradiantEnd   = matrix->end();
+            }
+        }
+
+    };  // struct TTrainable
     
     typedef TMatrix< DNN_NUMERIC >  Matrix;     // Typically double
     typedef TMatrix< DNN_INTEGER > DMatrix;     // Typically long
+    
+    typedef TTrainable< DNN_NUMERIC >  Trainable;
+    typedef TTrainable< DNN_INTEGER > DTrainable;
     
 }   // namespace tfs
 
