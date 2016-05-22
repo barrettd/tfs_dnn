@@ -20,6 +20,9 @@ namespace tfs {
         Matrix       *m_dw;             // Internal: Weight derivative, will be null when not training.
         Matrix       *m_out_a;          // Output:   Activations, output of a neuron.
         Matrix       *m_out_dw;         // Output:   Weight derivative, will be null when not training.
+        DNN_NUMERIC   m_l1_decay_mul;
+        DNN_NUMERIC   m_l2_decay_mul;
+
         DnnLayer     *m_prev_layer;
         DnnLayer     *m_next_layer;
         
@@ -36,6 +39,12 @@ namespace tfs {
         Matrix     *outA( void );               // Output Neuron Activations
         Matrix     *weights( void );            // Internal Neuron connection weights    (w)
         Matrix     *gradiants( void );          // Internal Neuron connection gradiants (dw)
+        
+        DNN_NUMERIC l1DecayMultiplier( void ) const;
+        DNN_NUMERIC l1DecayMultiplier( DNN_NUMERIC value );
+        
+        DNN_NUMERIC l2DecayMultiplier( void ) const;
+        DNN_NUMERIC l2DecayMultiplier( DNN_NUMERIC value );
         
         // Linked list pointers:
         DnnLayer *getPreviousLayer( void ) const;

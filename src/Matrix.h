@@ -194,14 +194,26 @@ namespace tfs {         // Tree Frog Software
         const T *weightEnd;
               T *gradiantStart;
         const T *gradiantEnd;
-        
+              T  l1_decay_mul;
+              T  l2_decay_mul;
+
         TTrainable( void ):
-        weightStart( 0 ), weightEnd( 0 ), gradiantStart( 0 ), gradiantEnd( 0 ) {
+        weightStart( 0 ), weightEnd( 0 ), gradiantStart( 0 ), gradiantEnd( 0 ),
+        l1_decay_mul( 1.0 ), l2_decay_mul( 1.0 ) {
         }
         
-        TTrainable( TMatrix< T > *weights, TMatrix< T > *gradiants ) {
+        TTrainable( TMatrix< T > *weights, TMatrix< T > *gradiants ) :
+        weightStart( 0 ), weightEnd( 0 ), gradiantStart( 0 ), gradiantEnd( 0 ),
+        l1_decay_mul( 1.0 ), l2_decay_mul( 1.0 ) {
             setWeight(   weights   );
             setGRadiant( gradiants );
+        }
+        
+        ~TTrainable( void ) {
+            weightStart   = 0;
+            weightEnd     = 0;
+            gradiantStart = 0;
+            gradiantEnd   = 0;
         }
         
         inline bool ok( void ) const {

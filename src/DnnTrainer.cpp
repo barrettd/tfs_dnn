@@ -48,6 +48,8 @@ namespace tfs {
             Matrix *gradiants = layer->gradiants();
             if( weights != 0 && gradiants != 0 ) {
                 Trainable *trainable = new Trainable( weights, gradiants );
+                trainable->l1_decay_mul = layer->l1DecayMultiplier();
+                trainable->l2_decay_mul = layer->l2DecayMultiplier();
                 if( trainable->ok()) {
                     m_trainables.push_back( trainable );
                 } else {

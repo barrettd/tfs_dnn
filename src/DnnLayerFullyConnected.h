@@ -14,8 +14,6 @@ namespace tfs {
     class DnnLayerFullyConnected : public DnnLayer {
     protected:
         unsigned long m_neuron_count;   // Always contains a bias for each neuron.
-        DNN_NUMERIC   m_l1_decay_mul;
-        DNN_NUMERIC   m_l2_decay_mul;
         
         void setup( const bool trainable = true );
 
@@ -27,12 +25,6 @@ namespace tfs {
 
         unsigned long neuronCount( void ) const;
         
-        DNN_NUMERIC l1DecayMultiplier( void ) const;
-        DNN_NUMERIC l1DecayMultiplier( DNN_NUMERIC value );
-
-        DNN_NUMERIC l2DecayMultiplier( void ) const;
-        DNN_NUMERIC l2DecayMultiplier( DNN_NUMERIC value );
-
         virtual bool forward(  void );                  // Forward propagate while training
         virtual bool backprop( void );                  // Back propagate while training
         

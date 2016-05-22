@@ -18,9 +18,7 @@ namespace tfs {
 
     DnnLayerFullyConnected::DnnLayerFullyConnected( DnnLayer *previousLayer, unsigned long neuronCount, const bool trainable ):
     DnnLayer( NAME, previousLayer ),
-    m_neuron_count( neuronCount ),
-    m_l1_decay_mul( 0.0 ),
-    m_l2_decay_mul( 1.0 ) {         // Constructor
+    m_neuron_count( neuronCount ) {         // Constructor
         if( previousLayer != 0 ) {  // previousLayer should not be null.
             setup( trainable );
         } else {
@@ -67,24 +65,6 @@ namespace tfs {
     unsigned long
     DnnLayerFullyConnected::neuronCount( void ) const {
         return m_neuron_count;
-    }
-    
-    DNN_NUMERIC
-    DnnLayerFullyConnected::l1DecayMultiplier( void ) const {
-        return m_l1_decay_mul;
-    }
-    DNN_NUMERIC
-    DnnLayerFullyConnected::l1DecayMultiplier( DNN_NUMERIC value ) {
-        return m_l1_decay_mul = value;
-    }
-
-    DNN_NUMERIC
-    DnnLayerFullyConnected::l2DecayMultiplier( void ) const {
-        return m_l2_decay_mul;
-    }
-    DNN_NUMERIC
-    DnnLayerFullyConnected::l2DecayMultiplier( DNN_NUMERIC value ) {
-        return m_l2_decay_mul = value;
     }
     
     bool
