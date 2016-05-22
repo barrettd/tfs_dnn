@@ -24,8 +24,10 @@ namespace tfs {     // Tree Frog Software
     
     DNN_NUMERIC randomGauss( void );
     
-    inline DNN_NUMERIC randn( DNN_NUMERIC spread ) { return randomGauss() * spread; }
-    inline DNN_NUMERIC randn( DNN_NUMERIC mu, DNN_NUMERIC spread ) { return mu + randomGauss() * spread; }
+    DNN_NUMERIC randomGaussian( DNN_NUMERIC mu, DNN_NUMERIC sigma );
+    
+    inline DNN_NUMERIC randn( DNN_NUMERIC sigma ) { return randomGauss() * sigma; }
+    inline DNN_NUMERIC randn( DNN_NUMERIC mu, DNN_NUMERIC sigma ) { return randomGauss() * sigma + mu; }
 
 
 }   // namespace tfs
