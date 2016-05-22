@@ -130,6 +130,9 @@ namespace tfs {
                 *inputDw++ = *es++;
             }
         }
+        if( m_prev_layer != 0 ) {
+            return m_prev_layer->backprop();
+        }
         return loss;
     }
     

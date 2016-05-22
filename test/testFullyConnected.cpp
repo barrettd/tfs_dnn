@@ -128,8 +128,8 @@ namespace tfs {
             if( !dnn.forward()) {
                 return log_error( "Error during feed forward" );
             }
-            Matrix previous = Matrix( *output, true );      // Copy output
-            DNN_INTEGER index = floor( random( 3.0 ));      // Index 0 to 2.
+            Matrix previous = Matrix( *output, true );          // Copy output
+            const DNN_INTEGER index = floor( random( 3.0 ));    // Index 0 to 2.
             if( index < 0 || index > 3 ) {
                 return log_error( "Index out of range: %ld", index );
             }
@@ -143,7 +143,7 @@ namespace tfs {
                 return log_error( "Null data" );
             }
             if( curr[index] <= prev[index] ) {
-                return log_error( "Current weight (%f) should be larger than previous (%f).", curr[index], prev[index] );
+                return log_error( "Current weight (%f) should be larger than previous (%f). ii = %d", curr[index], prev[index], ii );
             }
             
         }
