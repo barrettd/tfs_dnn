@@ -27,7 +27,7 @@ namespace tfs {
             return m_loss;
         }
         if( m_batch_size == 0 ) {
-            log_error( "Batch size 0" );
+            log_error( "Batch size 0 - will be a divide by zero error" );
             return m_loss;
         }
         if( !m_dnn->forward()) {
@@ -54,18 +54,17 @@ namespace tfs {
             const DNN_NUMERIC l2_decay   = m_l2_decay * trainable->l2_decay_mul;
             
             while( weight < weightEnd ) {
-                const DNN_NUMERIC w = *weight;
-                const DNN_NUMERIC g = *gradiant++;
+                const DNN_NUMERIC ww = *weight;
                 
-                l2_decay_loss += l2_decay * w * w / 2.0; // accumulate weight decay loss
-                l1_decay_loss += l1_decay * fabs( w );
+                l1_decay_loss += l1_decay * fabs( ww );
+                l2_decay_loss += l2_decay * ww * ww / 2.0;          // accumulate weight decay loss
                 
-                const DNN_NUMERIC l1grad = l1_decay * (w > 0.0 ? 1.0 : -1.0);
-                const DNN_NUMERIC l2grad = l2_decay * w;
+                const DNN_NUMERIC l1grad = l1_decay * (ww > 0.0 ? 1.0 : -1.0);
+                const DNN_NUMERIC l2grad = l2_decay * ww;
             
-                const DNN_NUMERIC gij = (l2grad + l1grad + g) / m_batch_size; // raw batch gradient
+                const DNN_NUMERIC gij = ( l1grad + l2grad + *gradiant++ ) / m_batch_size; // raw batch gradient
 
-                *weight++ -=  m_learning_rate * gij;
+                *weight++ -= m_learning_rate * gij;
             }
         }
         return m_loss += l1_decay_loss + l2_decay_loss;

@@ -12,7 +12,7 @@ namespace tfs {
     DnnLayer::DnnLayer( const char *name ):
     m_name( name ),
     m_in_a( 0 ), m_in_dw( 0 ), m_w( 0 ), m_dw( 0 ), m_out_a( 0 ), m_out_dw( 0 ),
-    m_l1_decay_mul( 0.0 ), m_l2_decay_mul( 1.0 ),
+    m_l1_decay_mul( 1.0 ), m_l2_decay_mul( 1.0 ),
     m_prev_layer( 0 ), m_next_layer( 0 ) {
         // Constructor
     }
@@ -20,7 +20,7 @@ namespace tfs {
     DnnLayer::DnnLayer( const char *name, DnnLayer *previousLayer ) :
     m_name( name ),
     m_in_a( 0 ), m_in_dw( 0 ), m_w( 0 ), m_dw( 0 ), m_out_a( 0 ), m_out_dw( 0 ),
-    m_l1_decay_mul( 0.0 ), m_l2_decay_mul( 1.0 ),
+    m_l1_decay_mul( 1.0 ), m_l2_decay_mul( 1.0 ),
     m_prev_layer( previousLayer ), m_next_layer( 0 ) {  // Constructor
         if( previousLayer != 0 ) {
             m_in_a  = previousLayer->m_out_a;            // Wire up to previous layer activations as input to forward() and predict()

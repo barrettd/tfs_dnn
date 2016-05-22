@@ -19,6 +19,8 @@ namespace tfs {
     DnnLayerConvolution::DnnLayerConvolution( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
+        m_l1_decay_mul = 0.0;
+        m_l2_decay_mul = 1.0;
     }
     
     DnnLayerConvolution::~DnnLayerConvolution( void ) {

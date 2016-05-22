@@ -105,8 +105,8 @@ namespace tfs {
     static bool
     localTestTrainer( DnnTrainerSGD &trainer, Dnn &dnn ) {
         for( int ii = 0; ii < 100; ii++ ) {
-            Matrix *input  = dnn.getMatrixInput();
-            Matrix *output = dnn.getMatrixOutput();
+            Matrix *input  = dnn.getMatrixInput();          // x,y pair
+            Matrix *output = dnn.getMatrixOutput();         //
             if( input == 0 ) {
                 return log_error( "Input matrix is null" );
             }
