@@ -46,7 +46,7 @@ namespace tfs {
         Trainable **trainableEnd    = m_trainable_end;
         
         while( trainableHandle < trainableEnd ) {
-            Trainable *trainable = *trainableHandle++;              // trainable != 0 & ok()
+                  Trainable   *trainable = *trainableHandle++;      // trainable != 0 & ok() from DnnTrainer::setUpTrainables()
                   DNN_NUMERIC *weight    = trainable->weightStart;
             const DNN_NUMERIC *weightEnd = trainable->weightEnd;
                   DNN_NUMERIC *gradiant  = trainable->gradiantStart;

@@ -75,22 +75,22 @@ namespace tfs {
               DNN_NUMERIC *        output = m_out_a->data();
         const DNN_NUMERIC * const  outEnd = m_out_a->end();
         
-        const DNN_NUMERIC max = m_in_a->max();
+        const DNN_NUMERIC max = m_in_a->max();      // Find input activation maximum
               DNN_NUMERIC esum = 0.0;
         
         DNN_NUMERIC *es = esStart;
-        while( input < inEnd ) {    // compute exponentials
+        while( input < inEnd ) {                    // Compute exponentials
             const DNN_NUMERIC ee = exp( *input++ - max );
             *es++ = ee;
             esum += ee;
         }
-        if( esum == 0.0 ) {
-            log_error( "esum == 0.0 - divide by zero problem" );     // Avoid a divide by zero problem...
+        if( esum == 0.0 ) {                         // Avoid a divide by zero problem...
+            log_error( "esum == 0.0 - divide by zero problem" );
             esum = 0.0001;
         }
         es = esStart;
-        while( output < outEnd ) {  // normalize
-            *output++ = *es++ / esum;
+        while( output < outEnd ) {                  // normalize
+            *output++ = *es++ /= esum;
         }
         if( m_next_layer != 0 ) {
             return m_next_layer->forward();
@@ -124,10 +124,10 @@ namespace tfs {
         DNN_NUMERIC loss = 0.0;
         for( DNN_INTEGER ii = 0; ii < count; ii++ ) {
             if( ii == yy ) {
-                loss  = log( *es );
+                loss = -log( *es );
                 *inputDw++ = *es++ - 1.0;
             } else {
-                *inputDw++ = *es++;
+                *inputDw++ = *es++;        
             }
         }
         if( m_prev_layer != 0 ) {
