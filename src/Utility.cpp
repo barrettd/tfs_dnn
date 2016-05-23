@@ -49,24 +49,30 @@ namespace tfs {     // Tree Frog Software
     }
     
     DNN_NUMERIC
-    randomGauss( void ) {   // 0.0 to 1.0, gausian distribution. Box–Muller transform
-        static DNN_NUMERIC value = 0.0;
-        static bool return_v = false;
-        if( return_v ) {
-            return_v = false;
-            return value;
+    randomGauss( void ) {
+        // --------------------------------------------------------------------
+        // 0.0 to 1.0, gausian distribution. Box–Muller transform
+        // This form probably a little faster than randomGaussian() below.
+        // --------------------------------------------------------------------
+        const DNN_NUMERIC scale = 2.0 / (DNN_NUMERIC) RAND_MAX;
+        
+        static DNN_NUMERIC z1 = 0.0;
+        static bool return_z1 = false;
+        if( return_z1 ) {
+            return_z1 = false;
+            return z1;          // Return z1 (prevously calculated)
         }
+        return_z1 = true;
         DNN_NUMERIC u, v, r;
         do {
-            u = 2.0 * ((DNN_NUMERIC) rand() / (DNN_NUMERIC)(RAND_MAX)) -1.0;     // [ -1.0, 1.0 ]
-            v = 2.0 * ((DNN_NUMERIC) rand() / (DNN_NUMERIC)(RAND_MAX)) -1.0;
+            u = ((DNN_NUMERIC) rand() * scale) -1.0;     // [ -1.0, 1.0 ]
+            v = ((DNN_NUMERIC) rand() * scale) -1.0;
             r = u*u + v*v;
         } while( r == 0.0 || r > 1.0 );
 
         const DNN_NUMERIC c = sqrt( -2.0 * log( r ) / r );
-        value = v * c;          // cache this
-        return_v = true;
-        return u * c;
+        z1 = v * c;             // Remember z1 for next time.
+        return u * c;           // Return z0
     }
 
     DNN_NUMERIC
@@ -76,9 +82,10 @@ namespace tfs {     // Tree Frog Software
         // --------------------------------------------------------------------
         const DNN_NUMERIC epsilon = std::numeric_limits<double>::min();
         const DNN_NUMERIC two_pi  = 2.0 * M_PI;
+        const DNN_NUMERIC scale   = 1.0 / (DNN_NUMERIC) RAND_MAX;
         
-        static double z1     = 0.0;
-        static bool generate = false;
+        static DNN_NUMERIC z1 = 0.0;
+        static bool generate  = false;
         
         generate = !generate;
         
@@ -88,8 +95,8 @@ namespace tfs {     // Tree Frog Software
         
         DNN_NUMERIC u1, u2;
         do {
-            u1 = rand() * (1.0 / RAND_MAX);
-            u2 = rand() * (1.0 / RAND_MAX);
+            u1 = rand() * scale;    // [0.0,1.0]
+            u2 = rand() * scale;
         } while ( u1 <= epsilon );
         
         const DNN_NUMERIC pu = two_pi * u2;
