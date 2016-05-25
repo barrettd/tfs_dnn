@@ -38,6 +38,7 @@ namespace tfs {
         // S = size of input data
         // m_in_a[S]
         // m_out_a[S]
+        // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_out_a == 0 ) {
             return log_error( "Not configured for training" );
@@ -65,6 +66,7 @@ namespace tfs {
         // m_in_dw[S]
         // m_out_a[S]
         // m_out_dw[S]
+        // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
         if( m_in_dw == 0 || m_out_a == 0 || m_out_dw == 0 ) {
             return log_error( "Not configured for training" );
@@ -73,7 +75,6 @@ namespace tfs {
         const DNN_NUMERIC * const  inDwEnd = m_in_dw->end();             // A pointer just past the end of the input
         const DNN_NUMERIC *        output  = m_out_a->dataReadOnly();
         const DNN_NUMERIC *          outDw = m_out_dw->dataReadOnly();
-        
         
         while( inputDw < inDwEnd ) {
             const DNN_NUMERIC out = *output++;

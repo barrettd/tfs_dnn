@@ -18,8 +18,8 @@ namespace tfs {
     m_loss(     0.0 ),
     m_batch_size( 1 ),
     m_k(          0 ),
-    m_trainable_handle( 0 ),
-    m_trainable_end(    0 ) {
+    m_trainable_handle( 0 ),    // Beginning of the "trainables" array.
+    m_trainable_end(    0 ) {   // End of the "trainables" array.
 //        this.gsum = []; // last iteration gradients (used for momentum calculations)
 //        this.xsum = []; // used in adam or adadelta
         setUpTrainables();

@@ -67,7 +67,7 @@ namespace tfs {
                 *weight++ -= m_learning_rate * gij;
             }
         }
-        return m_loss += l1_decay_loss + l2_decay_loss;
+        return m_loss += (l1_decay_loss + l2_decay_loss);
     }
 
 //    if(this.k % this.batch_size === 0) {

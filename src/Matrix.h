@@ -81,7 +81,6 @@ namespace tfs {         // Tree Frog Software
                   T *       ptr = m_data;
             const T * const end = m_end;
             while( ptr < end ) {
-//                *ptr++ = (T) randomGaussian( 0.0, scale );
                 *ptr++ = (T) randn( scale );
             }
         }

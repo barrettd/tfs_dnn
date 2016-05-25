@@ -54,6 +54,7 @@ namespace tfs {
         if( m_w == 0 || m_dw == 0 || m_out_a == 0 || m_in_a == 0 ) {
             return log_error( "Not configured for training" );
         }
+        // TODO: Check
         if( !threshold( *m_in_a )) {
             return log_error( "Thresholding failed" );
         }
@@ -65,7 +66,7 @@ namespace tfs {
     
     bool
     DnnLayerRectifiedLinearUnit::backprop( void ) {  // Back propagate while training
-        
+        // TODO:
         if( m_prev_layer != 0 ) {
             return m_prev_layer->backprop();
         }

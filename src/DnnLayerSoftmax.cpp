@@ -65,6 +65,7 @@ namespace tfs {
         // m_in_a[S]    Input activations
         // m_es[S]      Exponentials caculated in forward()
         // m_out_a[S]   Output activations
+        // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_es == 0 || m_out_a == 0 ) {
             return log_error( "Not configured for training" );
@@ -108,6 +109,7 @@ namespace tfs {
         // m_es[S]      Exponentials caculated in forward()
         // m_out_a[N]   Output activations
         // m_out_dw[N]
+        // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
         if( m_in_dw == 0 || m_es == 0 ) {
             log_error( "Not configured for training" );
@@ -127,7 +129,7 @@ namespace tfs {
                 loss = -log( *es );
                 *inputDw++ = *es++ - 1.0;
             } else {
-                *inputDw++ = *es++;        
+                *inputDw++ = *es++;
             }
         }
         if( m_prev_layer != 0 ) {

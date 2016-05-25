@@ -159,7 +159,9 @@ namespace tfs {
 
     void
     DnnLayer::randomize( void ) {
+        // -----------------------------------------------------------------------------------
         // Randomize weights and bias.
+        // -----------------------------------------------------------------------------------
         if( m_w != 0 ) {
             m_w->randomize();
         }
@@ -171,7 +173,10 @@ namespace tfs {
 
     bool
     DnnLayer::forward( void ) {
+        // -----------------------------------------------------------------------------------
         // Forward propagate while training
+        // ok: 24 May 2016
+        // -----------------------------------------------------------------------------------
         if( m_next_layer != 0 ) {
             return m_next_layer->forward();
         }
@@ -179,7 +184,11 @@ namespace tfs {
     }
 
     bool
-    DnnLayer::backprop( void ) {  // Back propagate while training
+    DnnLayer::backprop( void ) {
+        // -----------------------------------------------------------------------------------
+        // Back propagate while training
+        // ok: 24 May 2016
+        // -----------------------------------------------------------------------------------
         if( m_prev_layer != 0 ) {
             return m_prev_layer->backprop();
         }
@@ -188,6 +197,10 @@ namespace tfs {
     
     DNN_NUMERIC
     DnnLayer::backprop( const Matrix &expectation ) {
+        // -----------------------------------------------------------------------------------
+        // Back propagate while training
+        // ok: 24 May 2016
+        // -----------------------------------------------------------------------------------
         if( m_prev_layer != 0 ) {
             return m_prev_layer->backprop();
         }
@@ -196,6 +209,10 @@ namespace tfs {
 
     DNN_NUMERIC
     DnnLayer::backprop( const DNN_INTEGER expectation ) {
+        // -----------------------------------------------------------------------------------
+        // Back propagate while training
+        // ok: 24 May 2016
+        // -----------------------------------------------------------------------------------
         if( m_prev_layer != 0 ) {
             return m_prev_layer->backprop();
         }

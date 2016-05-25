@@ -12,9 +12,11 @@
 namespace tfs {
     
 
-    
     static bool
     setupDnn( Dnn &dnn ) {
+        // --------------------------------------------------------------------
+        // TODO: check
+        // --------------------------------------------------------------------
         if( !dnn.addLayerInput( 1, 1, 2 )) {                // Input layer a single x, y data point.
             return log_error( "Cannot add Input layer" );
         }
@@ -104,6 +106,9 @@ namespace tfs {
     
     static bool
     localTestTrainer( DnnTrainerSGD &trainer, Dnn &dnn ) {
+        // --------------------------------------------------------------------
+        // TODO: check
+        // --------------------------------------------------------------------
         for( int ii = 0; ii < 100; ii++ ) {
             Matrix *input  = dnn.getMatrixInput();          // x,y pair
             Matrix *output = dnn.getMatrixOutput();         //
@@ -123,8 +128,10 @@ namespace tfs {
             if( data == 0 ) {
                 return log_error( "Input data is null" );
             }
-            *data++ = random( -1.0, 1.0 );
-            *data   = random( -1.0, 1.0 );
+            const DNN_NUMERIC aa = random( -1.0, 1.0 );
+            const DNN_NUMERIC bb = random( -1.0, 1.0 );
+            *data++ = aa;
+            *data   = bb;
             if( !dnn.forward()) {
                 return log_error( "Error during feed forward" );
             }
@@ -134,6 +141,10 @@ namespace tfs {
                 return log_error( "Index out of range: %ld", index );
             }
             trainer.train( index );
+            data = input->data();
+            if( *data++ != aa || *data != bb ) {
+                return log_error( "Input data changed during training." );
+            }
             if( !dnn.forward()) {
                 return log_error( "Error during feed forward" );
             }
@@ -152,6 +163,9 @@ namespace tfs {
     
     static bool
     localTestFullyConnected( void ) {
+        // --------------------------------------------------------------------
+        // ok: 24 May 2016
+        // --------------------------------------------------------------------
         log_info( "Test Fully Connected - Start" );
         
         Dnn dnn;

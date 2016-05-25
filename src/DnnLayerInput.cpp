@@ -20,9 +20,7 @@ namespace tfs {
     DnnLayer( NAME ) {
         // Constructor
         m_out_a = new Matrix( xx, yy, zz );         // Input data copied to here.
-        if( trainable ) {
-            m_out_dw = new Matrix( xx, yy, zz );    // dw is ignored for this layer, but here to satisfy lower layer backpropagate.
-        }
+        // m_out_dw = 0;                            // dw is unused here. Lower layers need to check for dw == 0.
     }
         
     DnnLayerInput::~DnnLayerInput( void ) {
