@@ -62,8 +62,9 @@ namespace tfs {
                 const DNN_NUMERIC l1grad = l1_decay * (ww > 0.0 ? 1.0 : -1.0);
                 const DNN_NUMERIC l2grad = l2_decay * ww;
             
-                const DNN_NUMERIC gij = ( l1grad + l2grad + *gradiant++ ) / m_batch_size; // raw batch gradient
+                const DNN_NUMERIC gij = ( l1grad + l2grad + *gradiant ) / m_batch_size; // raw batch gradient
 
+                *gradiant++ = 0.0;
                 *weight++ -= m_learning_rate * gij;
             }
         }
