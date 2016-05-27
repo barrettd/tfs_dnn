@@ -13,14 +13,14 @@ namespace tfs {
     
     class DnnLayerSupportVectorMachine : public DnnLayer {
     protected:
-        virtual bool runForward(  void );
-        virtual bool runBackprop( void );
-        
     public:
         static const char *className( void );
 
         DnnLayerSupportVectorMachine( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerSupportVectorMachine( void );
+        
+        virtual bool runForward(  void );
+        virtual bool runBackprop( void );
         
     };
     

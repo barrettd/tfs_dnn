@@ -17,15 +17,15 @@ namespace tfs {
         
         void setup( const bool trainable = true );
 
-        virtual bool runForward(  void );   // Forward propagate
-        virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation );   // Back propagate
-
     public:
         static const char *className( void );
 
         DnnLayerSoftmax( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerSoftmax( void );
       
+        virtual bool runForward(  void );   // Forward propagate
+        virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation );   // Back propagate
+        
     };
     
     

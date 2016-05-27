@@ -13,14 +13,14 @@ namespace tfs {
     
     class DnnLayerPool : public DnnLayer {
     protected:
-        virtual bool runForward(  void );
-        virtual bool runBackprop( void );
-        
     public:
         static const char *className( void );
 
         DnnLayerPool( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerPool( void );
+        
+        virtual bool runForward(  void );
+        virtual bool runBackprop( void );
         
     };
     

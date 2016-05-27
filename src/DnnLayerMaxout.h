@@ -13,14 +13,14 @@ namespace tfs {
     
     class DnnLayerMaxout : public DnnLayer {
     protected:
-        virtual bool runForward(  void );
-        virtual bool runBackprop( void );
-        
     public:
         static const char *className( void );
 
         DnnLayerMaxout( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerMaxout( void );
+        
+        virtual bool runForward(  void );
+        virtual bool runBackprop( void );
         
     };
     

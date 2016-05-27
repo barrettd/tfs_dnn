@@ -162,37 +162,6 @@ namespace tfs {
         return true;
     }
     
-//    it("should compute correct gradient at data", function() {
-//        
-//        // here we only test the gradient at data, but if this is
-//        // right then that's comforting, because it is a function
-//        // of all gradients above, for all layers.
-//        
-//        var x = new convnetjs.Vol([Math.random() * 2 - 1, Math.random() * 2 - 1]);
-//        var gti = Math.floor(Math.random() * 3); // ground truth index
-//        trainer.train(x, gti); // computes gradients at all layers, and at x
-//        
-//        var delta = 0.000001;
-//        
-//        for(var i=0;i<x.w.length;i++) {
-//            
-//            var grad_analytic = x.dw[i];
-//            
-//            var xold = x.w[i];
-//            x.w[i] += delta;
-//            var c0 = net.getCostLoss(x, gti);
-//            x.w[i] -= 2*delta;
-//            var c1 = net.getCostLoss(x, gti);
-//            x.w[i] = xold; // reset
-//            
-//            var grad_numeric = (c0 - c1)/(2 * delta);
-//            var rel_error = Math.abs(grad_analytic - grad_numeric)/Math.abs(grad_analytic + grad_numeric);
-//            console.log(i + ': numeric: ' + grad_numeric + ', analytic: ' + grad_analytic + ' => rel error ' + rel_error);
-//            expect(rel_error).toBeLessThan(1e-2);
-//            
-//        }
-//    });
-    
     static bool
     localTestGradiant( DnnTrainerSGD &trainer, Dnn &dnn ) {
         // --------------------------------------------------------------------
@@ -223,25 +192,21 @@ namespace tfs {
         if( index < 0 || index > 3 ) {
             return log_error( "Index out of range: %ld", index );
         }
-        DNN_NUMERIC loss = trainer.train( index );         // Calulate gradients, propagate up to input layer.
+        trainer.train( index );         // Calulate gradients, propagate up to input layer.
         
         DnnLayerInput *inputLayer = dnn.getLayerInput();
         if( inputLayer == 0 ) {
             return log_error( "Input layer is null" );
         }
-        Matrix *weights = inputLayer->weights();            // This is the Matrix that contains the data() above.
-        if( weights == 0 ) {
-            return log_error( "Input weights are null" );
-        }
-        Matrix *gradiant = inputLayer->gradiant();
-        if( gradiant == 0 ) {
+        Matrix *inputDw = inputLayer->outDw();
+        if( inputDw == 0 ) {
             return log_error( "Input gradiant is null" );
         }
-        DNN_NUMERIC *ww = weights->data();
+        DNN_NUMERIC *ww = input->data();
         if( ww == 0 ) {
             return log_error( "ww == 0" );
         }
-        DNN_NUMERIC *dw = gradiant->data();
+        DNN_NUMERIC *dw = inputDw->data();
         if( dw == 0 ) {
             return log_error( "dw == 0" );
         }
@@ -249,22 +214,23 @@ namespace tfs {
         const DNN_NUMERIC delta = 0.000001;
         
         for( unsigned long ii = 0; ii < inputCount; ii++ ) {
-            DNN_NUMERIC grad_analytic = dw[ii];
+            const DNN_NUMERIC grad_analytic = dw[ii];
             
-            DNN_NUMERIC xold = ww[ii];
+            const DNN_NUMERIC xold = ww[ii];
             ww[ii] += delta;
             
-            DNN_NUMERIC c0 = loss;
-            
+            const DNN_NUMERIC c0 = dnn.getCostLoss( index );
             ww[ii] -= ( 2.0 * delta );
-            //            var c1 = net.getCostLoss(x, gti);
-            //            x.w[i] = xold; // reset
-            //
-            //            var grad_numeric = (c0 - c1)/(2 * delta);
-            //            var rel_error = Math.abs(grad_analytic - grad_numeric)/Math.abs(grad_analytic + grad_numeric);
-            //            console.log(i + ': numeric: ' + grad_numeric + ', analytic: ' + grad_analytic + ' => rel error ' + rel_error);
-            //            expect(rel_error).toBeLessThan(1e-2);
-           
+            
+            const DNN_NUMERIC c1 = dnn.getCostLoss( index );
+            ww[ii] = xold; // reset
+            
+            const DNN_NUMERIC grad_numeric = (c0 - c1)/(2 * delta);
+            const DNN_NUMERIC rel_error = fabs(grad_analytic - grad_numeric)/fabs(grad_analytic + grad_numeric);
+//            log_info( "%d, numeric: %f, analytic: %f, error: %f", ii, grad_numeric, grad_analytic, rel_error );
+            if( rel_error >= 1.0e-2 ) {
+                log_error( "rel_error = %f", rel_error );
+            }
         }
         
         

@@ -13,8 +13,6 @@ namespace tfs {
     
     class DnnLayerConvolution : public DnnLayer {
     protected:
-        virtual bool runForward(  void );
-        virtual bool runBackprop( void );
 
     public:
         static const char *className( void );
@@ -22,6 +20,8 @@ namespace tfs {
         DnnLayerConvolution( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerConvolution( void );
         
+        virtual bool runForward(  void );
+        virtual bool runBackprop( void );
     };
     
     

@@ -15,14 +15,14 @@ namespace tfs {
     protected:
         bool threshold( const Matrix &data );
         
-        virtual bool runForward(  void );   // Forward propagate
-        virtual bool runBackprop( void );   // Back propagate        
-
     public:
         static const char *className( void );
 
         DnnLayerRectifiedLinearUnit( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerRectifiedLinearUnit( void );
+        
+        virtual bool runForward(  void );   // Forward propagate
+        virtual bool runBackprop( void );   // Back propagate
         
     };
     

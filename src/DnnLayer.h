@@ -30,12 +30,6 @@ namespace tfs {
         void teardown( void );
         
         
-        virtual bool runForward(  void );
-        virtual bool runPredict(  void );
-        virtual bool runBackprop( void );
-        virtual DNN_NUMERIC runBackprop( const  Matrix &expectation );    // Last layer
-        virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation ); // Last layer
-
     public:
         DnnLayer( const char *name );
         DnnLayer( const char *name, DnnLayer *previousLayer );
@@ -43,7 +37,8 @@ namespace tfs {
         
         // Layer attributes:
         const char *name( void ) const;
-        Matrix     *outA( void );               // Output Neuron Activations
+        Matrix     *outA(  void );              // Output Neuron Activations
+        Matrix     *outDw( void );              // d/dw Output Neuron Activations
         Matrix     *weights( void );            // Internal Neuron connection weights   (w)
         Matrix     *gradiant( void );           // Internal Neuron connection gradiant (dw)
         
@@ -64,6 +59,12 @@ namespace tfs {
         // ----------------------------------------------------------------------------------------------
         virtual void initialize( void );                // Zero activations, gradiant and randomize weights. Forward calling.
         virtual void randomize(  void );                // Randomize gradiant. Forward calling.
+        
+        virtual bool runForward(  void );
+        virtual bool runPredict(  void );
+        virtual bool runBackprop( void );
+        virtual DNN_NUMERIC runBackprop( const  Matrix &expectation );    // Last layer
+        virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation ); // Last layer
         
         bool forward(  void );                                  // Forward propagate while training
         bool predict( void );                                   // Forward progagate when predicting

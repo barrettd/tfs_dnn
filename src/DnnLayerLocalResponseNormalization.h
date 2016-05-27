@@ -14,8 +14,6 @@ namespace tfs {
     
     class DnnLayerLocalResponseNormalization : public DnnLayer {
     protected:
-        virtual bool runForward(  void );
-        virtual bool runBackprop( void );
         
     public:
         static const char *className( void );
@@ -23,6 +21,8 @@ namespace tfs {
         DnnLayerLocalResponseNormalization( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerLocalResponseNormalization( void );
         
+        virtual bool runForward(  void );
+        virtual bool runBackprop( void );
     };
     
     

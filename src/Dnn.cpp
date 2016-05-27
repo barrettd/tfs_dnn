@@ -256,8 +256,46 @@ namespace tfs {
         }
         return log_error( "No input layer" );
     }
-
     
+    DNN_NUMERIC
+    Dnn::getCostLoss( void ) {
+        if( m_layer_input == 0 || m_layer_output == 0 ) {
+            log_error( "Not configured correctly" );
+            return 0.0;
+        }
+        if( !forward()) {
+            log_error( "Forward propagation error" );
+            return 0.0;
+        }
+        return m_layer_output->runBackprop();
+    }
+    
+    DNN_NUMERIC
+    Dnn::getCostLoss( const  Matrix &expectation ) {
+        if( m_layer_input == 0 || m_layer_output == 0  ) {
+            log_error( "Not configured correctly" );
+            return 0.0;
+        }
+        if( !forward()) {
+            log_error( "Forward propagation error" );
+            return 0.0;
+        }
+        return m_layer_output->runBackprop( expectation );
+    }
+
+    DNN_NUMERIC
+    Dnn::getCostLoss( const DNN_INTEGER expectation ) {
+        if( m_layer_input == 0 || m_layer_output == 0  ) {
+            log_error( "Not configured correctly" );
+            return 0.0;
+        }
+        if( !forward()) {
+            log_error( "Forward propagation error" );
+            return 0.0;
+        }
+        return m_layer_output->runBackprop( expectation );
+    }
+
     // Binary file I/O
     bool
     Dnn::save( const char *file_path ) const  {
