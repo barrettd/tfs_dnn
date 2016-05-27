@@ -25,5 +25,24 @@ namespace tfs {
         // Destructor
     }
     
+    bool
+    DnnLayerSupportVectorMachine::runForward(  void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Forward propagate, used with forward()
+        // -----------------------------------------------------------------------------------
+        // TODO:
+        return true;
+    }
+    
+    bool
+    DnnLayerSupportVectorMachine::runBackprop( void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Back propagate, used with backprop()
+        // -----------------------------------------------------------------------------------
+        // TODO:
+        return true;
+    }
+
+    
 }   // namespace tfs
 

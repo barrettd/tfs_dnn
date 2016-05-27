@@ -18,6 +18,9 @@ namespace tfs {
         void setup( const bool trainable = true );
         void zeroBiases( void );
 
+        virtual bool runForward(  void );   // Forward propagate
+        virtual bool runBackprop( void );   // Back propagate
+
     public:
         static const char *className( void );
 
@@ -26,13 +29,7 @@ namespace tfs {
 
         virtual void initialize( void );                // Zero activations, gradiant and randomize weights. Forward calling.
 
-        unsigned long neuronCount( void ) const;
-        
-        virtual bool forward(  void );                  // Forward propagate while training
-        virtual bool backprop( void );                  // Back propagate while training
-        
-        virtual bool predict( const Matrix &data );     // Forward progagate when predicting
-
+        unsigned long neuronCount( void ) const;        
     };
     
     

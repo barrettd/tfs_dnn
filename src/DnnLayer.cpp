@@ -85,12 +85,12 @@ namespace tfs {
     }
     
     Matrix*
-    DnnLayer::weights( void ) {     // Internal Neuron connection weights    (w)
+    DnnLayer::weights( void ) {     // Internal Neuron connection weights (w)
         return m_w;
     }
     
     Matrix*
-    DnnLayer::gradiants( void ) {   // Internal Neuron connection gradiants (dw)
+    DnnLayer::gradiant( void ) {    // Internal Neuron connection gradiant (dw)
         return m_dw;
     }
     
@@ -170,15 +170,73 @@ namespace tfs {
         }
         return;
     }
+    
+    
+    bool
+    DnnLayer::runForward(  void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Forward propagate, used with forward()
+        // -----------------------------------------------------------------------------------
+        return true;
+    }
+    
+    bool
+    DnnLayer::runPredict(  void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Forward propagate, used with predict()
+        // -----------------------------------------------------------------------------------
+        return runForward();    // Only dropout is different between forward() and predict() so far.
+    }
+
+    
+    bool
+    DnnLayer::runBackprop( void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Back propagate, used with backprop()
+        // -----------------------------------------------------------------------------------
+        return true;
+    }
+
+    DNN_NUMERIC
+    DnnLayer::runBackprop( const  Matrix &expectation ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Back propagate, used with backprop( const  Matrix &expectation )
+        // -----------------------------------------------------------------------------------
+        return true;
+    }
+
+    DNN_NUMERIC
+    DnnLayer::runBackprop( const DNN_INTEGER expectation ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Back propagate, used with backprop( const DNN_INTEGER expectation )
+        // -----------------------------------------------------------------------------------
+        return true;
+    }
 
     bool
     DnnLayer::forward( void ) {
         // -----------------------------------------------------------------------------------
         // Forward propagate while training
-        // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
+        if( !runForward()) {
+            return false;
+        }
         if( m_next_layer != 0 ) {
             return m_next_layer->forward();
+        }
+        return true;
+    }
+    
+    bool
+    DnnLayer::predict( void ) {
+        // -----------------------------------------------------------------------------------
+        // Forward progagate when predicting
+        // -----------------------------------------------------------------------------------
+        if( !runPredict()) {
+            return false;
+        }
+        if( m_next_layer != 0 ) {
+            return m_next_layer->predict();
         }
         return true;
     }
@@ -187,8 +245,10 @@ namespace tfs {
     DnnLayer::backprop( void ) {
         // -----------------------------------------------------------------------------------
         // Back propagate while training
-        // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
+        if( !runBackprop()) {
+            return false;
+        }
         if( m_prev_layer != 0 ) {
             return m_prev_layer->backprop();
         }
@@ -199,34 +259,26 @@ namespace tfs {
     DnnLayer::backprop( const Matrix &expectation ) {
         // -----------------------------------------------------------------------------------
         // Back propagate while training
-        // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
+        const DNN_NUMERIC result = runBackprop( expectation );
         if( m_prev_layer != 0 ) {
-            return m_prev_layer->backprop();
+            m_prev_layer->backprop();
         }
-        return 0.0;
+        return result;
     }
 
     DNN_NUMERIC
     DnnLayer::backprop( const DNN_INTEGER expectation ) {
         // -----------------------------------------------------------------------------------
         // Back propagate while training
-        // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
+        const DNN_NUMERIC result = runBackprop( expectation );
         if( m_prev_layer != 0 ) {
-            return m_prev_layer->backprop();
+            m_prev_layer->backprop();
         }
-        return 0.0;
+        return result;
     }
     
-    bool
-    DnnLayer::predict( const Matrix &data ) {
-        // Forward progagate when predicting
-        if( m_next_layer != 0 ) {
-            return m_next_layer->predict( data );
-        }
-        return true;
-    }
 
     
 }   // namespace tfs

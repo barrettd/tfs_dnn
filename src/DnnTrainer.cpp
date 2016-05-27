@@ -44,10 +44,10 @@ namespace tfs {
         }
         DnnLayer *layer = (DnnLayer*) m_dnn->getLayerInput();
         while( layer != 0 ) {
-            Matrix *weights   = layer->weights();
-            Matrix *gradiants = layer->gradiants();
-            if( weights != 0 && gradiants != 0 ) {
-                Trainable *trainable = new Trainable( weights, gradiants );
+            Matrix *weights  = layer->weights();
+            Matrix *gradiant = layer->gradiant();
+            if( weights != 0 && gradiant != 0 ) {
+                Trainable *trainable = new Trainable( weights, gradiant );
                 trainable->l1_decay_mul = layer->l1DecayMultiplier();
                 trainable->l2_decay_mul = layer->l2DecayMultiplier();
                 if( trainable->ok()) {

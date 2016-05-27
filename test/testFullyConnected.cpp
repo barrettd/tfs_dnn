@@ -5,6 +5,7 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
 #include <cmath>
+#include "DnnLayers.h"
 #include "DnnTrainerSGD.h"
 #include "Error.h"
 #include "testFullyConnected.hpp"
@@ -17,7 +18,7 @@ namespace tfs {
         // --------------------------------------------------------------------
         // TODO: check
         // --------------------------------------------------------------------
-        if( !dnn.addLayerInput( 1, 1, 2 )) {                // Input layer a single x, y data point.
+        if( !dnn.addLayerInput( 1, 1, 2, true )) {          // Input layer a single x, y data point.
             return log_error( "Cannot add Input layer" );
         }
         if( !dnn.addLayerFullyConnected( 5 )) {             // 5 Neurons
@@ -107,7 +108,7 @@ namespace tfs {
     static bool
     localTestTrainer( DnnTrainerSGD &trainer, Dnn &dnn ) {
         // --------------------------------------------------------------------
-        // TODO: check
+        // ok 25 May 2016
         // --------------------------------------------------------------------
         for( int ii = 0; ii < 100; ii++ ) {
             Matrix *input  = dnn.getMatrixInput();          // x,y pair
@@ -161,6 +162,115 @@ namespace tfs {
         return true;
     }
     
+//    it("should compute correct gradient at data", function() {
+//        
+//        // here we only test the gradient at data, but if this is
+//        // right then that's comforting, because it is a function
+//        // of all gradients above, for all layers.
+//        
+//        var x = new convnetjs.Vol([Math.random() * 2 - 1, Math.random() * 2 - 1]);
+//        var gti = Math.floor(Math.random() * 3); // ground truth index
+//        trainer.train(x, gti); // computes gradients at all layers, and at x
+//        
+//        var delta = 0.000001;
+//        
+//        for(var i=0;i<x.w.length;i++) {
+//            
+//            var grad_analytic = x.dw[i];
+//            
+//            var xold = x.w[i];
+//            x.w[i] += delta;
+//            var c0 = net.getCostLoss(x, gti);
+//            x.w[i] -= 2*delta;
+//            var c1 = net.getCostLoss(x, gti);
+//            x.w[i] = xold; // reset
+//            
+//            var grad_numeric = (c0 - c1)/(2 * delta);
+//            var rel_error = Math.abs(grad_analytic - grad_numeric)/Math.abs(grad_analytic + grad_numeric);
+//            console.log(i + ': numeric: ' + grad_numeric + ', analytic: ' + grad_analytic + ' => rel error ' + rel_error);
+//            expect(rel_error).toBeLessThan(1e-2);
+//            
+//        }
+//    });
+    
+    static bool
+    localTestGradiant( DnnTrainerSGD &trainer, Dnn &dnn ) {
+        // --------------------------------------------------------------------
+        // Check the gradiant.
+        // --------------------------------------------------------------------
+        Matrix *input  = dnn.getMatrixInput();          // x,y pair
+        Matrix *output = dnn.getMatrixOutput();         //
+        if( input == 0 ) {
+            return log_error( "Input matrix is null" );
+        }
+        const unsigned long inputCount = input->count();
+        if( inputCount != 2 ) {
+            return log_error( "Input matrix expected count = 2, was %lu", inputCount );
+        }
+        if( output == 0 ) {
+            return log_error( "Output matrix is null" );
+        }
+        if( output->count() != 3 ) {
+            return log_error( "Output matrix expected count = 3, was %lu", output->count());
+        }
+        DNN_NUMERIC *data = input->data();
+        if( data == 0 ) {
+            return log_error( "Input data is null" );
+        }
+        *data++ = random( -1.0, 1.0 );
+        *data   = random( -1.0, 1.0 );
+        const DNN_INTEGER index = floor( random( 3.0 ));    // Index 0 to 2.
+        if( index < 0 || index > 3 ) {
+            return log_error( "Index out of range: %ld", index );
+        }
+        DNN_NUMERIC loss = trainer.train( index );         // Calulate gradients, propagate up to input layer.
+        
+        DnnLayerInput *inputLayer = dnn.getLayerInput();
+        if( inputLayer == 0 ) {
+            return log_error( "Input layer is null" );
+        }
+        Matrix *weights = inputLayer->weights();            // This is the Matrix that contains the data() above.
+        if( weights == 0 ) {
+            return log_error( "Input weights are null" );
+        }
+        Matrix *gradiant = inputLayer->gradiant();
+        if( gradiant == 0 ) {
+            return log_error( "Input gradiant is null" );
+        }
+        DNN_NUMERIC *ww = weights->data();
+        if( ww == 0 ) {
+            return log_error( "ww == 0" );
+        }
+        DNN_NUMERIC *dw = gradiant->data();
+        if( dw == 0 ) {
+            return log_error( "dw == 0" );
+        }
+        
+        const DNN_NUMERIC delta = 0.000001;
+        
+        for( unsigned long ii = 0; ii < inputCount; ii++ ) {
+            DNN_NUMERIC grad_analytic = dw[ii];
+            
+            DNN_NUMERIC xold = ww[ii];
+            ww[ii] += delta;
+            
+            DNN_NUMERIC c0 = loss;
+            
+            ww[ii] -= ( 2.0 * delta );
+            //            var c1 = net.getCostLoss(x, gti);
+            //            x.w[i] = xold; // reset
+            //
+            //            var grad_numeric = (c0 - c1)/(2 * delta);
+            //            var rel_error = Math.abs(grad_analytic - grad_numeric)/Math.abs(grad_analytic + grad_numeric);
+            //            console.log(i + ': numeric: ' + grad_numeric + ', analytic: ' + grad_analytic + ' => rel error ' + rel_error);
+            //            expect(rel_error).toBeLessThan(1e-2);
+           
+        }
+        
+        
+        return true;
+    }
+    
     static bool
     localTestFullyConnected( void ) {
         // --------------------------------------------------------------------
@@ -182,6 +292,9 @@ namespace tfs {
             return false;
         }
         if( !localTestTrainer( trainer, dnn )) {
+            return false;
+        }
+        if( !localTestGradiant( trainer, dnn )) {
             return false;
         }
         log_info( "Test Fully Connected - End" );

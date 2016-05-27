@@ -104,13 +104,12 @@ namespace tfs {
     DnnLayerFullyConnected::initialize( void ) {
         // Zero activations, gradiant and randomize weights.
         DnnLayer::initialize();
-        zeroBiases();             // I think that I prefer random bias TODO: remove this later
+//        zeroBiases();             // I think that I prefer random bias TODO: remove this later
         return;
     }
 
-    
     bool
-    DnnLayerFullyConnected::forward( void ) {
+    DnnLayerFullyConnected::runForward( void ) {
         // -----------------------------------------------------------------------------------
         // Forward propagate while training
         // N = number of neurons
@@ -140,15 +139,11 @@ namespace tfs {
             }
             *output++ = aa + *ww++;             // Add the bias (1.0 * bias)
         }
-
-        if( m_next_layer != 0 ) {
-            return m_next_layer->forward();
-        }
         return true;
     }
-
+    
     bool
-    DnnLayerFullyConnected::backprop( void ) {
+    DnnLayerFullyConnected::runBackprop( void ) {
         // -----------------------------------------------------------------------------------
         // Back propagate while training
         // N = number of neurons
@@ -199,30 +194,9 @@ namespace tfs {
                 ww++;                                   // bias weight (skip)
             }
         }
-
-        if( m_prev_layer != 0 ) {
-            return m_prev_layer->backprop();
-        }
         return true;
     }
     
-    bool
-    DnnLayerFullyConnected::predict( const Matrix &data ) {
-        // -----------------------------------------------------------------------------------
-        // Forward progagate when predicting
-        // -----------------------------------------------------------------------------------
-        if( m_in_a == 0 || m_w == 0 || m_dw == 0 || m_out_a == 0 ) {
-            return log_error( "Not configured for predicting" );
-        }
-        if( m_w->count() != data.count()) {
-            return log_error( "Input matrix does not match expected size" );
-        }
-        if( m_next_layer != 0 ) {
-            return m_next_layer->predict( data );
-        }
-        return true;
-    }
-
 
     
 }   // namespace tfs

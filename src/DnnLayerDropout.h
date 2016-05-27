@@ -13,7 +13,10 @@ namespace tfs {
     
     class DnnLayerDropout : public DnnLayer {
     protected:
-        
+        virtual bool runForward(  void );
+        virtual bool runPredict(  void );
+        virtual bool runBackprop( void );
+
     public:
         static const char *className( void );
 

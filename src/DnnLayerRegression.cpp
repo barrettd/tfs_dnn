@@ -28,5 +28,24 @@ namespace tfs {
         // Destructor
     }
     
+    bool
+    DnnLayerRegression::runForward(  void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Forward propagate, used with forward()
+        // -----------------------------------------------------------------------------------
+        // TODO:
+        return true;
+    }
+    
+    bool
+    DnnLayerRegression::runBackprop( void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Back propagate, used with backprop()
+        // -----------------------------------------------------------------------------------
+        // TODO:
+        return true;
+    }
+
+    
 }   // namespace tfs
 

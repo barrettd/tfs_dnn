@@ -32,7 +32,7 @@ namespace tfs {
     }
     
     bool
-    DnnLayerTanh::forward( void ) {
+    DnnLayerTanh::runForward( void ) {
         // -----------------------------------------------------------------------------------
         // Forward propagate while training
         // S = size of input data
@@ -41,7 +41,7 @@ namespace tfs {
         // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_out_a == 0 ) {
-            return log_error( "Not configured for training" );
+            return log_error( "Not configured correctly" );
         }
         const DNN_NUMERIC *        input = m_in_a->dataReadOnly();
         const DNN_NUMERIC * const  inEnd = m_in_a->end();     // A pointer just past the end of the input
@@ -50,15 +50,11 @@ namespace tfs {
         while( input < inEnd ) {
             *output++ = tanh( *input++ );
         }
-        
-        if( m_next_layer != 0 ) {
-            return m_next_layer->forward();
-        }
         return true;
     }
     
     bool
-    DnnLayerTanh::backprop( void ) {
+    DnnLayerTanh::runBackprop( void ) {
         // -----------------------------------------------------------------------------------
         // Back propagate while training
         // S = size of input data
@@ -69,7 +65,7 @@ namespace tfs {
         // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
         if( m_in_dw == 0 || m_out_a == 0 || m_out_dw == 0 ) {
-            return log_error( "Not configured for training" );
+            return log_error( "Not configured correctly" );
         }
               DNN_NUMERIC *        inputDw = m_in_dw->data();
         const DNN_NUMERIC * const  inDwEnd = m_in_dw->end();             // A pointer just past the end of the input
@@ -80,30 +76,8 @@ namespace tfs {
             const DNN_NUMERIC out = *output++;
             *inputDw++ = (1.0 - out * out) * *outDw++;
         }
-        
-        if( m_prev_layer != 0 ) {
-            return m_prev_layer->backprop();
-        }
         return true;
     }
-    
-    bool
-    DnnLayerTanh::predict( const Matrix &data ) {
-        // -----------------------------------------------------------------------------------
-        // Forward progagate when predicting
-        // -----------------------------------------------------------------------------------
-        if( m_in_a == 0 || m_w == 0 || m_dw == 0 || m_out_a == 0 ) {
-            return log_error( "Not configured for predicting" );
-        }
-        if( m_w->count() != data.count()) {
-            return log_error( "Input matrix does not match expected size" );
-        }
-        if( m_next_layer != 0 ) {
-            return m_next_layer->predict( data );
-        }
-        return true;
-    }
-
 
 }   // namespace tfs
 

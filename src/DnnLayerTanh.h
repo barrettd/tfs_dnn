@@ -12,17 +12,16 @@
 namespace tfs {
     
     class DnnLayerTanh : public DnnLayer {      // tanh( radians ) output is between [-1.0, 1.0]
+    protected:
+        virtual bool runForward(  void );
+        virtual bool runBackprop( void );
+
     public:
         static const char *className( void );
 
         DnnLayerTanh( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerTanh( void );
         
-        virtual bool forward(  void );                  // Forward propagate while training
-        virtual bool backprop( void );                  // Back propagate while training
-        
-        virtual bool predict( const Matrix &data );     // Forward progagate when predicting
-
     };
     
     

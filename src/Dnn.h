@@ -42,7 +42,7 @@ namespace tfs {     // Tree Frog Software
         void clear( void );                                 // Remove all of the layers.
         unsigned long count( void ) const;                  // Count of the layers.
         
-        bool addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz = 1 ); // input
+        bool addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz = 1, const bool retain_dw = false ); // input
 
         bool addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride = 1, unsigned long pad = 0 ); // conv (square)
         bool addLayerDropout( void );                       // dropout
@@ -66,10 +66,10 @@ namespace tfs {     // Tree Frog Software
         void randomize( void );                                 // Randomize weights and bias.
 
         bool forward( void );                                   // Forward propagate while training
+        bool predict( void );                                   // Forward progagate when predicting
         DNN_NUMERIC backprop( const  Matrix &expectation );     // Back propagate while training, returns loss.
         DNN_NUMERIC backprop( const DNN_INTEGER expectation );  // Back propagate while training, returns loss.
         
-        bool predict( const Matrix &data, Matrix &prediction ); // Forward progagate when predicting
 
         // Binary file I/O
         bool save( const char *file_path ) const;

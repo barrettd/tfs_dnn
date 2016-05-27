@@ -49,42 +49,33 @@ namespace tfs {
     }
    
     bool
-    DnnLayerRectifiedLinearUnit::forward( void ) {
-        // Forward propagate while training
+    DnnLayerRectifiedLinearUnit::runForward( void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Forward propagate, used with forward()
+        // -----------------------------------------------------------------------------------
+        // TODO:
         if( m_w == 0 || m_dw == 0 || m_out_a == 0 || m_in_a == 0 ) {
-            return log_error( "Not configured for training" );
+            return log_error( "Not configured" );
         }
         // TODO: Check
         if( !threshold( *m_in_a )) {
             return log_error( "Thresholding failed" );
         }
-        if( m_next_layer != 0 ) {
-            return m_next_layer->forward();
-        }
         return true;
     }
     
     bool
-    DnnLayerRectifiedLinearUnit::backprop( void ) {  // Back propagate while training
+    DnnLayerRectifiedLinearUnit::runBackprop( void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Back propagate, used with backprop()
+        // -----------------------------------------------------------------------------------
         // TODO:
         if( m_prev_layer != 0 ) {
             return m_prev_layer->backprop();
         }
         return true;
     }
-    
-    bool
-    DnnLayerRectifiedLinearUnit::predict( const Matrix &data ) {
-        // Forward progagate when predicting
-        if( !threshold( data )) {
-            return log_error( "Thresholding failed" );
-        }
-        if( m_next_layer != 0 ) {
-            return m_next_layer->predict( *m_out_a );
-        }
-        return true;
-    }
-    
+        
 //forward: function(V, is_training) {
 //    this.in_act = V;
 //    var V2 = V.clone();

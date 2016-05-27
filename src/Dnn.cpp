@@ -86,12 +86,12 @@ namespace tfs {
     }
     
     bool
-    Dnn::addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz ) {
+    Dnn::addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz, const bool retain_dw ) {
         // Add an input layer
         if( xx < 1 || yy < 1 || zz < 1 ) {
             return log_error( "bad args" );
         }
-        DnnLayerInput *layer = new DnnLayerInput( xx, yy, zz, m_trainable );
+        DnnLayerInput *layer = new DnnLayerInput( xx, yy, zz, m_trainable, retain_dw );
         return addLayer( layer );
     }
     
@@ -249,10 +249,10 @@ namespace tfs {
     }
     
     bool
-    Dnn::predict( const Matrix &data, Matrix &prediction ) {
+    Dnn::predict( void ) {
         // Forward progagate when predicting
         if( m_layer_input != 0 ) {
-            return m_layer_input->predict( data );      // Calls each layer in the forward direction.
+            return m_layer_input->predict();            // Calls each layer in the forward direction.
         }
         return log_error( "No input layer" );
     }

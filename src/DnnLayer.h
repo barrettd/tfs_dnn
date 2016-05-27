@@ -28,6 +28,13 @@ namespace tfs {
         
         void setup( const bool trainable = true );
         void teardown( void );
+        
+        
+        virtual bool runForward(  void );
+        virtual bool runPredict(  void );
+        virtual bool runBackprop( void );
+        virtual DNN_NUMERIC runBackprop( const  Matrix &expectation );    // Last layer
+        virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation ); // Last layer
 
     public:
         DnnLayer( const char *name );
@@ -37,8 +44,8 @@ namespace tfs {
         // Layer attributes:
         const char *name( void ) const;
         Matrix     *outA( void );               // Output Neuron Activations
-        Matrix     *weights( void );            // Internal Neuron connection weights    (w)
-        Matrix     *gradiants( void );          // Internal Neuron connection gradiants (dw)
+        Matrix     *weights( void );            // Internal Neuron connection weights   (w)
+        Matrix     *gradiant( void );           // Internal Neuron connection gradiant (dw)
         
         DNN_NUMERIC l1DecayMultiplier( void ) const;
         DNN_NUMERIC l1DecayMultiplier( DNN_NUMERIC value );
@@ -58,12 +65,12 @@ namespace tfs {
         virtual void initialize( void );                // Zero activations, gradiant and randomize weights. Forward calling.
         virtual void randomize(  void );                // Randomize gradiant. Forward calling.
         
-        virtual bool forward(  void );                  // Forward propagate while training
-        virtual bool backprop( void );                  // Back propagate while training
-        virtual DNN_NUMERIC backprop( const  Matrix &expectation );    // Last layer
-        virtual DNN_NUMERIC backprop( const DNN_INTEGER expectation );    // Last layer
+        bool forward(  void );                                  // Forward propagate while training
+        bool predict( void );                                   // Forward progagate when predicting
+        bool backprop( void );                                  // Back propagate while training
+        DNN_NUMERIC backprop( const  Matrix    &expectation );  // Last layer
+        DNN_NUMERIC backprop( const DNN_INTEGER expectation );  // Last layer
         
-        virtual bool predict( const Matrix &data );     // Forward progagate when predicting
         
     };
     

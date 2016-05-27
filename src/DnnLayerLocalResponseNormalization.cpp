@@ -10,12 +10,12 @@
 namespace tfs {
     
     static const char *NAME = "lrn";
- 
+    
     const char*
     DnnLayerLocalResponseNormalization::className( void ) {
         return NAME;
     }
-
+    
     DnnLayerLocalResponseNormalization::DnnLayerLocalResponseNormalization( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
@@ -24,5 +24,24 @@ namespace tfs {
     DnnLayerLocalResponseNormalization::~DnnLayerLocalResponseNormalization( void ) {
         // Destructor
     }
+    
+    bool
+    DnnLayerLocalResponseNormalization::runForward(  void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Forward propagate, used with forward()
+        // -----------------------------------------------------------------------------------
+        // TODO:
+        return true;
+    }
+    
+    bool
+    DnnLayerLocalResponseNormalization::runBackprop( void ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Back propagate, used with backprop()
+        // -----------------------------------------------------------------------------------
+        // TODO:
+        return true;
+    }
+
     
 }   // namespace tfs

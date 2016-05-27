@@ -58,7 +58,7 @@ namespace tfs {
     }
     
     bool
-    DnnLayerSoftmax::forward( void ) {
+    DnnLayerSoftmax::runForward( void ) {
         // -----------------------------------------------------------------------------------
         // Forward propagate while training
         // S = size of input data
@@ -68,7 +68,7 @@ namespace tfs {
         // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_es == 0 || m_out_a == 0 ) {
-            return log_error( "Not configured for training" );
+            return log_error( "Not configured" );
         }
         const DNN_NUMERIC *         input = m_in_a->dataReadOnly();
         const DNN_NUMERIC * const   inEnd = m_in_a->end();
@@ -93,14 +93,11 @@ namespace tfs {
         while( output < outEnd ) {                  // normalize
             *output++ = *es++ /= esum;
         }
-        if( m_next_layer != 0 ) {
-            return m_next_layer->forward();
-        }
         return true;
     }
     
     DNN_NUMERIC
-    DnnLayerSoftmax::backprop( const DNN_INTEGER yy ) {
+    DnnLayerSoftmax::runBackprop( const DNN_INTEGER yy ) {
         // -----------------------------------------------------------------------------------
         // Back propagate while training
         // S = size of input data
@@ -132,30 +129,8 @@ namespace tfs {
                 *inputDw++ = *es++;
             }
         }
-        if( m_prev_layer != 0 ) {
-            m_prev_layer->backprop();
-        }
         return loss;
     }
-    
-    bool
-    DnnLayerSoftmax::predict( const Matrix &data ) {
-        // -----------------------------------------------------------------------------------
-        // Forward progagate when predicting
-        // -----------------------------------------------------------------------------------
-        if( m_in_a == 0 || m_w == 0 || m_dw == 0 || m_out_a == 0 ) {
-            return log_error( "Not configured for predicting" );
-        }
-        if( m_w->count() != data.count()) {
-            return log_error( "Input matrix does not match expected size" );
-        }
-        if( m_next_layer != 0 ) {
-            return m_next_layer->predict( data );
-        }
-        return true;
-    }
-
-
     
 }   // namespace tfs
 
