@@ -27,17 +27,13 @@ namespace tfs {
     }
     
     bool
-    DnnLayerRectifiedLinearUnit::threshold( const Matrix &data ) {
-        if( m_out_a == 0 ) {
-            return log_error( "Activation matrix not allocated" );
+    DnnLayerRectifiedLinearUnit::threshold( const DNN_NUMERIC *src, const DNN_NUMERIC * const end, DNN_NUMERIC *dst ) {
+        // -----------------------------------------------------------------------------------
+        // Copy src to dst, except clamping negative values to 0.0
+        // -----------------------------------------------------------------------------------
+        if( src == 0 || end == 0 || dst == 0 ) {
+            return log_error( "Not configured" );
         }
-        unsigned long count = m_out_a->count();
-        if( count != data.count()) {
-            return log_error( "Input matrix does not match activation matrix size" );
-        }
-        const DNN_NUMERIC *       src = data.dataReadOnly();
-        const DNN_NUMERIC * const end = data.end();
-              DNN_NUMERIC *       dst = m_out_a->data();
         while( src < end ) {
             if( *src >= 0.0 ) {     // Threshold at 0.0
                 *dst++ = *src++;
@@ -48,60 +44,36 @@ namespace tfs {
         }
         return true;
     }
-   
+
     bool
     DnnLayerRectifiedLinearUnit::runForward( void ) {
         // -----------------------------------------------------------------------------------
         // virtual: Forward propagate, used with forward()
+        // The output is a copy of the input, except that any negative values are clamped at zero.
         // -----------------------------------------------------------------------------------
-        // TODO:
-        if( m_w == 0 || m_dw == 0 || m_out_a == 0 || m_in_a == 0 ) {
+        if( m_in_a == 0 || m_out_a == 0  ) {
             return log_error( "Not configured" );
         }
-        // TODO: Check
-        if( !threshold( *m_in_a )) {
-            return log_error( "Thresholding failed" );
-        }
-        return true;
+        const DNN_NUMERIC *       src = m_in_a->dataReadOnly();
+        const DNN_NUMERIC * const end = m_in_a->end();
+              DNN_NUMERIC *       dst = m_out_a->data();
+        return threshold( src, end, dst );
     }
     
     bool
     DnnLayerRectifiedLinearUnit::runBackprop( void ) {
         // -----------------------------------------------------------------------------------
         // virtual: Back propagate, used with backprop()
+        // Backpropagate output dw to input dw, except that negative values are clamped to zero.
         // -----------------------------------------------------------------------------------
-        // TODO:
-        if( m_prev_layer != 0 ) {
-            return m_prev_layer->backprop();
+        if( m_in_dw == 0 || m_out_dw == 0  ) {
+            return log_error( "Not configured" );
         }
-        return true;
+        const DNN_NUMERIC *       src = m_out_dw->dataReadOnly();
+        const DNN_NUMERIC * const end = m_out_dw->end();
+              DNN_NUMERIC *       dst = m_in_dw->data();
+        return threshold( src, end, dst );
     }
-        
-//forward: function(V, is_training) {
-//    this.in_act = V;
-//    var V2 = V.clone();
-//    var N = V.w.length;
-//    var V2w = V2.w;
-//    for(var i=0;i<N;i++) {
-//        if(V2w[i] < 0) V2w[i] = 0; // threshold at 0
-//    }
-//    this.out_act = V2;
-//    return this.out_act;
-//},
-//backward: function() {
-//    var V = this.in_act; // we need to set dw of this
-//    var V2 = this.out_act;
-//    var N = V.w.length;
-//    V.dw = global.zeros(N); // zero out gradient wrt data
-//    for(var i=0;i<N;i++) {
-//        if(V2.w[i] <= 0) V.dw[i] = 0; // threshold
-//        else V.dw[i] = V2.dw[i];
-//    }
-//},
-//getParamsAndGrads: function() {
-//    return [];
-//},
-
     
 }   // namespace tfs
 
