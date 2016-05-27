@@ -91,7 +91,7 @@ namespace tfs {
     
     bool
     DnnBuilder::addLayerPool( unsigned long side, unsigned long stride ) {
-        return true;
+        return m_dnn.addLayerPool( side, stride );
     }
     
     bool

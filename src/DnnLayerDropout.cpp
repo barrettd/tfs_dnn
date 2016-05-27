@@ -20,6 +20,7 @@ namespace tfs {
     DnnLayerDropout::DnnLayerDropout( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
+        // TODO:
     }
     
     DnnLayerDropout::~DnnLayerDropout( void ) {

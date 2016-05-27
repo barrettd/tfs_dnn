@@ -115,18 +115,15 @@ namespace tfs {
         dnn.initialize();                                   // Randomize the weights.
         const unsigned long count = dnn.count();
         // TODO: continue work here.
-//        if( count != 17 ) {
-//            return log_error( "Expected 17 layers, received %lu", count );
-//        }
+        if( count != 12 ) {
+            return log_error( "Expected 12 layers, received %lu", count );
+        }
         return true;
     }
 
     static bool
     localTestBuilder( void ) {
         log_info( "Test Builder - Start" );
-        if( !localTestBuilder01()) {
-            return false;
-        }
         if( !localTestBuilder01()) {
             return false;
         }
