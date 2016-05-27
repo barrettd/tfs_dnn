@@ -5,6 +5,7 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
 #include <iostream>
+#include "testBuilder.hpp"
 #include "testCifar10.hpp"
 #include "testFullyConnected.hpp"
 #include "TestMatrix.hpp"
@@ -18,6 +19,7 @@ main( int argc, const char * argv[] ) {
     std::cout << "Test DNN begin\n";
     
     testMatrix();
+    testBuilder();
     testFullyConnected();
     testCifar10();
 //    testSpiral();

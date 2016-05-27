@@ -33,7 +33,7 @@ namespace tfs {     // Tree Frog Software
         bool addLayer( DnnLayer      *layer );
 
     public:
-        Dnn( void );
+        Dnn( bool trainable = true );
         virtual ~Dnn( void );
         
         bool trainable( void ) const;

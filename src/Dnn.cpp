@@ -10,11 +10,11 @@
 
 namespace tfs {
    
-    Dnn::Dnn( void ) :
-    m_layer_input(    0 ),
-    m_layer_previous( 0 ),
-    m_layer_output(   0 ),
-    m_trainable(   true ) {
+    Dnn::Dnn( bool trainable ) :
+    m_layer_input(         0 ),
+    m_layer_previous(      0 ),
+    m_layer_output(        0 ),
+    m_trainable(   trainable ) {
         // Constructor
     }
     

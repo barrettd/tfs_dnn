@@ -19,6 +19,7 @@ namespace tfs {
     DnnLayerRectifiedLinearUnit::DnnLayerRectifiedLinearUnit( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
+        setup( trainable );
     }
     
     DnnLayerRectifiedLinearUnit::~DnnLayerRectifiedLinearUnit( void ) {
