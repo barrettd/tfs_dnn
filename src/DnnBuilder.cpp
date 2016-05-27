@@ -51,9 +51,9 @@ namespace tfs {
             case ACTIVATION_TANH:       return m_dnn.addLayerTanh();
             case ACTIVATION_RELU:       return m_dnn.addLayerRectifiedLinearUnit();
             case ACTIVATION_MAXOUT:     return m_dnn.addLayerMaxout();
-            default: log_error( "Unexpected actication type: %d", activation );
+            default: log_error( "Unexpected activation type: %d", activation );
         }
-        return log_error( "Unrecognized actication type" );
+        return log_error( "Unrecognized activation type" );
     }
     
     bool

@@ -120,6 +120,68 @@ namespace tfs {
         }
         return true;
     }
+    
+    static bool
+    localTestBuilder05( void ) {
+        //layer_defs = [];
+        //layer_defs.push({type:'input', out_sx:32, out_sy:32, out_depth:3});
+        //layer_defs.push({type:'conv', sx:5, filters:16, stride:1, pad:2, activation:'relu'});
+        //layer_defs.push({type:'pool', sx:2, stride:2});
+        //layer_defs.push({type:'conv', sx:5, filters:20, stride:1, pad:2, activation:'relu'});
+        //layer_defs.push({type:'pool', sx:2, stride:2});
+        //layer_defs.push({type:'conv', sx:5, filters:20, stride:1, pad:2, activation:'relu'});
+        //layer_defs.push({type:'pool', sx:2, stride:2});
+        //layer_defs.push({type:'softmax', num_classes:10});
+        //net = new convnetjs.Net();
+        Dnn dnn;
+        if( !dnn.addLayerInput( 32, 32, 3 )) {             // Input layer for 32x32 RGB image
+            return log_error( "Cannot add Input layer" );
+        }
+        // Convolution / Activation / Pool set:
+        if( !dnn.addLayerConvolution( 5, 16, 1, 2 )) {     // 16 5x5 filters for convolution
+            return log_error( "Cannot add Convolution layer" );
+        }
+        if( !dnn.addLayerRectifiedLinearUnit()) {          // Activation function for previous layer.
+            return log_error( "Cannot add ReLu layer" );
+        }
+        if( !dnn.addLayerPool( 2, 2 )) {
+            return log_error( "Cannot add Pool layer" );
+        }
+        // Convolution / Activation / Pool set:
+        if( !dnn.addLayerConvolution( 5, 20, 1, 2 )) {     // 20 5x5 filters for convolution
+            return log_error( "Cannot add Convolution layer" );
+        }
+        if( !dnn.addLayerRectifiedLinearUnit()) {          // Activation function for previous layer.
+            return log_error( "Cannot add ReLu layer" );
+        }
+        if( !dnn.addLayerPool( 2, 2 )) {
+            return log_error( "Cannot add Pool layer" );
+        }
+        // Convolution / Activation / Pool set:
+        if( !dnn.addLayerConvolution( 5, 20, 1, 2 )) {     // 20 5x5 filters for convolution
+            return log_error( "Cannot add Convolution layer" );
+        }
+        if( !dnn.addLayerRectifiedLinearUnit()) {          // Activation function for previous layer.
+            return log_error( "Cannot add ReLu layer" );
+        }
+        if( !dnn.addLayerPool( 2, 2 )) {
+            return log_error( "Cannot add Pool layer" );
+        }
+        // Fully connected layer with softmax:
+        if( !dnn.addLayerFullyConnected( 10 )) {               //  1, 1, 10
+            return log_error( "Cannot add Fully Connected layer" );
+        }
+        if( !dnn.addLayerSoftmax()) {                          // Output classifier
+            return log_error( "Cannot add Softmax layer" );
+        }
+        dnn.initialize();
+        const unsigned long count = dnn.count();
+        if( count != 12 ) {
+            return log_error( "Expected 12 layers, received %lu", count );
+        }
+        return true;
+    }
+
 
     static bool
     localTestBuilder( void ) {
@@ -134,6 +196,9 @@ namespace tfs {
             return false;
         }
         if( !localTestBuilder04()) {
+            return false;
+        }
+        if( !localTestBuilder05()) {
             return false;
         }
         log_info( "Test Builder - End" );

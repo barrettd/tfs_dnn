@@ -76,6 +76,7 @@ namespace tfs {
         
         dnn->initialize();
         
+        delete dnn;
         log_info( "Test Cifar10 - End" );
         return true;
     }
