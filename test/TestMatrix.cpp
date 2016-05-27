@@ -107,7 +107,7 @@ namespace tfs {
     static bool
     localTestMatricCopy( void ) {
         Matrix aa = Matrix( 3, 2, 1 );
-              DNN_NUMERIC *       data = aa.data();
+              DNN_NUMERIC *      data = aa.data();
         const DNN_NUMERIC * const end = aa.end();
         
         DNN_NUMERIC value = 0.0;

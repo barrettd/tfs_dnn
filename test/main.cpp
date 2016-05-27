@@ -22,7 +22,7 @@ main( int argc, const char * argv[] ) {
     testBuilder();
     testFullyConnected();
     testCifar10();
-//    testSpiral();
+    testSpiral();
     
     std::cout << "Test DNN end\n";
     return 0;
