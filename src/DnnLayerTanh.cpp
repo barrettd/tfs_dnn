@@ -69,7 +69,7 @@ namespace tfs {
         }
               DNN_NUMERIC *        inputDw = m_in_dw->data();
         const DNN_NUMERIC * const  inDwEnd = m_in_dw->end();             // A pointer just past the end of the input
-        const DNN_NUMERIC *        output  = m_out_a->dataReadOnly();
+        const DNN_NUMERIC *         output = m_out_a->dataReadOnly();
         const DNN_NUMERIC *          outDw = m_out_dw->dataReadOnly();
         
         while( inputDw < inDwEnd ) {

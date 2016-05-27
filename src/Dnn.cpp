@@ -169,6 +169,42 @@ namespace tfs {
         return addLayer( layer );
     }
     
+    DNN_NUMERIC*
+    Dnn::getDataInput( void ) {
+        Matrix *matrix = getMatrixInput();
+        if( matrix == 0 ) {
+            return 0;
+        }
+        return matrix->data();
+    }
+    
+    const DNN_NUMERIC*
+    Dnn::getDataInputEnd( void ) {
+        Matrix *matrix = getMatrixInput();
+        if( matrix == 0 ) {
+            return 0;
+        }
+        return matrix->end();
+    }
+    
+    DNN_NUMERIC*
+    Dnn::getDataOutput( void ) {
+        Matrix *matrix = getMatrixOutput();
+        if( matrix == 0 ) {
+            return 0;
+        }
+        return matrix->data();
+    }
+    
+    const DNN_NUMERIC*
+    Dnn::getDataOutputEnd(void ) {
+        Matrix *matrix = getMatrixOutput();
+        if( matrix == 0 ) {
+            return 0;
+        }
+        return matrix->end();
+    }
+
     Matrix*
     Dnn::getMatrixInput( void ) {
         Matrix *matrix = 0;

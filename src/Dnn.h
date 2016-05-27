@@ -57,6 +57,10 @@ namespace tfs {     // Tree Frog Software
         bool addLayerSupportVectorMachine( void );          // svm
         bool addLayerTanh( void );                          // tanh
         
+              DNN_NUMERIC   *getDataInput(    void );
+        const DNN_NUMERIC   *getDataInputEnd( void );
+              DNN_NUMERIC   *getDataOutput(   void );
+        const DNN_NUMERIC   *getDataOutputEnd(void );
         Matrix        *getMatrixInput(  void );
         Matrix        *getMatrixOutput( void );
         DnnLayerInput *getLayerInput(   void );
