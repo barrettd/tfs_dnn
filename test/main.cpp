@@ -10,6 +10,7 @@
 #include "testFullyConnected.hpp"
 #include "TestMatrix.hpp"
 #include "testSpiral.hpp"
+#include "test2Layer.hpp"
 
 
 
@@ -19,10 +20,11 @@ main( int argc, const char * argv[] ) {
     std::cout << "Test DNN begin\n";
     
     testMatrix();
-    testBuilder();
-    testFullyConnected();
-    testCifar10();
-    testSpiral();
+//    testBuilder();
+//    testFullyConnected();
+//    testCifar10();
+//    testSpiral();
+    test2Layer();
     
     std::cout << "Test DNN end\n";
     return 0;
