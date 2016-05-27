@@ -1,5 +1,6 @@
 // --------------------------------------------------------------------
 //  DnnBuilder.cpp
+//  We can use this interface to tweak some of the hyper-parameters.
 //
 //  Created by Barrett Davis on 5/21/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
@@ -65,7 +66,7 @@ namespace tfs {
    
     bool
     DnnBuilder::addLayerDropout( void ) {
-        return true;
+        return m_dnn.addLayerDropout();
     }
     
     bool
@@ -81,12 +82,7 @@ namespace tfs {
     
     bool
     DnnBuilder::addLayerLocalResponseNormalization( void ) {
-        return true;
-    }
-    
-    bool
-    DnnBuilder::addLayerMaxout( void ) {
-        return true;
+        return m_dnn.addLayerLocalResponseNormalization();
     }
     
     bool
@@ -106,8 +102,14 @@ namespace tfs {
     }
     
     bool
-    DnnBuilder::addLayerSupportVectorMachine( void ) {
-        return true;
+    DnnBuilder::addLayerSupportVectorMachine( unsigned long numberOfClasses ) {
+        if( numberOfClasses < 1 ) {
+            return log_error( "Number of classes < 1" );
+        }
+        if( !m_dnn.addLayerFullyConnected( numberOfClasses )) {
+            return false;
+        }
+        return m_dnn.addLayerSupportVectorMachine();
     }
     
     bool

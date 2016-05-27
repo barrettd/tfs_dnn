@@ -44,10 +44,10 @@ namespace tfs {
 
         bool addLayerDropout( void );
         bool addLayerLocalResponseNormalization( void );
-        bool addLayerMaxout( void );
         bool addLayerPool( unsigned long side, unsigned long stride = 1 );
         bool addLayerRegression( unsigned long neuronCount );
-        bool addLayerSupportVectorMachine( void );
+        
+        bool addLayerSupportVectorMachine( unsigned long numberOfClasses );
 
         bool addLayerSoftmax( unsigned long numberOfClasses );
         
