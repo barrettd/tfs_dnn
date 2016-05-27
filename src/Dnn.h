@@ -65,6 +65,7 @@ namespace tfs {     // Tree Frog Software
         void initialize( void );                                // Initialize for learning.
         void randomize( void );                                 // Randomize weights and bias.
 
+        void bias( DNN_NUMERIC value = 0.0 );                   // Set biases in all layers.
         bool forward( void );                                   // Forward propagate while training
         bool predict( void );                                   // Forward progagate when predicting
         DNN_NUMERIC backprop( const  Matrix &expectation );     // Back propagate while training, returns loss.

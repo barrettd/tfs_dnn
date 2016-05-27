@@ -177,6 +177,13 @@ namespace tfs {
         return;
     }
     
+    void
+    DnnLayer::setBiases( DNN_NUMERIC value ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Set the biases for the learning layers.
+        // -----------------------------------------------------------------------------------
+        return;
+    }
     
     bool
     DnnLayer::runForward(  void ) {
@@ -217,6 +224,19 @@ namespace tfs {
         // virtual: Back propagate, used with backprop( const DNN_INTEGER expectation )
         // -----------------------------------------------------------------------------------
         return true;
+    }
+    
+    void
+    DnnLayer::bias( DNN_NUMERIC value ) {
+        // -----------------------------------------------------------------------------------
+        // Set the biases of all the learning layers.
+        // Generally, I leave the biases as random for best results.
+        // -----------------------------------------------------------------------------------
+        setBiases( value );
+        if( m_next_layer != 0 ) {
+            m_next_layer->bias( value );
+        }
+        return;
     }
 
     bool

@@ -36,7 +36,7 @@ namespace tfs {
         }
         return;
     }
-        
+    
     static bool
     setupDnn( Dnn &dnn ) {
         DnnBuilder builder( dnn, ACTIVATION_TANH );
@@ -85,33 +85,40 @@ namespace tfs {
         if( input == 0 ) {
             return log_error( "Unable to obtain input matrix." );
         }
-        DNN_INTEGER *outPtr = label.data();
-        if( outPtr == 0 ) {
-            return log_error( "Unable to obtain output labels." );
+        const DNN_NUMERIC *dPtr = data.data();
+        if( dPtr == 0 ) {
+            return log_error( "Unable to obtain input data." );
         }
-        DNN_INTEGER output = *outPtr;   // label ( 0 or 1 )
-
+        const DNN_INTEGER *lPtr = label.data();
+        if( lPtr == 0 ) {
+            return log_error( "Unable to obtain input labels." );
+        }
+        const unsigned long DATA_COUNT = label.size();
+        if( DATA_COUNT < 1 ) {
+            return log_error( "Label data size < 1" );
+        }
+        const DNN_INTEGER *ePtr = lPtr + DATA_COUNT;
+        
         const unsigned long MAX_ITERATION = 200;
-        const unsigned long DATA_COUNT    = label.size();
-        const DNN_NUMERIC   TARGET_LOSS   = 0.0001;
+        const DNN_NUMERIC   TARGET_LOSS   = 0.00108;
+        unsigned long count = 0;
         DNN_NUMERIC average_loss = 0.0;
         do {
+            count++;
             average_loss = 0.0;
             for( unsigned long ii = 0; ii < MAX_ITERATION; ii++ ) {
-                const DNN_NUMERIC *dPtr = data.data();
-                const DNN_INTEGER *lPtr = label.data();
-                const DNN_INTEGER *ePtr = lPtr + DATA_COUNT;
+                dPtr = data.data();
+                lPtr = label.data();
                 
                 while( lPtr < ePtr ) {
                     DNN_NUMERIC *inPtr = input->data();
                     *inPtr++ = *dPtr++;     // x
-                    *inPtr++ = *dPtr++;     // y
-                    *outPtr  = *lPtr++;     // label
-                    average_loss += trainer.train( output );
+                    *inPtr   = *dPtr++;     // y
+                    average_loss += trainer.train( *lPtr++ );
                 }
             }
             average_loss /= DATA_COUNT * MAX_ITERATION;
-            log_info( "Average loss = %f", average_loss );
+            log_info( "%lu: Average loss = %f", count, average_loss );
         } while( average_loss > TARGET_LOSS );
 
         log_info( "Test Spiral - End" );

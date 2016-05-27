@@ -16,16 +16,15 @@ namespace tfs {
         unsigned long m_neuron_count;   // Always contains a bias for each neuron.
         
         void setup( const bool trainable = true );
-        void zeroBiases( void );
-
+        
     public:
         static const char *className( void );
 
         DnnLayerFullyConnected( DnnLayer *previousLayer, unsigned long neuronCount, const bool trainable = true );
         virtual ~DnnLayerFullyConnected( void );
 
-        virtual void initialize( void );                // Zero activations, gradiant and randomize weights. Forward calling.
-
+        virtual void setBiases( DNN_NUMERIC value = 0.0 );    // Generally random biases seem to work quite well.
+        
         unsigned long neuronCount( void ) const;
         
         virtual bool runForward(  void );   // Forward propagate

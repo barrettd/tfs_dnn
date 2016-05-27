@@ -70,10 +70,14 @@ namespace tfs {
     }
     
     void
-    DnnLayerFullyConnected::zeroBiases( void ) {
+    DnnLayerFullyConnected::setBiases( DNN_NUMERIC value ) {
+        // -----------------------------------------------------------------------------------
+        // virtual: Set the biases for the learning layers.
+        // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_w == 0 || m_out_a == 0 ) {
             return;
         }
+        // TODO: Clean this up.
 //        const unsigned long N = m_neuron_count;
 //        const unsigned long S = m_in_a->count(); // 1d input, S elements.
 //        DNN_NUMERIC       *ww = m_w->data();       // weights[n,s]
@@ -94,20 +98,12 @@ namespace tfs {
                 ww++;
                 in++;
             }
-            *ww++ = 0.0;                        // Zero the bias
+            *ww++ = value;                      // Set the bias
             output++;
         }
         return;
     }
     
-    void
-    DnnLayerFullyConnected::initialize( void ) {
-        // Zero activations, gradiant and randomize weights.
-        DnnLayer::initialize();
-//        zeroBiases();             // I think that I prefer random bias TODO: remove this later
-        return;
-    }
-
     bool
     DnnLayerFullyConnected::runForward( void ) {
         // -----------------------------------------------------------------------------------

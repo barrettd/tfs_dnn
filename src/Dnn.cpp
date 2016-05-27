@@ -201,7 +201,7 @@ namespace tfs {
     Dnn::initialize( void ) {
         // Initialize for learning
         if( m_layer_input != 0 ) {
-            m_layer_input->initialize();     // Calls each layer in the forward direction.
+            m_layer_input->initialize();        // Calls each layer in the forward direction.
         } else {
             log_error( "No input layer" );
         }
@@ -212,18 +212,28 @@ namespace tfs {
     Dnn::randomize( void ) {
         // Randomize weights and bias.
         if( m_layer_input != 0 ) {
-            m_layer_input->randomize();     // Calls each layer in the forward direction.
+            m_layer_input->randomize();         // Calls each layer in the forward direction.
         } else {
             log_error( "No input layer" );
         }
         return;
     }
     
+    void
+    Dnn::bias( DNN_NUMERIC value ) {
+        // Set biases in all layers.
+        if( m_layer_input != 0 ) {
+            m_layer_input->bias( value );       // Calls each layer in the forward direction.
+        }
+        log_error( "No input layer" );
+        return;
+    }
+
     bool
     Dnn::forward( void ) {
         // Forward propagate while training
         if( m_layer_input != 0 ) {
-            return m_layer_input->forward();      // Calls each layer in the forward direction.
+            return m_layer_input->forward();    // Calls each layer in the forward direction.
         }
         return log_error( "No input layer" );
     }

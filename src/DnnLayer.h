@@ -60,14 +60,16 @@ namespace tfs {
         virtual void initialize( void );                // Zero activations, gradiant and randomize weights. Forward calling.
         virtual void randomize(  void );                // Randomize gradiant. Forward calling.
         
+        virtual void setBiases( DNN_NUMERIC value = 0.0 );
         virtual bool runForward(  void );
         virtual bool runPredict(  void );
         virtual bool runBackprop( void );
         virtual DNN_NUMERIC runBackprop( const  Matrix &expectation );    // Last layer
         virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation ); // Last layer
         
+        void bias( DNN_NUMERIC value = 0.0 );                   // Set biases in all layers.
         bool forward(  void );                                  // Forward propagate while training
-        bool predict( void );                                   // Forward progagate when predicting
+        bool predict(  void );                                  // Forward progagate when predicting
         bool backprop( void );                                  // Back propagate while training
         DNN_NUMERIC backprop( const  Matrix    &expectation );  // Last layer
         DNN_NUMERIC backprop( const DNN_INTEGER expectation );  // Last layer
