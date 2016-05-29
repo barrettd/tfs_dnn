@@ -16,7 +16,12 @@ namespace tfs {
         return NAME;
     }
 
-    DnnLayerConvolution::DnnLayerConvolution( DnnLayer *previousLayer, const bool trainable ):
+    DnnLayerConvolution::DnnLayerConvolution( DnnLayer *previousLayer,
+                                             unsigned long side,
+                                             unsigned long filters,
+                                             unsigned long stride,
+                                             unsigned long pad,
+                                             const bool trainable ):
     DnnLayer( NAME, previousLayer ) {
         // Constructor
         m_l1_decay_mul = 0.0;

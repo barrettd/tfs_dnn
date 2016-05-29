@@ -13,10 +13,21 @@ namespace tfs {
     
     class DnnLayerPool : public DnnLayer {
     protected:
+        unsigned long  m_side;
+        unsigned long  m_stride;
+        unsigned long  m_pad;
+        unsigned long *m_switch;  // Contains index to max max values
+        
+        void setup( const bool trainable = true );
+
     public:
         static const char *className( void );
 
-        DnnLayerPool( DnnLayer *previousLayer, const bool trainable = true );
+        DnnLayerPool( DnnLayer *previousLayer,
+                     unsigned long side,            // Size of the square side
+                     unsigned long stride = 2,
+                     unsigned long pad = 0,
+                     const bool trainable = true );
         virtual ~DnnLayerPool( void );
         
         virtual bool runForward(  void );

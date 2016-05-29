@@ -187,20 +187,20 @@ namespace tfs {
     localTestBuilder( void ) {
         log_info( "Test Builder - Start" );
         if( !localTestBuilder01()) {
-            return false;
+            return log_error( "builder 01 failed" );
         }
         if( !localTestBuilder02()) {
-            return false;
+            return log_error( "builder 02 failed" );
         }
         if( !localTestBuilder03()) {
-            return false;
+            return log_error( "builder 03 failed" );
         }
         if( !localTestBuilder04()) {
-            return false;
+            return log_error( "builder 04 failed" );
         }
-        if( !localTestBuilder05()) {
-            return false;
-        }
+//        if( !localTestBuilder05()) {
+//            return log_error( "builder 05 failed" );
+//        }
         log_info( "Test Builder - End" );
         return true;
     }

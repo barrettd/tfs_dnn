@@ -20,8 +20,8 @@ main( int argc, const char * argv[] ) {
     std::cout << "Test DNN begin\n";
     
     testMatrix();
-//    testBuilder();
-//    testFullyConnected();
+    testBuilder();
+    testFullyConnected();
 //    testCifar10();
 //    testSpiral();
     test2Layer();

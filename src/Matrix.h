@@ -104,6 +104,20 @@ namespace tfs {         // Tree Frog Software
             }
             return memcmp( m_data, matrix.m_data, m_length ) == 0;
         }
+        
+        inline unsigned long getIndex( unsigned long x, unsigned long y, unsigned long z ) const {
+            return (( m_x * y) + x) * m_z + z;
+        }
+        
+        inline T get( unsigned long x, unsigned long y = 1, unsigned long z = 1 ) const {
+            const unsigned long index = getIndex( x, y, z );
+            return m_data[index];
+        }
+
+        inline T set( unsigned long x, unsigned long y, unsigned long z, T value ) {
+            const unsigned long index = getIndex( x, y, z );
+            return m_data[index] = value;
+        }
 
         inline T dot( const TMatrix &matrix ) const { // Calculate the dot product: scalar = lhs (dot) rhs;
             if( isEmpty()) {

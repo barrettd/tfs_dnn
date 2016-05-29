@@ -98,7 +98,7 @@ namespace tfs {
     bool
     Dnn::addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride, unsigned long pad ) {
         // Add a Convolution Layer
-        DnnLayerConvolution *layer = new DnnLayerConvolution( m_layer_previous, m_trainable );
+        DnnLayerConvolution *layer = new DnnLayerConvolution( m_layer_previous, side, filters, stride, pad, m_trainable );
         return addLayer( layer );
     }
     
@@ -128,7 +128,7 @@ namespace tfs {
     
     bool
     Dnn::addLayerPool( unsigned long side, unsigned long stride ) {
-        DnnLayerPool *layer = new DnnLayerPool( m_layer_previous, m_trainable );
+        DnnLayerPool *layer = new DnnLayerPool( m_layer_previous, side, stride, 0, m_trainable );
         return addLayer( layer );
     }
     
