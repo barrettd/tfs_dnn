@@ -85,7 +85,7 @@ namespace tfs {
         const unsigned long out_z = m_out_a->depth();
         
         unsigned long n = 0;        // index counter for switches
-        for(unsigned long d = 0; d < out_z; d++ ) {
+        for( unsigned long z = 0; z < out_z; z++ ) {
             long x = -m_pad;
             long y = -m_pad;
             for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
@@ -100,7 +100,7 @@ namespace tfs {
                             long oy = y + fy;
                             long ox = x + fx;
                             if( oy >= 0 && oy < in_y && ox >= 0 && ox < in_x ) {
-                                DNN_NUMERIC v = m_in_a->get( ox, oy, d );
+                                DNN_NUMERIC v = m_in_a->get( ox, oy, z );
                                 if( v > a ) {   // perform max pooling and store indexes to where
                                     a = v;      // the max came from. This will speed up backprop
                                     winx = ox;
@@ -132,16 +132,16 @@ namespace tfs {
 
         m_in_dw->zero();
         unsigned long n = 0;        // index counter for switches
-        for(unsigned long d = 0; d < out_z; d++ ) {
+        for( unsigned long z = 0; z < out_z; z++ ) {
             long x = -m_pad;
             long y = -m_pad;
             for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
                 y = -m_pad;
                 for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
-                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, d );
-                    const unsigned long xx = m_switch[n++];
-                    const unsigned long yy = m_switch[n++];
-                    m_in_dw->set( xx, yy, d, chain_grad );
+                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, z );
+                    const unsigned long ox = m_switch[n++];
+                    const unsigned long oy = m_switch[n++];
+                    m_in_dw->set( ox, oy, z, chain_grad );
                 }
             }
         }

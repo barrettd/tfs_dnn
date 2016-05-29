@@ -176,6 +176,7 @@ namespace tfs {         // Tree Frog Software
  
         inline T sum( void ) const {                // Return sum of matrix elements.
             if( isEmpty()) {
+                log_error( "empty matrix" );
                 return 0;
             }
             const T *      data = m_data;
@@ -187,9 +188,25 @@ namespace tfs {         // Tree Frog Software
             }
             return result;
         }
+        
+        inline void add( T value ) const {          // Add a scalar to each element.
+            if( isEmpty()) {
+                log_error( "empty matrix" );
+                return ;
+            }
+            const T *      data = m_data;
+            const T * const end = m_end;
+            
+            while( data < end ) {
+                *data++ += value;
+            }
+            return;
+        }
+
 
         inline void multiply( T value ) const {     // Multiple each element by a scalar.
             if( isEmpty()) {
+                log_error( "empty matrix" );
                 return ;
             }
             const T *      data = m_data;
