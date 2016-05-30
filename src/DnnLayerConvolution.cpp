@@ -86,15 +86,50 @@ namespace tfs {
         // -----------------------------------------------------------------------------------
         // virtual: Forward propagate, used with forward()
         // -----------------------------------------------------------------------------------
-        // TODO:
+        if( m_in_a == 0 || m_out_a == 0 ) {
+            return log_error( "Not configured" );
+        }
+        const unsigned long in_x  = m_in_a->width();        // var V_sx = V.sx |0;
+        const unsigned long in_y  = m_in_a->height();       // var V_sy = V.sy |0;
+        const unsigned long stride = m_stride;              // var xy_stride = this.stride |0;
         
-//        this.in_act = V;
-//        var A = new Vol(this.out_sx |0, this.out_sy |0, this.out_depth |0, 0.0);
-//        
-//        var V_sx = V.sx |0;
-//        var V_sy = V.sy |0;
-//        var xy_stride = this.stride |0;
-//        
+        const unsigned long out_x = m_out_a->width();
+        const unsigned long out_y = m_out_a->height();
+        const unsigned long out_z = m_out_a->depth();
+
+        const DNN_NUMERIC *input  = m_in_a->dataReadOnly();
+        const DNN_NUMERIC *weight = m_w->dataReadOnly();
+
+        for( unsigned long z = 0; z < out_z; z++ ) {
+            long x = -m_pad;
+            long y = -m_pad;
+            for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
+                x = -m_pad;
+                for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
+                    // Convolve centered at [ax, ay]
+                    DNN_NUMERIC a = 0.0;
+                    long winx = -1;
+                    long winy = -1;
+                    for( unsigned long fy = 0; fy < m_side; fy++ ) {
+                        long oy = y + fy;
+                        for( unsigned long fx = 0; fx < m_side; fx++ ) {
+                            long ox = x + fx;
+                            if( oy >= 0 && oy < in_y && ox >= 0 && ox < in_x ) {
+                                for( unsigned long fd = 0; fd < m_filters; fd++ ) {
+                                    //a += f.get(fx, fy, fd) * V.get(ox, oy, fd);
+//                                    unsigned long filter_index = ((f.sx * fy)+fx)*f.depth+fd;
+//                                    unsigned long input_index  = ((V_sx * oy)+ox)*V.depth+fd;
+//                                    a += weight[filter_index] * input[input_index];
+                                }
+                            }
+                        }
+                    }
+//                    m_switch[n++] = winx;
+//                    m_switch[n++] = winy;
+                }
+            }
+        }
+//
 //        for(var d=0;d<this.out_depth;d++) {
 //            var f = this.filters[d];
 //            var x = -this.pad |0;
@@ -111,7 +146,7 @@ namespace tfs {
 //                            var ox = x+fx;
 //                            if(oy>=0 && oy<V_sy && ox>=0 && ox<V_sx) {
 //                                for(var fd=0;fd<f.depth;fd++) {
-//                                    // avoid function call overhead (x2) for efficiency, compromise modularity :(
+//                                    // avoid function call overhead (x2) for efficiency, compromise modularity
 //                                    a += f.w[((f.sx * fy)+fx)*f.depth+fd] * V.w[((V_sx * oy)+ox)*V.depth+fd];
 //                                }
 //                            }
@@ -122,8 +157,7 @@ namespace tfs {
 //                }
 //            }
 //        }
-//        this.out_act = A;
-//        return this.out_act;
+        
         return true;
     }
     
