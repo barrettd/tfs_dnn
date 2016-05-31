@@ -22,8 +22,8 @@ main( int argc, const char * argv[] ) {
     testMatrix();
     testBuilder();
     testFullyConnected();
-//    testCifar10();
-//    testSpiral();
+    testCifar10();
+    testSpiral();
     test2Layer();
     
     std::cout << "Test DNN end\n";

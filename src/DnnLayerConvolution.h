@@ -17,7 +17,6 @@ namespace tfs {
         unsigned long m_stride;
         unsigned long m_pad;
         unsigned long m_filter_count;
-        Matrix      **m_filter;
         
         void setup( const bool trainable = true );
 

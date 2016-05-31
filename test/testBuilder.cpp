@@ -198,9 +198,9 @@ namespace tfs {
         if( !localTestBuilder04()) {
             return log_error( "builder 04 failed" );
         }
-//        if( !localTestBuilder05()) {
-//            return log_error( "builder 05 failed" );
-//        }
+        if( !localTestBuilder05()) {
+            return log_error( "builder 05 failed" );
+        }
         log_info( "Test Builder - End" );
         return true;
     }

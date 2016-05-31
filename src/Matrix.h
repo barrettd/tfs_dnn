@@ -18,9 +18,9 @@ namespace tfs {         // Tree Frog Software
 
     template <typename T> class TMatrix  {      // Possibly use Eigen matricies: https://eigen.tuxfamily.org/
     protected:
-        unsigned long m_a;      // Width
-        unsigned long m_b;      // Height
-        unsigned long m_c;      // Depth
+        unsigned long m_a;      // x Width
+        unsigned long m_b;      // y Height
+        unsigned long m_c;      // z Depth
         unsigned long m_d;      // 4th dimension
         unsigned long m_count;  // = x * w * h;  // Count of DNN_NUMERIC elements.
         unsigned long m_length; // = count * sizeof( T )
@@ -59,10 +59,13 @@ namespace tfs {         // Tree Frog Software
             m_length = 0;
         }
         
-        inline unsigned long width(  void ) const { return m_a; }
-        inline unsigned long height( void ) const { return m_b; }
-        inline unsigned long depth(  void ) const { return m_c; }
+        inline unsigned long aa(     void ) const { return m_a; }
+        inline unsigned long bb(     void ) const { return m_b; }
+        inline unsigned long cc(     void ) const { return m_c; }
         inline unsigned long dd(     void ) const { return m_d; }
+        inline unsigned long width(  void ) const { return m_a; }       // aa
+        inline unsigned long height( void ) const { return m_b; }       // bb
+        inline unsigned long depth(  void ) const { return m_c; }       // cc
         inline unsigned long count(  void ) const { return m_count;  }  // Count of elements.
         inline unsigned long length( void ) const { return m_length; }  // Length in bytes
         
@@ -124,6 +127,16 @@ namespace tfs {         // Tree Frog Software
         inline T set( unsigned long x, unsigned long y, unsigned long z, T value ) {
             const unsigned long index = getIndex( x, y, z );
             return m_data[index] = value;
+        }
+
+        inline T plusEquals( unsigned long aa, unsigned long bb, unsigned long cc, unsigned long dd, T value ) {
+            const unsigned long index = getIndex( aa, bb, cc, dd );
+            return m_data[index] += value;
+        }
+
+        inline T plusEquals( unsigned long x, unsigned long y, unsigned long z, T value ) {
+            const unsigned long index = getIndex( x, y, z );
+            return m_data[index] += value;
         }
 
         inline T dot( const TMatrix &matrix ) const { // Calculate the dot product: scalar = lhs (dot) rhs;

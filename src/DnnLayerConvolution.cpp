@@ -26,8 +26,7 @@ namespace tfs {
     m_side(    side ),
     m_stride(  stride ),
     m_pad(     pad ),
-    m_filter_count( filters ),
-    m_filter(  0 ) {              // Constructor
+    m_filter_count( filters ) {
         m_l1_decay_mul = 0.0;
         m_l2_decay_mul = 1.0;
         if( previousLayer != 0 ) {  // previousLayer should not be null.
@@ -39,24 +38,12 @@ namespace tfs {
     
     DnnLayerConvolution::~DnnLayerConvolution( void ) {
         // Destructor
-        if( m_filter != 0 ) {
-            for( unsigned long ii = 0; ii < m_filter_count; ii++ ) {
-                delete m_filter[ii];
-            }
-            delete[] m_filter;
-            m_filter = 0;
-        }
     }
     
     void
     DnnLayerConvolution::setup( const bool trainable ) {
         // -----------------------------------------------------------------------------------
-        // N = number of filters
-        // S = size of input data
-        //  w[N,S+1] = filters weight + bias weight
-        // dw[N,S+1] = gradiant + d/dw bias
-        // out_a[N]  = activations
-        // out_dw[N] = gradiant
+        // Allocate filters and output
         // -----------------------------------------------------------------------------------
         if( m_side < 1 || m_filter_count < 1 || m_stride < 1 ) {
             log_error( "Bad params" );
@@ -74,18 +61,14 @@ namespace tfs {
         const unsigned long out_y = floorl((in_y + m_pad * 2 - m_side) / m_stride + 1 );
         const unsigned long out_z = m_filter_count;
         
-        const unsigned long N = m_filter_count;
-        const unsigned long S = m_side * m_side * in_z;     // 1d input, S elements.
-        
-        m_w = new Matrix( N, S+1, 1 );                      // weights N x (S+1)
+        m_w = new Matrix( m_filter_count, m_side, m_side, in_z + 1 );       // N Fiters of side x side x (depth +1) for the bias
         if( trainable ) {
-            m_dw = new Matrix( N, S+1, 1 );                 // gradiant N x (S+1)
+            m_dw = new Matrix( *m_w );                      // gradiant N x side x side + (depth+1)
         }
         m_out_a = new Matrix( out_x, out_y, out_z );        // Activations (output)
         if( trainable ) {
-            m_out_dw = new Matrix( out_x, out_y, out_z );   // Activation gradiant
+            m_out_dw = new Matrix( *m_out_a );              // Activation gradiant
         }
-
         return;
     }
     
@@ -97,74 +80,39 @@ namespace tfs {
         if( m_in_a == 0 || m_out_a == 0 ) {
             return log_error( "Not configured" );
         }
-        const unsigned long in_x  = m_in_a->width();        // var V_sx = V.sx |0;
-        const unsigned long in_y  = m_in_a->height();       // var V_sy = V.sy |0;
+        const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
+        const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
+        const unsigned long in_z   = m_in_a->depth();
+        const unsigned long side   = m_side;
         const unsigned long stride = m_stride;              // var xy_stride = this.stride |0;
         
         const unsigned long out_x = m_out_a->width();
         const unsigned long out_y = m_out_a->height();
         const unsigned long out_z = m_out_a->depth();
 
-        const DNN_NUMERIC *input  = m_in_a->dataReadOnly();
-        const DNN_NUMERIC *weight = m_w->dataReadOnly();
-
-        for( unsigned long z = 0; z < out_z; z++ ) {
+        for( unsigned long d = 0; d < out_z; d++ ) {
             long x = -m_pad;
-            long y = -m_pad;
-            for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
-                x = -m_pad;
-                for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
-                    // Convolve centered at [ax, ay]
+            for( unsigned long ax = 0; ax < out_x; x += stride, ax++ ) {
+                long y = -m_pad;
+                for( unsigned long ay = 0; ay < out_y; y += stride, ay++ ) {
+                    // convolve centered at this point
                     DNN_NUMERIC a = 0.0;
-                    long winx = -1;
-                    long winy = -1;
-                    for( unsigned long fy = 0; fy < m_side; fy++ ) {
-                        long oy = y + fy;
-                        for( unsigned long fx = 0; fx < m_side; fx++ ) {
-                            long ox = x + fx;
-                            if( oy >= 0 && oy < in_y && ox >= 0 && ox < in_x ) {
-                                for( unsigned long fd = 0; fd < m_filter_count; fd++ ) {
-                                    //a += f.get(fx, fy, fd) * V.get(ox, oy, fd);
-//                                    unsigned long filter_index = ((f.sx * fy)+fx)*f.depth+fd;
-//                                    unsigned long input_index  = ((V_sx * oy)+ox)*V.depth+fd;
-//                                    a += weight[filter_index] * input[input_index];
+                    for( unsigned long fx = 0; fx < side; fx++ ) {
+                        for( unsigned long  fy = 0; fy < side; fy++ ) {
+                            for( unsigned long fd = 0;fd < in_z; fd++ ) {
+                                long oy = y+fy; // coordinates in the original input array coordinates
+                                long ox = x+fx;
+                                if( oy >= 0 && oy < in_y && ox >= 0 && ox < in_x ) {
+                                    a += m_w->get( d, fx, fy, fd ) * m_in_a->get( ox, oy, fd );
                                 }
                             }
                         }
                     }
-//                    m_switch[n++] = winx;
-//                    m_switch[n++] = winy;
+                    a += m_w->get( d, ax, ay, in_z );   // bias
+                    m_out_a->set( ax, ay, d, a );       // set output
                 }
             }
         }
-//
-//        for(var d=0;d<this.out_depth;d++) {
-//            var f = this.filters[d];
-//            var x = -this.pad |0;
-//            var y = -this.pad |0;
-//            for(var ay=0; ay<this.out_sy; y+=xy_stride,ay++) {  // xy_stride
-//                x = -this.pad |0;
-//                for(var ax=0; ax<this.out_sx; x+=xy_stride,ax++) {  // xy_stride
-//                    
-//                    // convolve centered at this particular location
-//                    var a = 0.0;
-//                    for(var fy=0;fy<f.sy;fy++) {
-//                        var oy = y+fy; // coordinates in the original input array coordinates
-//                        for(var fx=0;fx<f.sx;fx++) {
-//                            var ox = x+fx;
-//                            if(oy>=0 && oy<V_sy && ox>=0 && ox<V_sx) {
-//                                for(var fd=0;fd<f.depth;fd++) {
-//                                    // avoid function call overhead (x2) for efficiency, compromise modularity
-//                                    a += f.w[((f.sx * fy)+fx)*f.depth+fd] * V.w[((V_sx * oy)+ox)*V.depth+fd];
-//                                }
-//                            }
-//                        }
-//                    }
-//                    a += this.biases.w[d];
-//                    A.set(ax, ay, d, a);
-//                }
-//            }
-//        }
         
         return true;
     }
@@ -174,45 +122,48 @@ namespace tfs {
         // -----------------------------------------------------------------------------------
         // virtual: Back propagate, used with backprop()
         // -----------------------------------------------------------------------------------
-        // TODO:
-//    backward: function() {
-//        
-//        var V = this.in_act;
-//        V.dw = global.zeros(V.w.length); // zero out gradient wrt bottom data, we're about to fill it
-//        
-//        var V_sx = V.sx |0;
-//        var V_sy = V.sy |0;
-//        var xy_stride = this.stride |0;
-//        
-//        for(var d=0;d<this.out_depth;d++) {
-//            var f = this.filters[d];
-//            var x = -this.pad |0;
-//            var y = -this.pad |0;
-//            for(var ay=0; ay<this.out_sy; y+=xy_stride,ay++) {  // xy_stride
-//                x = -this.pad |0;
-//                for(var ax=0; ax<this.out_sx; x+=xy_stride,ax++) {  // xy_stride
-//                    
-//                    // convolve centered at this particular location
-//                    var chain_grad = this.out_act.get_grad(ax,ay,d); // gradient from above, from chain rule
-//                    for(var fy=0;fy<f.sy;fy++) {
-//                        var oy = y+fy; // coordinates in the original input array coordinates
-//                        for(var fx=0;fx<f.sx;fx++) {
-//                            var ox = x+fx;
-//                            if(oy>=0 && oy<V_sy && ox>=0 && ox<V_sx) {
-//                                for(var fd=0;fd<f.depth;fd++) {
-//                                    // avoid function call overhead (x2) for efficiency, compromise modularity :(
-//                                    var ix1 = ((V_sx * oy)+ox)*V.depth+fd;
-//                                    var ix2 = ((f.sx * fy)+fx)*f.depth+fd;
-//                                    f.dw[ix2] += V.w[ix1]*chain_grad;
-//                                    V.dw[ix1] += f.w[ix2]*chain_grad;
-//                                }
-//                            }
-//                        }
-//                    }
-//                    this.biases.dw[d] += chain_grad;
-//                }
-//            }
-//        }
+        if( m_in_a || m_in_dw == 0 || m_w || m_dw == 0 ) {
+            return log_error( "Not configured" );
+        }
+        const unsigned long in_x   = m_in_dw->width();        // var V_sx = V.sx |0;
+        const unsigned long in_y   = m_in_dw->height();       // var V_sy = V.sy |0;
+        const unsigned long in_z   = m_in_dw->depth();
+        const unsigned long side   = m_side;
+        const unsigned long stride = m_stride;              // var xy_stride = this.stride |0;
+        
+        const unsigned long out_x = m_out_dw->width();
+        const unsigned long out_y = m_out_dw->height();
+        const unsigned long out_z = m_out_dw->depth();
+
+        m_in_dw->zero();        // Zero input gradiant, not sure if it is totally filled below.
+        for( unsigned long d = 0; d < out_z; d++ ) {
+            long x = -m_pad;
+            for( unsigned long ax = 0; ax < out_x; x += stride, ax++ ) {
+                long y = -m_pad;
+                for( unsigned long ay = 0; ay < out_y; y += stride, ay++ ) {
+                    // convolve and add up the gradients.
+                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, d ); // gradient from above, from chain rule
+                    for( unsigned long fx = 0; fx < side; fx++ ) {
+                        for( unsigned long  fy = 0; fy < side; fy++ ) {
+                            for( unsigned long fd = 0;fd < in_z; fd++ ) {
+                                long oy = y+fy; // coordinates in the original input array coordinates
+                                long ox = x+fx;
+                                if( oy >= 0 && oy < in_y && ox >= 0 && ox < in_x ) {
+                                    // forward prop calculated: a += f.get(fx, fy, fd) * V.get(ox, oy, fd);
+                                    // f.add_grad(fx, fy, fd, V.get(ox, oy, fd) * chain_grad);
+                                    // V.add_grad(ox, oy, fd, f.get(fx, fy, fd) * chain_grad);
+                                    const DNN_NUMERIC in_delta = m_in_a->get( d, ox, oy, fd ) * chain_grad;
+                                    const DNN_NUMERIC dw_delta = m_w->get(    d, fx, fy, fd ) * chain_grad;
+                                    m_dw->plusEquals(    d, fx, fy, fd, in_delta );
+                                    m_in_dw->plusEquals( d, ox, oy, fd, dw_delta );
+                                }
+                            }
+                        }
+                    }
+                    m_dw->plusEquals( d, ax, ay, in_z, chain_grad );
+                }
+            }
+        }
         return true;
     }
 
