@@ -1,14 +1,16 @@
 //
-//  testCircle.hpp
+//  test2D.hpp
 //  TestNeuralNet
 //
 //  Created by Barrett Davis on 5/31/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
 
-#ifndef testCircle_hpp
-#define testCircle_hpp
+#ifndef test2D_hpp
+#define test2D_hpp
 
+bool testSimple( void );
 bool testCircle( void );
+bool testSpiral( void );
 
-#endif /* testCircle_hpp */
+#endif /* test2D_hpp */
