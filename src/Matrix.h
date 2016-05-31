@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------
-//  Matrix.hpp - 3D matrix <template> for DNN_NUMERIC and DNN_INTEGER
+//  Matrix.hpp - 3 or 4 D matrix <template> for DNN_NUMERIC and DNN_INTEGER
 //
 //  Created by Barrett Davis on 5/10/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
@@ -18,9 +18,10 @@ namespace tfs {         // Tree Frog Software
 
     template <typename T> class TMatrix  {      // Possibly use Eigen matricies: https://eigen.tuxfamily.org/
     protected:
-        unsigned long m_x;      // Width
-        unsigned long m_y;      // Height
-        unsigned long m_z;      // Depth
+        unsigned long m_a;      // Width
+        unsigned long m_b;      // Height
+        unsigned long m_c;      // Depth
+        unsigned long m_d;      // 4th dimension
         unsigned long m_count;  // = x * w * h;  // Count of DNN_NUMERIC elements.
         unsigned long m_length; // = count * sizeof( T )
         T            *m_data;   // Pointer to data[] array:     = &data[0];
@@ -36,7 +37,7 @@ namespace tfs {         // Tree Frog Software
 
     public:
         TMatrix( const TMatrix &other, bool copyOther = false ) :       // Constructor
-        m_x( other.m_x ), m_y( other.m_y ), m_z( other.m_z ), m_count( other.m_count ),
+        m_a( other.m_a ), m_b( other.m_b ), m_c( other.m_c ), m_d( other.m_d ), m_count( other.m_count ),
         m_length( 0 ), m_data( 0 ), m_end( 0 ) {
             allocate();
             if( copyOther ) {
@@ -44,8 +45,8 @@ namespace tfs {         // Tree Frog Software
             }
         }
 
-        TMatrix( const unsigned long xx, const unsigned long yy = 1, const unsigned long zz = 1 ):  // Constructor
-        m_x( xx ), m_y( yy ), m_z( zz ), m_count( xx * yy * zz ),
+        TMatrix( const unsigned long aa, const unsigned long bb = 1, const unsigned long cc = 1, const unsigned long dd = 1 ):  // Constructor
+        m_a( aa ), m_b( bb ), m_c( cc ), m_d( dd ), m_count( aa * bb * cc * dd ),
         m_length( 0 ), m_data( 0 ), m_end( 0 ) {
             allocate();
         }
@@ -58,9 +59,10 @@ namespace tfs {         // Tree Frog Software
             m_length = 0;
         }
         
-        inline unsigned long width(  void ) const { return m_x; }
-        inline unsigned long height( void ) const { return m_y; }
-        inline unsigned long depth(  void ) const { return m_z; }
+        inline unsigned long width(  void ) const { return m_a; }
+        inline unsigned long height( void ) const { return m_b; }
+        inline unsigned long depth(  void ) const { return m_c; }
+        inline unsigned long dd(     void ) const { return m_d; }
         inline unsigned long count(  void ) const { return m_count;  }  // Count of elements.
         inline unsigned long length( void ) const { return m_length; }  // Length in bytes
         
@@ -99,19 +101,24 @@ namespace tfs {         // Tree Frog Software
         
         bool equal( const TMatrix &matrix ) const { // Return true if matricies same dimension and contents.
             if( m_data == 0 || matrix.m_data == 0 || m_length < 1 || m_length != matrix.m_length ||
-               m_x != matrix.m_x || m_y != matrix.m_y || m_z != matrix.m_z ) {
+               m_a != matrix.m_a || m_b != matrix.m_b || m_c != matrix.m_c || m_d != matrix.m_d ) {
                 return false;
             }
             return memcmp( m_data, matrix.m_data, m_length ) == 0;
         }
         
-        inline unsigned long getIndex( unsigned long x, unsigned long y, unsigned long z ) const {
-            return (( m_x * y) + x) * m_z + z;
+        inline unsigned long getIndex( unsigned long aa, unsigned long bb, unsigned long cc, unsigned long dd = 0 ) const {
+            return ((( m_a * bb) + aa) * m_c + cc) * m_d + dd;
         }
         
-        inline T get( unsigned long x, unsigned long y = 1, unsigned long z = 1 ) const {
-            const unsigned long index = getIndex( x, y, z );
+        inline T get( unsigned long aa, unsigned long bb = 0, unsigned long cc = 0, unsigned long dd = 0 ) const {
+            const unsigned long index = getIndex( aa, bb, cc, dd );
             return m_data[index];
+        }
+
+        inline T set( unsigned long aa, unsigned long bb, unsigned long cc, unsigned long dd, T value ) {
+            const unsigned long index = getIndex( aa, bb, cc, dd );
+            return m_data[index] = value;
         }
 
         inline T set( unsigned long x, unsigned long y, unsigned long z, T value ) {
@@ -220,8 +227,8 @@ namespace tfs {         // Tree Frog Software
         
     };  // class TMatrix
     
-    template <typename T> struct TTrainable {
-              T *weightStart;
+    template <typename T> struct TTrainable {       // Tuple of weight Matrix and gradiant Matrix.
+              T *weightStart;                       // Convienience pointers to the start and end of data arrays
         const T *weightEnd;
               T *gradiantStart;
         const T *gradiantEnd;
@@ -255,6 +262,9 @@ namespace tfs {         // Tree Frog Software
             if( matrix != 0 ) {
                 weightStart = matrix->data();
                 weightEnd   = matrix->end();
+            } else {
+                weightStart = 0;
+                weightEnd   = 0;
             }
         }
 
@@ -262,6 +272,9 @@ namespace tfs {         // Tree Frog Software
             if( matrix != 0 ) {
                 gradiantStart = matrix->data();
                 gradiantEnd   = matrix->end();
+            } else {
+                gradiantStart = 0;
+                gradiantEnd   = 0;
             }
         }
 

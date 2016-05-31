@@ -35,8 +35,8 @@ namespace tfs {
         
         Matrix*       getMatrixInput( void );
 
-        DNN_NUMERIC   learningRate( void ) const;
-        DNN_NUMERIC   learningRate( DNN_NUMERIC value );
+        DNN_NUMERIC   learningRate( void ) const;           // get()
+        DNN_NUMERIC   learningRate( DNN_NUMERIC value );    // set( value )
         
         DNN_NUMERIC   l1Decay( void ) const;
         DNN_NUMERIC   l1Decay( DNN_NUMERIC value );

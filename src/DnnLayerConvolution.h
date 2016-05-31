@@ -14,9 +14,10 @@ namespace tfs {
     class DnnLayerConvolution : public DnnLayer {   
     protected:
         unsigned long m_side;       // Prefer odd sizes, to give the filter a center.
-        unsigned long m_filters;
         unsigned long m_stride;
         unsigned long m_pad;
+        unsigned long m_filter_count;
+        Matrix      **m_filter;
         
         void setup( const bool trainable = true );
 

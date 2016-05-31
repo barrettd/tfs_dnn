@@ -24,9 +24,10 @@ namespace tfs {
                                              const bool trainable ):
     DnnLayer( NAME, previousLayer ),
     m_side(    side ),
-    m_filters( filters ),
     m_stride(  stride ),
-    m_pad(     pad ) {              // Constructor
+    m_pad(     pad ),
+    m_filter_count( filters ),
+    m_filter(  0 ) {              // Constructor
         m_l1_decay_mul = 0.0;
         m_l2_decay_mul = 1.0;
         if( previousLayer != 0 ) {  // previousLayer should not be null.
@@ -38,6 +39,13 @@ namespace tfs {
     
     DnnLayerConvolution::~DnnLayerConvolution( void ) {
         // Destructor
+        if( m_filter != 0 ) {
+            for( unsigned long ii = 0; ii < m_filter_count; ii++ ) {
+                delete m_filter[ii];
+            }
+            delete[] m_filter;
+            m_filter = 0;
+        }
     }
     
     void
@@ -50,7 +58,7 @@ namespace tfs {
         // out_a[N]  = activations
         // out_dw[N] = gradiant
         // -----------------------------------------------------------------------------------
-        if( m_side < 1 || m_filters < 1 || m_stride < 1 ) {
+        if( m_side < 1 || m_filter_count < 1 || m_stride < 1 ) {
             log_error( "Bad params" );
             return;
         }
@@ -64,9 +72,9 @@ namespace tfs {
         
         const unsigned long out_x = floorl((in_x + m_pad * 2 - m_side) / m_stride + 1 );
         const unsigned long out_y = floorl((in_y + m_pad * 2 - m_side) / m_stride + 1 );
-        const unsigned long out_z = m_filters;
+        const unsigned long out_z = m_filter_count;
         
-        const unsigned long N = m_filters;
+        const unsigned long N = m_filter_count;
         const unsigned long S = m_side * m_side * in_z;     // 1d input, S elements.
         
         m_w = new Matrix( N, S+1, 1 );                      // weights N x (S+1)
@@ -115,7 +123,7 @@ namespace tfs {
                         for( unsigned long fx = 0; fx < m_side; fx++ ) {
                             long ox = x + fx;
                             if( oy >= 0 && oy < in_y && ox >= 0 && ox < in_x ) {
-                                for( unsigned long fd = 0; fd < m_filters; fd++ ) {
+                                for( unsigned long fd = 0; fd < m_filter_count; fd++ ) {
                                     //a += f.get(fx, fy, fd) * V.get(ox, oy, fd);
 //                                    unsigned long filter_index = ((f.sx * fy)+fx)*f.depth+fd;
 //                                    unsigned long input_index  = ((V_sx * oy)+ox)*V.depth+fd;
