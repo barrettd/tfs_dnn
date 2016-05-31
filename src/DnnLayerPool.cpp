@@ -62,9 +62,9 @@ namespace tfs {
         
         m_switch = new unsigned long[ out_x * out_y * out_z * 2 ];
 
-        m_out_a = new Matrix( out_x, out_y, out_z );         // Output dimension matches input dimension
+        m_out_a = new Matrix( out_x, out_y, out_z );
         if( trainable ) {
-            m_out_dw = new Matrix( out_x, out_y, out_z );   // Output dimension matches input dimension
+            m_out_dw = new Matrix( *m_out_a );          // dw dimenstion matches a
         }
         return;
     }

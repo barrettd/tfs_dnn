@@ -50,9 +50,9 @@ namespace tfs {
             return;
         }
         m_es    = new Matrix( classCount, 1, 1 );
-        m_out_a = new Matrix( classCount, 1, 1 );
+        m_out_a = new Matrix( *m_es );
         if( trainable ) {
-            m_out_dw = new Matrix( classCount, 1, 1 );
+            m_out_dw = new Matrix( *m_out_a );
         }
         return;
     }

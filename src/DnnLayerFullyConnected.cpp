@@ -55,11 +55,11 @@ namespace tfs {
 
         m_w = new Matrix( N, S+1, 1 );          // 2d neuron weights N x (S+1)
         if( trainable ) {
-            m_dw = new Matrix( N, S+1, 1 );     // 2d neuron weights N x (S+1)
+            m_dw = new Matrix( *m_w );          // 2d neuron weights N x (S+1)
         }
         m_out_a = new Matrix( N, 1, 1 );        // 1d N neuron activations (output)
         if( trainable ) {
-            m_out_dw = new Matrix( N, 1, 1 );   // 1d N neuron dw
+            m_out_dw = new Matrix( *m_out_a );  // 1d N neuron dw
         }
         return;
     }
