@@ -1,6 +1,5 @@
 //
 //  test2D.cpp
-//  TestNeuralNet
 //
 //  Created by Barrett Davis on 5/31/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
@@ -23,7 +22,7 @@ namespace tfs {
     }
 
     static void
-    spiralSetUpDataSimple( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
+    setUpDataSimple( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
         setData( data, label, -0.4326, 1.1909,   1 );
         setData( data, label,  3.0,      4.0,    1 );
         setData( data, label,  0.1253 , -0.0376, 1 );
@@ -41,7 +40,21 @@ namespace tfs {
     }
     
     static void
-    spiralSetUpDataCircle( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label, const int count ) {
+    setUpDataRandom( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label, const int count ) {
+        for( int ii = 0; ii < count; ii++ ) {
+            const DNN_NUMERIC xx = random( -3.0, 3.0 );
+            const DNN_NUMERIC yy = random( -3.0, 3.0 );
+            DNN_INTEGER value = 0;
+            if( random( 0.0, 1.0 ) > 0.5 ) {
+                value = 1;
+            }
+            setData( data, label, xx, yy, value );
+        }
+        return;
+    }
+    
+    static void
+    setUpDataCircle( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label, const int count ) {
         for( int ii = 0; ii < count; ii++ ) {
             const DNN_NUMERIC rr = random( 0.0, 2.0 );
             const DNN_NUMERIC tt = random( 0.0, 2.0 * M_PI );
@@ -60,7 +73,7 @@ namespace tfs {
     }
     
     static void
-    spiralSetUpDataSpiral( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label, const int count ) {
+    setUpDataSpiral( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label, const int count ) {
         for( int ii = 0; ii < count; ii++ ) {
             const DNN_NUMERIC rr = ii / count * 5.0 + random( -0.1, 0.1 );
             const DNN_NUMERIC tt = 1.25 * ii / count * 2.0 * M_PI + random( -0.1, 0.1 );
@@ -155,26 +168,40 @@ namespace tfs {
     }
     
     static bool
-    localTestSpiral( void ) {
-        log_info( "Test Spiral - Start" );
+    localTestSimple( void ) {
+        log_info( "Test Simple - Start" );
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
-        spiralSetUpDataSpiral( data, label, 100 );
+        setUpDataSimple( data, label );
         
         localTest2d( data, label );
         
-        log_info( "Test Spiral - End" );
+        log_info( "Test Simple - End" );
         return true;
     }
     
+    static bool
+    localTestRandom( void ) {
+        log_info( "Test Random - Start" );
+        std::vector< DNN_NUMERIC > data;    // x,y pairs
+        std::vector< DNN_INTEGER > label;   // binary labels.
+        
+        setUpDataRandom( data, label, 40 );
+        
+        localTest2d( data, label );
+        
+        log_info( "Test Random - End" );
+        return true;
+    }
+
     static bool
     localTestCircle( void ) {
         log_info( "Test Circle - Start" );
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
-        spiralSetUpDataCircle( data, label, 50 );
+        setUpDataCircle( data, label, 50 );
         
         localTest2d( data, label );
 
@@ -183,16 +210,16 @@ namespace tfs {
     }
 
     static bool
-    localTestSimple( void ) {
-        log_info( "Test Simple - Start" );
+    localTestSpiral( void ) {
+        log_info( "Test Spiral - Start" );
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
-        spiralSetUpDataSimple( data, label );
+        setUpDataSpiral( data, label, 100 );
         
         localTest2d( data, label );
         
-        log_info( "Test Simple - End" );
+        log_info( "Test Spiral - End" );
         return true;
     }
 
@@ -201,6 +228,11 @@ namespace tfs {
 bool
 testSimple( void ) {
     return tfs::localTestSimple();
+}
+
+bool
+testRandom( void ) {
+    return tfs::localTestRandom();
 }
 
 bool

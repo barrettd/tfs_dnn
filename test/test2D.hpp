@@ -10,6 +10,7 @@
 #define test2D_hpp
 
 bool testSimple( void );
+bool testRandom( void );
 bool testCircle( void );
 bool testSpiral( void );
 

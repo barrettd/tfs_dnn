@@ -24,6 +24,7 @@ main( int argc, const char * argv[] ) {
     testFullyConnected();
     testCifar10();
     testSimple();
+//    testRandom();
     testCircle();
     testSpiral();
     test2Layer();
