@@ -1,15 +1,15 @@
 //
-//  testSpiral.cpp
+//  testCircle.cpp
 //  Example inspired by http://cs.stanford.edu/people/karpathy/convnetjs/demo/classify2d.html
 //
-//  Created by Barrett Davis on 5/9/16.
+//  Created by Barrett Davis on 5/31/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
 #include <cmath>
 #include "DnnBuilder.h"
 #include "DnnTrainerSGD.h"
 #include "Error.h"
-#include "testSpiral.hpp"
+#include "testCircle.hpp"
 #include "Utility.h"
 
 namespace tfs {
@@ -17,35 +17,32 @@ namespace tfs {
     static void
     spiralSetUpData( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label, const int count ) {
         for( int ii = 0; ii < count; ii++ ) {
-            const DNN_NUMERIC rr = ii / count * 5.0 + random( -0.1, 0.1 );
-            const DNN_NUMERIC tt = 1.25 * ii / count * 2.0 * M_PI + random( -0.1, 0.1 );
-            const DNN_NUMERIC xx = rr * sin( tt );
-            const DNN_NUMERIC yy = rr * cos( tt );
-            data.push_back( xx );       // x,y pair
-            data.push_back( yy );
-            label.push_back( 1 );       // label
-        }
-        for( int ii = 0; ii < count; ii++ ) {
-            const DNN_NUMERIC rr = ii / count * 5.0 + random( -0.1, 0.1 );
-            const DNN_NUMERIC tt = 1.25 * ii / count * 2.0 * M_PI + random( -0.1, 0.1 ) + M_PI;
+            const DNN_NUMERIC rr = random( 0.0, 2.0 );
+            const DNN_NUMERIC tt = random( 0.0, 2.0 * M_PI );
             const DNN_NUMERIC xx = rr * sin( tt );
             const DNN_NUMERIC yy = rr * cos( tt );
             data.push_back( xx );       // x,y pair
             data.push_back( yy );
             label.push_back( 0 );       // label
         }
+        for( int ii = 0; ii < count; ii++ ) {
+            const DNN_NUMERIC rr = random( 3.0, 5.0 );
+            const DNN_NUMERIC tt = 2.0 * M_PI * ii / count;
+            const DNN_NUMERIC xx = rr * sin( tt );
+            const DNN_NUMERIC yy = rr * cos( tt );
+            data.push_back( xx );       // x,y pair
+            data.push_back( yy );
+            label.push_back( 1 );       // label
+        }
         return;
     }
-
+    
     static bool
     setupDnn( Dnn &dnn ) {
         DnnBuilder builder( dnn, ACTIVATION_TANH );
         if( !builder.addLayerInput( 1, 1, 2 )) {                // Input layer a single x, y data point.
             return log_error( "Cannot add Input layer" );
         }
-//        if( !builder.addLayerFullyConnected( 8 )) {             // 8 Neurons
-//            return log_error( "Cannot add Fully Connected layer" );
-//        }
         if( !builder.addLayerFullyConnected( 6 )) {             // 6 Neurons
             return log_error( "Cannot add Fully Connected layer" );
         }
@@ -60,12 +57,11 @@ namespace tfs {
         log_info( "We have set up %lu layers", count );
         return true;
     }
-
     
     static bool
-    localTestSpiral( void ) {
-        log_info( "Test Spiral - Start" );
-
+    localTestCircle( void ) {
+        log_info( "Test Circle - Start" );
+        
         Dnn dnn;
         if( !setupDnn( dnn )) {
             return false;
@@ -79,7 +75,7 @@ namespace tfs {
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
-        spiralSetUpData( data, label, 100 );
+        spiralSetUpData( data, label, 50 );
         
         Matrix *input = trainer.getMatrixInput();       // get the input matrix: x,y pair Matrix( 1, 1, 2 )
         if( input == 0 ) {
@@ -120,8 +116,8 @@ namespace tfs {
             average_loss /= DATA_COUNT * MAX_ITERATION;
             log_info( "%lu: Average loss = %f", count, average_loss );
         } while( average_loss > TARGET_LOSS );
-
-        log_info( "Test Spiral - End" );
+        
+        log_info( "Test Circle - End" );
         return true;
     }
     
@@ -129,6 +125,6 @@ namespace tfs {
 
 
 bool
-testSpiral( void ) {
-    return tfs::localTestSpiral();
+testCircle( void ) {
+    return tfs::localTestCircle();
 }

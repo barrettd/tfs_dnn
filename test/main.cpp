@@ -7,6 +7,7 @@
 #include <iostream>
 #include "testBuilder.hpp"
 #include "testCifar10.hpp"
+#include "testCircle.hpp"
 #include "testFullyConnected.hpp"
 #include "TestMatrix.hpp"
 #include "testSpiral.hpp"
@@ -23,6 +24,7 @@ main( int argc, const char * argv[] ) {
     testBuilder();
     testFullyConnected();
     testCifar10();
+    testCircle();
     testSpiral();
     test2Layer();
     

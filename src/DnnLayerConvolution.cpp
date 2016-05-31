@@ -135,14 +135,14 @@ namespace tfs {
         const unsigned long out_y = m_out_dw->height();
         const unsigned long out_z = m_out_dw->depth();
 
-        m_in_dw->zero();        // Zero input gradiant, not sure if it is totally filled below.
+        m_in_dw->zero();        // Zero input gradiant, we add to it below.
         for( unsigned long d = 0; d < out_z; d++ ) {
             long x = -m_pad;
             for( unsigned long ax = 0; ax < out_x; x += stride, ax++ ) {
                 long y = -m_pad;
                 for( unsigned long ay = 0; ay < out_y; y += stride, ay++ ) {
                     // convolve and add up the gradients.
-                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, d ); // gradient from above, from chain rule
+                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, d ); // gradient from chain rule
                     for( unsigned long fx = 0; fx < side; fx++ ) {
                         for( unsigned long  fy = 0; fy < side; fy++ ) {
                             for( unsigned long fd = 0;fd < in_z; fd++ ) {
@@ -153,7 +153,7 @@ namespace tfs {
                                     // f.add_grad(fx, fy, fd, V.get(ox, oy, fd) * chain_grad);
                                     // V.add_grad(ox, oy, fd, f.get(fx, fy, fd) * chain_grad);
                                     const DNN_NUMERIC in_delta = m_in_a->get( d, ox, oy, fd ) * chain_grad;
-                                    const DNN_NUMERIC dw_delta = m_w->get(    d, fx, fy, fd ) * chain_grad;
+                                    const DNN_NUMERIC dw_delta =    m_w->get( d, fx, fy, fd ) * chain_grad;
                                     m_dw->plusEquals(    d, fx, fy, fd, in_delta );
                                     m_in_dw->plusEquals( d, ox, oy, fd, dw_delta );
                                 }
