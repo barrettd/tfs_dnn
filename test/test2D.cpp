@@ -73,15 +73,15 @@ namespace tfs {
     }
     
     static void
-    setUpDataSpiral( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label, const int count ) {
-        for( int ii = 0; ii < count; ii++ ) {
+    setUpDataSpiral( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label, const DNN_NUMERIC count ) {
+        for( DNN_NUMERIC ii = 0; ii < count; ii += 1.0 ) {
             const DNN_NUMERIC rr = ii / count * 5.0 + random( -0.1, 0.1 );
             const DNN_NUMERIC tt = 1.25 * ii / count * 2.0 * M_PI + random( -0.1, 0.1 );
             const DNN_NUMERIC xx = rr * sin( tt );
             const DNN_NUMERIC yy = rr * cos( tt );
             setData( data, label, xx, yy, 0 );
         }
-        for( int ii = 0; ii < count; ii++ ) {
+        for( int ii = 0; ii < count; ii += 1.0 ) {
             const DNN_NUMERIC rr = ii / count * 5.0 + random( -0.1, 0.1 );
             const DNN_NUMERIC tt = 1.25 * ii / count * 2.0 * M_PI + random( -0.1, 0.1 ) + M_PI;
             const DNN_NUMERIC xx = rr * sin( tt );
@@ -113,11 +113,7 @@ namespace tfs {
     }
     
     static bool
-    localTest2d( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
-        Dnn dnn;
-        if( !setupDnn( dnn )) {
-            return false;
-        }
+    localTest2d( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
         DnnTrainerSGD trainer( &dnn );
         trainer.learningRate( 0.01  );
         trainer.momentum(     0.1   );
@@ -143,7 +139,7 @@ namespace tfs {
         const DNN_INTEGER *ePtr = lPtr + DATA_COUNT;
         
         const unsigned long MAX_ITERATION = 200;
-        const DNN_NUMERIC   TARGET_LOSS   = 0.005;
+        const DNN_NUMERIC   TARGET_LOSS   = 0.05;
         unsigned long count = 0;
         DNN_NUMERIC average_loss = 0.0;
         do {
@@ -161,8 +157,8 @@ namespace tfs {
                 }
             }
             average_loss /= DATA_COUNT * MAX_ITERATION;
-            log_info( "%lu: Average loss = %f", count, average_loss );
         } while( average_loss > TARGET_LOSS );
+        log_info( "%lu: Average loss = %f", count, average_loss );
         
         return true;
     }
@@ -170,12 +166,16 @@ namespace tfs {
     static bool
     localTestSimple( void ) {
         log_info( "Test Simple - Start" );
+        Dnn dnn;
+        if( !setupDnn( dnn )) {
+            return false;
+        }
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
         setUpDataSimple( data, label );
         
-        localTest2d( data, label );
+        localTest2d( dnn, data, label );
         
         log_info( "Test Simple - End" );
         return true;
@@ -184,12 +184,16 @@ namespace tfs {
     static bool
     localTestRandom( void ) {
         log_info( "Test Random - Start" );
+        Dnn dnn;
+        if( !setupDnn( dnn )) {
+            return false;
+        }
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
         setUpDataRandom( data, label, 40 );
         
-        localTest2d( data, label );
+        localTest2d( dnn, data, label );
         
         log_info( "Test Random - End" );
         return true;
@@ -198,12 +202,16 @@ namespace tfs {
     static bool
     localTestCircle( void ) {
         log_info( "Test Circle - Start" );
+        Dnn dnn;
+        if( !setupDnn( dnn )) {
+            return false;
+        }
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
         setUpDataCircle( data, label, 50 );
         
-        localTest2d( data, label );
+        localTest2d( dnn, data, label );
 
         log_info( "Test Circle - End" );
         return true;
@@ -212,13 +220,24 @@ namespace tfs {
     static bool
     localTestSpiral( void ) {
         log_info( "Test Spiral - Start" );
+        Dnn dnn;
+        if( !setupDnn( dnn )) {
+            return false;
+        }
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
-        setUpDataSpiral( data, label, 100 );
+//        setUpDataSimple( data, label );
+//        
+//        localTest2d( dnn, data, label );
+//        
+//        data.clear();
+//        label.clear();
+
+        setUpDataSpiral( data, label, 100.0 );
         
-        localTest2d( data, label );
-        
+        localTest2d( dnn, data, label );
+
         log_info( "Test Spiral - End" );
         return true;
     }
