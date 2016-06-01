@@ -11,6 +11,7 @@
 #include "TestMatrix.hpp"
 #include "test2Layer.hpp"
 #include "test2D.hpp"
+#include "testIO.hpp"
 
 
 
@@ -27,6 +28,7 @@ main( int argc, const char * argv[] ) {
     testCircle();
     testSpiral();
     test2Layer();
+    testIO();
     
     std::cout << "Test DNN end\n";
     return 0;

@@ -45,17 +45,17 @@ namespace tfs {     // Tree Frog Software
         bool addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz = 1, const bool retain_dw = false ); // input
 
         bool addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride = 1, unsigned long pad = 0 ); // conv (square)
-        bool addLayerDropout( void );                       // dropout
-        bool addLayerFullyConnected( unsigned long neuronCount ); // fully connected
-        bool addLayerLocalResponseNormalization( void );    // lrn
-        bool addLayerMaxout( void );                        // maxout
+        bool addLayerDropout( void );                                       // dropout
+        bool addLayerFullyConnected( unsigned long neuronCount );           // fully connected
+        bool addLayerLocalResponseNormalization( void );                    // lrn
+        bool addLayerMaxout( void );                                        // maxout
         bool addLayerPool( unsigned long side, unsigned long stride = 1 );  // pool (square)
-        bool addLayerRectifiedLinearUnit( void );           // relu
-        bool addLayerRegression( void );                    // regression
-        bool addLayerSigmoid( void );                       // sigmoid
-        bool addLayerSoftmax( void );                       // softmax
-        bool addLayerSupportVectorMachine( void );          // svm
-        bool addLayerTanh( void );                          // tanh
+        bool addLayerRectifiedLinearUnit( void );                           // relu
+        bool addLayerRegression( void );                                    // regression
+        bool addLayerSigmoid( void );                                       // sigmoid
+        bool addLayerSoftmax( void );                                       // softmax
+        bool addLayerSupportVectorMachine( void );                          // svm
+        bool addLayerTanh( void );                                          // tanh
         
               DNN_NUMERIC   *getDataInput(    void );
         const DNN_NUMERIC   *getDataInputEnd( void );
@@ -72,11 +72,11 @@ namespace tfs {     // Tree Frog Software
         void bias( DNN_NUMERIC value = 0.0 );                   // Set biases in all layers.
         bool forward( void );                                   // Forward propagate while training
         bool predict( void );                                   // Forward progagate when predicting
-        DNN_NUMERIC backprop( const  Matrix &expectation );     // Back propagate while training, returns loss.
+        DNN_NUMERIC backprop( const Matrix     &expectation );  // Back propagate while training, returns loss.
         DNN_NUMERIC backprop( const DNN_INTEGER expectation );  // Back propagate while training, returns loss.
         
         DNN_NUMERIC getCostLoss( void );                        // Forward 
-        DNN_NUMERIC getCostLoss( const  Matrix &expectation );
+        DNN_NUMERIC getCostLoss( const Matrix     &expectation );
         DNN_NUMERIC getCostLoss( const DNN_INTEGER expectation );
         
         // Binary file I/O
