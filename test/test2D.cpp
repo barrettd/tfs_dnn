@@ -97,6 +97,9 @@ namespace tfs {
         if( !builder.addLayerInput( 1, 1, 2 )) {                // Input layer a single x, y data point.
             return log_error( "Cannot add Input layer" );
         }
+        if( !builder.addLayerFullyConnected( 8 )) {             // 8 Neurons
+            return log_error( "Cannot add Fully Connected layer" );
+        }
         if( !builder.addLayerFullyConnected( 6 )) {             // 6 Neurons
             return log_error( "Cannot add Fully Connected layer" );
         }
@@ -139,7 +142,7 @@ namespace tfs {
         const DNN_INTEGER *ePtr = lPtr + DATA_COUNT;
         
         const unsigned long MAX_ITERATION = 200;
-        const DNN_NUMERIC   TARGET_LOSS   = 0.05;
+        const DNN_NUMERIC   TARGET_LOSS   = 0.02;
         unsigned long count = 0;
         DNN_NUMERIC average_loss = 0.0;
         do {
@@ -157,6 +160,7 @@ namespace tfs {
                 }
             }
             average_loss /= DATA_COUNT * MAX_ITERATION;
+//            log_info( "%lu: Average loss = %f", count, average_loss );
         } while( average_loss > TARGET_LOSS );
         log_info( "%lu: Average loss = %f", count, average_loss );
         
