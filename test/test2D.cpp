@@ -62,7 +62,7 @@ namespace tfs {
             const DNN_NUMERIC yy = rr * cos( tt );
             setData( data, label, xx, yy, 0 );
         }
-        for( int ii = 0; ii < count; ii++ ) {
+        for( DNN_NUMERIC ii = 0.0; ii < count; ii += 1.0 ) {
             const DNN_NUMERIC rr = random( 3.0, 5.0 );
             const DNN_NUMERIC tt = 2.0 * M_PI * ii / count;
             const DNN_NUMERIC xx = rr * sin( tt );
@@ -74,14 +74,14 @@ namespace tfs {
     
     static void
     setUpDataSpiral( std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label, const DNN_NUMERIC count ) {
-        for( DNN_NUMERIC ii = 0; ii < count; ii += 1.0 ) {
+        for( DNN_NUMERIC ii = 0.0; ii < count; ii += 1.0 ) {
             const DNN_NUMERIC rr = ii / count * 5.0 + random( -0.1, 0.1 );
             const DNN_NUMERIC tt = 1.25 * ii / count * 2.0 * M_PI + random( -0.1, 0.1 );
             const DNN_NUMERIC xx = rr * sin( tt );
             const DNN_NUMERIC yy = rr * cos( tt );
             setData( data, label, xx, yy, 0 );
         }
-        for( int ii = 0; ii < count; ii += 1.0 ) {
+        for( DNN_NUMERIC ii = 0.0; ii < count; ii += 1.0 ) {
             const DNN_NUMERIC rr = ii / count * 5.0 + random( -0.1, 0.1 );
             const DNN_NUMERIC tt = 1.25 * ii / count * 2.0 * M_PI + random( -0.1, 0.1 ) + M_PI;
             const DNN_NUMERIC xx = rr * sin( tt );
