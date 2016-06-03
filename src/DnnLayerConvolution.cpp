@@ -80,6 +80,7 @@ namespace tfs {
         if( m_in_a == 0 || m_out_a == 0 ) {
             return log_error( "Not configured" );
         }
+        log_debug( "start" );
         const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
         const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
         const unsigned long in_z   = m_in_a->depth();
@@ -113,7 +114,7 @@ namespace tfs {
                 }
             }
         }
-        
+        log_debug( "end" );
         return true;
     }
     
@@ -125,6 +126,7 @@ namespace tfs {
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 ) {
             return log_error( "Not configured" );
         }
+        log_debug( "start" );
         const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
         const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
         const unsigned long in_z   = m_in_a->depth();
@@ -168,6 +170,7 @@ namespace tfs {
                 }
             }
         }
+        log_debug( "end" );
         return true;
     }
 
