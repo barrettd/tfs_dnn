@@ -62,14 +62,14 @@ OBJS = 	$(OBJ_DIR)main.o\
 # -----------------------------------------------------------------------------
 # We list the individual source file dependencies here.
 # -----------------------------------------------------------------------------
-$(OBJ_DIR)main.o                : main.cpp 
-$(OBJ_DIR)TestMatrix.o          : TestMatrix.cpp TestMatrix.h
-$(OBJ_DIR)test2D.o              : test2D.cpp test2D.h
-$(OBJ_DIR)testBuilder.o         : testBuilder.cpp testBuilder.h
-$(OBJ_DIR)testFullyConnected.o  : testFullyConnected.cpp testFullyConnected.h
-$(OBJ_DIR)test2Layer.o          : test2Layer.cpp test2Layer.h
-$(OBJ_DIR)testCifar10.o         : testCifar10.cpp testCifar10.h
-$(OBJ_DIR)testIO.o              : testIO.cpp testIO.h
+$(OBJ_DIR)main.o                : main.cpp
+$(OBJ_DIR)TestMatrix.o          : TestMatrix.cpp TestMatrix.hpp
+$(OBJ_DIR)test2D.o              : test2D.cpp test2D.hpp
+$(OBJ_DIR)testBuilder.o         : testBuilder.cpp testBuilder.hpp
+$(OBJ_DIR)testFullyConnected.o  : testFullyConnected.cpp testFullyConnected.hpp
+$(OBJ_DIR)test2Layer.o          : test2Layer.cpp test2Layer.hpp
+$(OBJ_DIR)testCifar10.o         : testCifar10.cpp testCifar10.hpp
+$(OBJ_DIR)testIO.o              : testIO.cpp testIO.hpp
 
 
 
