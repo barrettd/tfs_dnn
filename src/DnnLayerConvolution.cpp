@@ -155,9 +155,9 @@ namespace tfs {
                                     // f.add_grad(fx, fy, fd, V.get(ox, oy, fd) * chain_grad);
                                     // V.add_grad(ox, oy, fd, f.get(fx, fy, fd) * chain_grad);
                                     const DNN_NUMERIC in_delta = m_in_a->get( d, ox, oy, fd ) * chain_grad;
-                                    const DNN_NUMERIC dw_delta =    m_w->get( d, fx, fy, fd ) * chain_grad;
                                     m_dw->plusEquals( d, fx, fy, fd, in_delta );
                                     if( m_in_dw != 0 ) {
+                                        const DNN_NUMERIC dw_delta = m_w->get( d, fx, fy, fd ) * chain_grad;
                                         m_in_dw->plusEquals( d, ox, oy, fd, dw_delta );
                                     }
                                 }
