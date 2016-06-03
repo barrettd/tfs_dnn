@@ -8,6 +8,7 @@
 //  Please feel free to use this software as you wish, but please
 //  drop me a line to let me know how you are using this library.
 //  Regards, Barrett Davis: barrett (at) thefrog.com
+//  http://thefrog.com/barrett/
 // --------------------------------------------------------------------
 #ifndef dnn_h
 #define dnn_h

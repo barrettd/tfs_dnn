@@ -122,12 +122,12 @@ namespace tfs {
         // -----------------------------------------------------------------------------------
         // virtual: Back propagate, used with backprop()
         // -----------------------------------------------------------------------------------
-        if( m_in_a || m_in_dw == 0 || m_w || m_dw == 0 ) {
+        if( m_in_a == 0 || m_w == 0 || m_dw == 0 ) {
             return log_error( "Not configured" );
         }
-        const unsigned long in_x   = m_in_dw->width();        // var V_sx = V.sx |0;
-        const unsigned long in_y   = m_in_dw->height();       // var V_sy = V.sy |0;
-        const unsigned long in_z   = m_in_dw->depth();
+        const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
+        const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
+        const unsigned long in_z   = m_in_a->depth();
         const unsigned long side   = m_side;
         const unsigned long stride = m_stride;              // var xy_stride = this.stride |0;
         
@@ -135,7 +135,9 @@ namespace tfs {
         const unsigned long out_y = m_out_dw->height();
         const unsigned long out_z = m_out_dw->depth();
 
-        m_in_dw->zero();        // Zero input gradiant, we add to it below.
+        if( m_in_dw != 0 ) {        // Input layer often does not have dw.
+            m_in_dw->zero();        // Zero input gradiant, we add to it below.
+        }
         for( unsigned long d = 0; d < out_z; d++ ) {
             long x = -m_pad;
             for( unsigned long ax = 0; ax < out_x; x += stride, ax++ ) {
@@ -154,8 +156,10 @@ namespace tfs {
                                     // V.add_grad(ox, oy, fd, f.get(fx, fy, fd) * chain_grad);
                                     const DNN_NUMERIC in_delta = m_in_a->get( d, ox, oy, fd ) * chain_grad;
                                     const DNN_NUMERIC dw_delta =    m_w->get( d, fx, fy, fd ) * chain_grad;
-                                    m_dw->plusEquals(    d, fx, fy, fd, in_delta );
-                                    m_in_dw->plusEquals( d, ox, oy, fd, dw_delta );
+                                    m_dw->plusEquals( d, fx, fy, fd, in_delta );
+                                    if( m_in_dw != 0 ) {
+                                        m_in_dw->plusEquals( d, ox, oy, fd, dw_delta );
+                                    }
                                 }
                             }
                         }
