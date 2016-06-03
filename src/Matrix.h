@@ -257,7 +257,7 @@ namespace tfs {         // Tree Frog Software
         weightStart( 0 ), weightEnd( 0 ), gradiantStart( 0 ), gradiantEnd( 0 ),
         l1_decay_mul( 1.0 ), l2_decay_mul( 1.0 ) {
             setWeight(   weights   );
-            setGRadiant( gradiants );
+            setGradiant( gradiants );
         }
         
         ~TTrainable( void ) {
@@ -281,7 +281,7 @@ namespace tfs {         // Tree Frog Software
             }
         }
 
-        void setGRadiant( TMatrix< T > *matrix ) {
+        void setGradiant( TMatrix< T > *matrix ) {
             if( matrix != 0 ) {
                 gradiantStart = matrix->data();
                 gradiantEnd   = matrix->end();
