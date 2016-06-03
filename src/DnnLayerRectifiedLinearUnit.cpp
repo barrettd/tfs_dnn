@@ -34,6 +34,7 @@ namespace tfs {
         if( src == 0 || end == 0 || dst == 0 ) {
             return log_error( "Not configured" );
         }
+        log_debug( "start" );
         while( src < end ) {
             if( *src >= 0.0 ) {     // Threshold at 0.0
                 *dst++ = *src++;
@@ -42,6 +43,7 @@ namespace tfs {
                 src++;
             }
         }
+        log_debug( "end" );
         return true;
     }
 
@@ -54,6 +56,7 @@ namespace tfs {
         if( m_in_a == 0 || m_out_a == 0  ) {
             return log_error( "Not configured" );
         }
+        log_debug( "run" );
         const DNN_NUMERIC *       src = m_in_a->dataReadOnly();
         const DNN_NUMERIC * const end = m_in_a->end();
               DNN_NUMERIC *       dst = m_out_a->data();
@@ -69,6 +72,7 @@ namespace tfs {
         if( m_in_dw == 0 || m_out_dw == 0  ) {
             return log_error( "Not configured" );
         }
+        log_debug( "run" );
         const DNN_NUMERIC *       src = m_out_dw->dataReadOnly();
         const DNN_NUMERIC * const end = m_out_dw->end();
               DNN_NUMERIC *       dst = m_in_dw->data();

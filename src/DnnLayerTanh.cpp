@@ -43,6 +43,7 @@ namespace tfs {
         if( m_in_a == 0 || m_out_a == 0 ) {
             return log_error( "Not configured correctly" );
         }
+        log_debug( "start" );
         const DNN_NUMERIC *        input = m_in_a->dataReadOnly();
         const DNN_NUMERIC * const  inEnd = m_in_a->end();     // A pointer just past the end of the input
         DNN_NUMERIC       *       output = m_out_a->data();   // activations[S] for the neurons in this layer
@@ -50,6 +51,7 @@ namespace tfs {
         while( input < inEnd ) {
             *output++ = tanh( *input++ );
         }
+        log_debug( "end" );
         return true;
     }
     

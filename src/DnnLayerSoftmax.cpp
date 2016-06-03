@@ -70,6 +70,7 @@ namespace tfs {
         if( m_in_a == 0 || m_es == 0 || m_out_a == 0 ) {
             return log_error( "Not configured" );
         }
+        log_debug( "start" );
         const DNN_NUMERIC *         input = m_in_a->dataReadOnly();
         const DNN_NUMERIC * const   inEnd = m_in_a->end();
               DNN_NUMERIC * const esStart = m_es->data();
@@ -93,6 +94,7 @@ namespace tfs {
         while( output < outEnd ) {                  // normalize
             *output++ = *es++ /= esum;
         }
+        log_debug( "end" );
         return true;
     }
     
