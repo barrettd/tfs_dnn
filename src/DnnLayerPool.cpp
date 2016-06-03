@@ -47,9 +47,15 @@ namespace tfs {
             log_error( "Input activation matrix is null" );
             return;
         }
-        if( trainable && m_in_dw == 0 ) {
-            log_error( "Input dw matrix is null" );
-            return;
+        if( trainable ) {
+            if( m_in_dw == 0 ) {
+                log_error( "Input dw matrix is null" );
+                return;
+            }
+            if( m_in_a->count() != m_in_dw->count()) {  // By default, we expect the dimensions to be the same.
+                log_error( "in_a != in_dw size" );
+                return;
+            }
         }
         const unsigned long in_x = m_in_a->width();
         const unsigned long in_y = m_in_a->height();

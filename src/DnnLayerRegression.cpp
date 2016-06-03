@@ -34,7 +34,7 @@ namespace tfs {
         // virtual: Forward propagate, used with forward()
         // -----------------------------------------------------------------------------------
         // TODO:
-        return true;
+        return log_warn( "Not implemented yet" );
     }
     
     bool
@@ -43,7 +43,7 @@ namespace tfs {
         // virtual: Back propagate, used with backprop()
         // -----------------------------------------------------------------------------------
         // TODO:
-        return true;
+        return log_warn( "Not implemented yet" );
     }
 
     

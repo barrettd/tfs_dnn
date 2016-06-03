@@ -53,7 +53,7 @@ namespace tfs {
                 log_error( "Input dw matrix is null" );
                 return;
             }
-            if( m_in_a->count() != m_in_dw->count()) {  // TODO: Development test
+            if( m_in_a->count() != m_in_dw->count()) {  // By default, we expect the dimensions to be the same.
                 log_error( "in_a != in_dw size" );
                 return;
             }
