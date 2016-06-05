@@ -137,7 +137,7 @@ namespace tfs {
                 return log_error( "Error during feed forward" );
             }
             Matrix previous = Matrix( *output, true );          // Copy output
-            const DNN_INTEGER index = floor( random( 3.0 ));    // Index 0 to 2.
+            const DNN_INTEGER index = (DNN_INTEGER) floor( random( 3.0 ));    // Index 0 to 2.
             if( index < 0 || index > 3 ) {
                 return log_error( "Index out of range: %ld", index );
             }
@@ -188,7 +188,7 @@ namespace tfs {
         }
         *data++ = random( -1.0, 1.0 );
         *data   = random( -1.0, 1.0 );
-        const DNN_INTEGER index = floor( random( 3.0 ));    // Index 0 to 2.
+        const DNN_INTEGER index = (DNN_INTEGER) floor( random( 3.0 ));    // Index 0 to 2.
         if( index < 0 || index > 3 ) {
             return log_error( "Index out of range: %ld", index );
         }

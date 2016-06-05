@@ -67,8 +67,8 @@ namespace tfs {
         const unsigned long in_y = m_in_a->height();
         const unsigned long in_z = m_in_a->depth();
         
-        const unsigned long out_x = floorl((in_x + m_pad * 2 - m_side) / m_stride + 1 );
-        const unsigned long out_y = floorl((in_y + m_pad * 2 - m_side) / m_stride + 1 );
+        const unsigned long out_x = (unsigned long) floor((in_x + m_pad * 2.0 - m_side) / m_stride + 1.0 );
+        const unsigned long out_y = (unsigned long) floor((in_y + m_pad * 2.0 - m_side) / m_stride + 1.0 );
         const unsigned long out_z = m_filter_count;
         
         m_w = new Matrix( m_filter_count, m_side, m_side, in_z + 1 );       // N Fiters of side x side x (depth +1) for the bias

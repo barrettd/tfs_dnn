@@ -61,8 +61,8 @@ namespace tfs {
         const unsigned long in_y = m_in_a->height();
         const unsigned long in_z = m_in_a->depth();
         
-        const unsigned long out_x = floorl((in_x + m_pad * 2 - m_side) / m_stride + 1 );
-        const unsigned long out_y = floorl((in_y + m_pad * 2 - m_side) / m_stride + 1 );
+        const unsigned long out_x = (unsigned long) floor((in_x + m_pad * 2.0 - m_side) / m_stride + 1.0 );
+        const unsigned long out_y = (unsigned long) floor((in_y + m_pad * 2.0 - m_side) / m_stride + 1.0 );
         const unsigned long out_z = in_z;
         
         

@@ -112,7 +112,7 @@ namespace tfs {
             log_error( "Not configured for training" );
             return 0.0;
         }
-        if( yy < 0 || yy >= m_es->count()) {
+        if( yy < 0 || yy >= (DNN_INTEGER) m_es->count()) {
             log_error( "Expectation is out of range" );
             return 0.0;
         }
