@@ -46,8 +46,8 @@ namespace tfs {
             log_error( "Neuron count is less than 1" );
             return;
         }
-        if( m_in_a == 0 ) {
-            log_error( "Input activation matrix is null" );
+        if( matrixBad( m_in_a )) {
+            log_error( "Input activation matrix is bad" );
             return;
         }
         const unsigned long N = m_neuron_count;

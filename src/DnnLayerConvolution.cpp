@@ -49,8 +49,12 @@ namespace tfs {
             log_error( "Bad params" );
             return;
         }
+        if( matrixBad( m_in_a )) {
+            log_error( "Input activation matrix is bad" );
+            return;
+        }
         if( trainable && m_in_dw != 0 ) {               // Input layers can have null m_out_dw
-            if( m_in_dw == 0 ) {
+            if( matrixBad( m_in_dw )) {
                 log_error( "Input dw matrix is bad" );
                 return;
             }

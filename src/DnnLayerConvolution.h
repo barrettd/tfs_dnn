@@ -26,7 +26,7 @@ namespace tfs {
         DnnLayerConvolution( DnnLayer *previousLayer,
                             unsigned long side,             // Square filter size (should be odd.)
                             unsigned long filterCount,
-                            unsigned long stride = 2,
+                            unsigned long stride = 1,
                             unsigned long pad    = 0,
                             const bool trainable = true );
         virtual ~DnnLayerConvolution( void );

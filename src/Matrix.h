@@ -115,7 +115,7 @@ namespace tfs {         // Tree Frog Software
         inline unsigned long getIndex( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd = 0 ) const {
             const unsigned long index = ((( m_a * bb) + aa) * m_c + cc) * m_d + dd;
             if( index >= m_count ) {
-                log_error( "Index out of range: %lu, max = %lu, a = %lu/%lu, b = %lu/%lu, c = %lu/%lu, d = %lu/%lu",
+                log_error( "Index out of range: %lu/%lu, a = %lu/%lu, b = %lu/%lu, c = %lu/%lu, d = %lu/%lu",
                           index, m_count, aa, m_a, bb, m_b, cc, m_c, dd, m_d );
             }
             return index;

@@ -25,7 +25,7 @@ INSTALL_DIR = $(LIB_DIR)
 # CC      = 
 # CDEFS   =
 
-CFLAGS  = 
+CFLAGS  = -Wall -O3
 IFLAGS  = -I $(INC_LIB_DIR)
 LDFLAGS = 
 COMPILE_DYNAMIC  = $(CC) $(IFLAGS) $(CFLAGS) -fpic $(CDEFS) -c
