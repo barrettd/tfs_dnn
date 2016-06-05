@@ -40,8 +40,8 @@ namespace tfs {
         // m_out_a[S]   Output activations
         // m_out_dw[S]
         // -----------------------------------------------------------------------------------
-        if( m_in_a == 0 ) {
-            log_error( "input A is null" );
+        if( matrixBad( m_in_a )) {
+            log_error( "input A is bad" );
             return;
         }
         const unsigned long classCount = m_in_a->count();    // 1d input, S elements.
@@ -67,7 +67,7 @@ namespace tfs {
         // m_out_a[S]   Output activations
         // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
-        if( m_in_a == 0 || m_es == 0 || m_out_a == 0 ) {
+        if( matrixBad( m_in_a ) || matrixBad( m_es ) || matrixBad( m_out_a )) {
             return log_error( "Not configured" );
         }
         log_debug( "start" );

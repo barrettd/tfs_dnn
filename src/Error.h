@@ -15,7 +15,7 @@ namespace tfs {     // Tree Frog Software
 
     void report_message( const char *level, const char *file, const char *function, const unsigned long line, const char *format, ... );
     bool report_problem( const char *level, const char *file, const char *function, const unsigned long line, const char *format, ... );
-    
+ 
 #define log_debug( message, args... ) report_message( "Debug", __FILE__, __FUNCTION__, __LINE__, message, ## args )
 #define log_info(  message, args... ) report_message( "Info ", __FILE__, __FUNCTION__, __LINE__, message, ## args )
 #define log_warn(  message, args... ) report_problem( "Warn ", __FILE__, __FUNCTION__, __LINE__, message, ## args )

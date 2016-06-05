@@ -152,7 +152,9 @@ namespace tfs {
         // m_out_dw[N]
         // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
-        if( m_in_a == 0 || m_w == 0 || m_dw == 0 || m_out_dw == 0 ) {
+        if( matrixBad( m_in_a )  ||
+            matrixBad( m_w  )    || matrixBad( m_dw )   ||
+            matrixBad( m_out_dw )) {
             return log_error( "Not configured for training" );
         }
         const DNN_NUMERIC *          input = m_in_a->dataReadOnly();
@@ -161,7 +163,7 @@ namespace tfs {
         const DNN_NUMERIC *          outDw = m_out_dw->dataReadOnly();
         const DNN_NUMERIC * const outDwEnd = m_out_dw->end();
         
-        if( m_in_dw == 0 ) {                            // Previous layer is input layer, no dw backprop needed.
+        if( matrixBad( m_in_dw )) {                     // Previous layer is input layer, no dw backprop needed.
             while( outDw < outDwEnd ) {                 // for ii = 0 to N: Loop for each neuron activation
                 const DNN_NUMERIC   *in = input;
                 const DNN_NUMERIC  grad = *outDw++;

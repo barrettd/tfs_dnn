@@ -44,13 +44,13 @@ namespace tfs {
         // out_a[S]  = activations of each neuron
         // out_dw[S] = gradiant
         // -----------------------------------------------------------------------------------
-        if( m_in_a == 0 ) {
-            log_error( "Input activation matrix is null" );
+        if( matrixBad( m_in_a )) {
+            log_error( "Input activation matrix is bad" );
             return;
         }
-        if( trainable ) {
-            if( m_in_dw == 0 ) {
-                log_error( "Input dw matrix is null" );
+        if( trainable && m_in_dw != 0 ) {       // Input layers can have null m_out_dw
+            if( matrixBad( m_in_dw )) {
+                log_error( "Input dw matrix is bad" );
                 return;
             }
             if( m_in_a->count() != m_in_dw->count()) {  // By default, we expect the dimensions to be the same.
@@ -60,7 +60,7 @@ namespace tfs {
         }
         m_out_a = new Matrix( *m_in_a );         // Output dimension matches input dimension
         if( trainable ) {
-            m_out_dw = new Matrix( *m_in_dw );   // Output dimension matches input dimension
+            m_out_dw = new Matrix( *m_out_a );   // Output dimension matches input dimension
         }
         return;
     }

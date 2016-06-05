@@ -50,6 +50,9 @@ namespace tfs {
     localTestMatrixMath( void ) {
         Matrix aa = Matrix( 3, 1, 1 );
         Matrix bb = Matrix( 3, 1, 1 );
+        if( !aa.ok() || !bb.ok()) {
+            return log_error( "Poorly formed matrix" );
+        }
         DNN_NUMERIC *data = aa.data();
         *data++ = 1.0;
         *data++ = 2.0;

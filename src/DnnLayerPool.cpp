@@ -43,13 +43,13 @@ namespace tfs {
             log_error( "Bad params" );
             return;
         }
-        if( m_in_a == 0 ) {
-            log_error( "Input activation matrix is null" );
+        if( matrixBad( m_in_a )) {
+            log_error( "Input activation matrix is bad" );
             return;
         }
-        if( trainable ) {
-            if( m_in_dw == 0 ) {
-                log_error( "Input dw matrix is null" );
+        if( trainable && m_in_dw != 0 ) {               // Input layers can have null m_out_dw
+            if( matrixBad( m_in_dw )) {
+                log_error( "Input dw matrix is bad" );
                 return;
             }
             if( m_in_a->count() != m_in_dw->count()) {  // By default, we expect the dimensions to be the same.
@@ -94,9 +94,8 @@ namespace tfs {
         unsigned long n = 0;        // index counter for switches
         for( unsigned long z = 0; z < out_z; z++ ) {
             long x = -m_pad;
-            long y = -m_pad;
             for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
-                y = -m_pad;
+                long y = -m_pad;
                 for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
                     // Convolve centered at [ax, ay]
                     DNN_NUMERIC a = -__DBL_MAX__;
@@ -143,9 +142,8 @@ namespace tfs {
         unsigned long n = 0;        // index counter for switches
         for( unsigned long z = 0; z < out_z; z++ ) {
             long x = -m_pad;
-            long y = -m_pad;
             for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
-                y = -m_pad;
+                long y = -m_pad;
                 for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
                     const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, z );
                     const unsigned long ox = m_switch[n++];

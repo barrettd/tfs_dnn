@@ -49,9 +49,9 @@ namespace tfs {
             log_error( "Bad params" );
             return;
         }
-        if( trainable ) {
+        if( trainable && m_in_dw != 0 ) {               // Input layers can have null m_out_dw
             if( m_in_dw == 0 ) {
-                log_error( "Input dw matrix is null" );
+                log_error( "Input dw matrix is bad" );
                 return;
             }
             if( m_in_a->count() != m_in_dw->count()) {  // By default, we expect the dimensions to be the same.

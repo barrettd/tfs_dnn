@@ -59,6 +59,8 @@ namespace tfs {         // Tree Frog Software
             m_length = 0;
         }
         
+        inline bool ok( void ) const { return m_data != 0 && m_data <= m_end; }
+        
         inline unsigned long aa(     void ) const { return m_a; }
         inline unsigned long bb(     void ) const { return m_b; }
         inline unsigned long cc(     void ) const { return m_c; }
@@ -298,6 +300,9 @@ namespace tfs {         // Tree Frog Software
     
     typedef TTrainable< DNN_NUMERIC >  Trainable;
     typedef TTrainable< DNN_INTEGER > DTrainable;
+    
+    inline bool matrixBad( const  Matrix * const matrix ) { return matrix == 0 || !matrix->ok(); }
+    inline bool matrixBad( const DMatrix * const matrix ) { return matrix == 0 || !matrix->ok(); }
     
 }   // namespace tfs
 
