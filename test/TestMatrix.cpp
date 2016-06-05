@@ -12,9 +12,14 @@ namespace tfs {
     
     static bool
     localTestMatrixSize( void ) {
-        DMatrix matrix = DMatrix( 2, 2, 1 );
-        if( matrix.count() != 4 ) {
-            return log_error( "Matrix count is not 4, it is %lu", matrix.count());
+        const unsigned long X_MAX = 4;
+        const unsigned long Y_MAX = 4;
+        const unsigned long Z_MAX = 2;
+        const unsigned long D_MAX = 3;
+        const unsigned long EXPECTED_COUNT = X_MAX * Y_MAX * Z_MAX * D_MAX;
+        DMatrix matrix = DMatrix( X_MAX, Y_MAX, Z_MAX, D_MAX );
+        if( matrix.count() != EXPECTED_COUNT ) {
+            return log_error( "Matrix count is not %lu, it is %lu", EXPECTED_COUNT, matrix.count());
         }
         const unsigned long INTEGER_SIZE = sizeof( DNN_INTEGER );
         const unsigned long EXPECTED_LENGTH = matrix.count() * INTEGER_SIZE;
@@ -24,7 +29,7 @@ namespace tfs {
               DNN_INTEGER *      data = matrix.data();
         const DNN_INTEGER * const end  = matrix.end();
         
-        const DNN_INTEGER * const expectedEnd = &data[4];
+        const DNN_INTEGER * const expectedEnd = &data[EXPECTED_COUNT];
         if( end != expectedEnd ) {
             return log_error( "End pointers do not match" );
         }
@@ -34,14 +39,54 @@ namespace tfs {
                 return log_error( "Data element not zero" );
             }
         }
-        if( matrix.width() != 2 ) {
-            return log_error( "Width != 2" );
+        if( matrix.width() != X_MAX || matrix.aa() != X_MAX ) {
+            return log_error( "Width != %lu", X_MAX );
         }
-        if( matrix.height() != 2 ) {
-            return log_error( "Height != 2" );
+        if( matrix.height() != Y_MAX || matrix.bb() != Y_MAX ) {
+            return log_error( "Height != %lu", Y_MAX );
         }
-        if( matrix.depth() != 1 ) {
-            return log_error( "Depth != 1" );
+        if( matrix.depth() != Z_MAX || matrix.cc() != Z_MAX ) {
+            return log_error( "Depth != %lu", Z_MAX );
+        }
+        if( matrix.dd() != D_MAX ) {
+            return log_error( "4th dimension != %lu", D_MAX );
+        }
+        DNN_INTEGER count = 0;
+        for( unsigned long d = 0; d < D_MAX; d++ ) {
+            for( unsigned long z = 0; z < Z_MAX; z++ ) {
+                for( unsigned long y; y < Y_MAX; y++ ) {
+                    for( unsigned long x; x < X_MAX; x++ ) {
+                        DNN_INTEGER val = matrix.get( x, y, z, d );
+                        val += count++;
+                        matrix.set( x, y, z, d, val );
+                        matrix.plusEquals( x, y, z, count++ );
+                    }
+                }
+            }
+        }
+        count = 0;
+        for( unsigned long d = 0; d < D_MAX; d++ ) {
+            for( unsigned long z = 0; z < Z_MAX; z++ ) {
+                for( unsigned long y; y < Y_MAX; y++ ) {
+                    for( unsigned long x; x < X_MAX; x++ ) {
+                        matrix.set( x, y, z, d, count++ );
+                    }
+                }
+            }
+        }
+        count = 0;
+        for( unsigned long d = 0; d < D_MAX; d++ ) {
+            for( unsigned long z = 0; z < Z_MAX; z++ ) {
+                for( unsigned long y; y < Y_MAX; y++ ) {
+                    for( unsigned long x; x < X_MAX; x++ ) {
+                        DNN_INTEGER val = matrix.get( x, y, z, d );
+                        if( val != count ) {
+                            return log_error( "value %lu != %lu", val, count );
+                        }
+                        count++;
+                    }
+                }
+            }
         }
         return true;
     }

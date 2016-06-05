@@ -112,31 +112,45 @@ namespace tfs {         // Tree Frog Software
             return memcmp( m_data, matrix.m_data, m_length ) == 0;
         }
         
-        inline unsigned long getIndex( unsigned long aa, unsigned long bb, unsigned long cc, unsigned long dd = 0 ) const {
-            return ((( m_a * bb) + aa) * m_c + cc) * m_d + dd;
+        inline unsigned long getIndex( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd = 0 ) const {
+            const unsigned long index = ((( m_a * bb) + aa) * m_c + cc) * m_d + dd;
+            if( index >= m_count ) {
+                log_error( "Index out of range: %lu, max = %lu, a = %lu, b = %lu, c = %lu, d = %lu", index, m_count, aa, bb, cc, dd );
+            }
+            return index;
         }
         
-        inline T get( unsigned long aa, unsigned long bb = 0, unsigned long cc = 0, unsigned long dd = 0 ) const {
+        inline T get( const unsigned long aa, const unsigned long bb = 0, const unsigned long cc = 0, const unsigned long dd = 0 ) const {
             const unsigned long index = getIndex( aa, bb, cc, dd );
             return m_data[index];
         }
-
-        inline T set( unsigned long aa, unsigned long bb, unsigned long cc, unsigned long dd, T value ) {
+        
+        inline T set( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd, const T value ) {
             const unsigned long index = getIndex( aa, bb, cc, dd );
             return m_data[index] = value;
         }
 
-        inline T set( unsigned long x, unsigned long y, unsigned long z, T value ) {
+        inline T set( const unsigned long x, const unsigned long y, const unsigned long z, const T value ) {
             const unsigned long index = getIndex( x, y, z );
             return m_data[index] = value;
         }
 
-        inline T plusEquals( unsigned long aa, unsigned long bb, unsigned long cc, unsigned long dd, T value ) {
+        inline T set( const unsigned long x, const unsigned long y, const T value ) {
+            const unsigned long index = getIndex( x, y );
+            return m_data[index] = value;
+        }
+
+        inline T set( const unsigned long x, const T value ) {
+            const unsigned long index = getIndex( x );
+            return m_data[index] = value;
+        }
+
+        inline T plusEquals( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd, const T value ) {
             const unsigned long index = getIndex( aa, bb, cc, dd );
             return m_data[index] += value;
         }
 
-        inline T plusEquals( unsigned long x, unsigned long y, unsigned long z, T value ) {
+        inline T plusEquals( const unsigned long x, const unsigned long y, const unsigned long z, const T value ) {
             const unsigned long index = getIndex( x, y, z );
             return m_data[index] += value;
         }
@@ -211,7 +225,7 @@ namespace tfs {         // Tree Frog Software
             return result;
         }
         
-        inline void add( T value ) const {          // Add a scalar to each element.
+        inline void add( const T value ) const {          // Add a scalar to each element.
             if( isEmpty()) {
                 log_error( "empty matrix" );
                 return ;
@@ -226,7 +240,7 @@ namespace tfs {         // Tree Frog Software
         }
 
 
-        inline void multiply( T value ) const {     // Multiple each element by a scalar.
+        inline void multiply( const T value ) const {     // Multiple each element by a scalar.
             if( isEmpty()) {
                 log_error( "empty matrix" );
                 return ;

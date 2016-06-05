@@ -134,6 +134,12 @@ namespace tfs {
         if( layer != 0 ) {
             m_in_a  = layer->m_out_a;     // Remember previous activation layer
             m_in_dw = layer->m_out_dw;    // Remember previous gradiant array
+            if( matrixBad( m_in_a )) {
+                log_error( "Input m_in_a is bad" );
+            }
+            if( m_in_dw != 0 && matrixBad( m_in_dw ) ) {
+                log_error( "Input m_in_dw is bad" );
+            }
         }
         return m_prev_layer = layer;
     }
