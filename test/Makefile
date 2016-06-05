@@ -28,7 +28,7 @@ INSTALL_DIR = $(BIN_DIR)
 # CC      = 
 # CDEFS   =
 
-CFLAGS  =  -Wall
+CFLAGS  =  -Wall -O3
 IFLAGS  = -I$(INC_LIB_DIR) -I$(INC_DNN_DIR)
 LDFLAGS = 
 COMPILE = g++ $(IFLAGS) $(CFLAGS) $(CDEFS) -c
