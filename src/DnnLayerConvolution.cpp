@@ -18,7 +18,7 @@ namespace tfs {
 
     DnnLayerConvolution::DnnLayerConvolution( DnnLayer *previousLayer,
                                              unsigned long side,
-                                             unsigned long filters,
+                                             unsigned long filterCount,
                                              unsigned long stride,
                                              unsigned long pad,
                                              const bool trainable ):
@@ -26,7 +26,7 @@ namespace tfs {
     m_side(    side ),
     m_stride(  stride ),
     m_pad(     pad ),
-    m_filter_count( filters ) {
+    m_filter_count( filterCount ) {
         m_l1_decay_mul = 0.0;
         m_l2_decay_mul = 1.0;
         if( previousLayer != 0 ) {  // previousLayer should not be null.
@@ -69,7 +69,7 @@ namespace tfs {
         
         m_w = new Matrix( m_filter_count, m_side, m_side, in_z + 1 );       // N Fiters of side x side x (depth +1) for the bias
         if( trainable ) {
-            m_dw = new Matrix( *m_w );                      // gradiant N x side x side + (depth+1)
+            m_dw = new Matrix( *m_w );                      // Gradiant N x side x side + (depth+1)
         }
         m_out_a = new Matrix( out_x, out_y, out_z );        // Activations (output)
         if( trainable ) {
@@ -86,7 +86,6 @@ namespace tfs {
         if( m_in_a == 0 || m_out_a == 0 ) {
             return log_error( "Not configured" );
         }
-        log_debug( "start" );
         const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
         const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
         const unsigned long in_z   = m_in_a->depth();
@@ -95,9 +94,10 @@ namespace tfs {
         
         const unsigned long out_x = m_out_a->width();
         const unsigned long out_y = m_out_a->height();
-        const unsigned long out_z = m_out_a->depth();
+        const unsigned long out_z = m_out_a->depth();       // Filter count
 
-        for( unsigned long d = 0; d < out_z; d++ ) {
+        const unsigned long last = side-1;
+        for( unsigned long d = 0; d < out_z; d++ ) {        // Filter count
             long x = -m_pad;
             for( unsigned long ax = 0; ax < out_x; x += stride, ax++ ) {
                 long y = -m_pad;
@@ -115,12 +115,11 @@ namespace tfs {
                             }
                         }
                     }
-                    a += m_w->get( d, ax, ay, in_z );   // bias
+                    a += m_w->get( d, last, last, in_z );   // bias
                     m_out_a->set( ax, ay, d, a );       // set output
                 }
             }
         }
-        log_debug( "end" );
         return true;
     }
     
@@ -132,7 +131,6 @@ namespace tfs {
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 ) {
             return log_error( "Not configured" );
         }
-        log_debug( "start" );
         const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
         const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
         const unsigned long in_z   = m_in_a->depth();
@@ -146,6 +144,7 @@ namespace tfs {
         if( m_in_dw != 0 ) {        // Input layer often does not have dw.
             m_in_dw->zero();        // Zero input gradiant, we add to it below.
         }
+        const unsigned long last = side-1;
         for( unsigned long d = 0; d < out_z; d++ ) {
             long x = -m_pad;
             for( unsigned long ax = 0; ax < out_x; x += stride, ax++ ) {
@@ -172,11 +171,10 @@ namespace tfs {
                             }
                         }
                     }
-                    m_dw->plusEquals( d, ax, ay, in_z, chain_grad );
+                    m_dw->plusEquals( d, last, last, in_z, chain_grad );
                 }
             }
         }
-        log_debug( "end" );
         return true;
     }
 

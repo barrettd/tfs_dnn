@@ -34,18 +34,14 @@ namespace tfs {
             log_error( "No gradiants available for training" );
             return m_loss;
         }
-        log_debug( "about to do forward()" );
         if( !m_dnn->forward()) {
             return m_loss;
         }
-        log_debug( "about to do backprop()" );
         m_loss = m_dnn->backprop( expectation );
         m_k++;
         if( m_k % m_batch_size ) {
-            log_debug( "returning" );
             return m_loss;
         }
-        log_debug( "about to modify gradiants" );
         // Set up for modifying the gradiants.
         DNN_NUMERIC l1_decay_loss = 0.0;
         DNN_NUMERIC l2_decay_loss = 0.0;
@@ -86,7 +82,6 @@ namespace tfs {
                 *weight++ -= m_learning_rate * gij;
             }
         }
-        log_debug( "returning" );
         return m_loss += (l1_decay_loss + l2_decay_loss);
     }
     

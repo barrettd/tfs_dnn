@@ -70,7 +70,6 @@ namespace tfs {
         if( matrixBad( m_in_a ) || matrixBad( m_es ) || matrixBad( m_out_a )) {
             return log_error( "Not configured" );
         }
-        log_debug( "start" );
         const DNN_NUMERIC *         input = m_in_a->dataReadOnly();
         const DNN_NUMERIC * const   inEnd = m_in_a->end();
               DNN_NUMERIC * const esStart = m_es->data();
@@ -94,7 +93,6 @@ namespace tfs {
         while( output < outEnd ) {                  // normalize
             *output++ = *es++ /= esum;
         }
-        log_debug( "end" );
         return true;
     }
     
