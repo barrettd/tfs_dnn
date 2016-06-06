@@ -90,27 +90,27 @@ namespace tfs {
         if( m_in_a == 0 || m_out_a == 0 ) {
             return log_error( "Not configured" );
         }
-        const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
-        const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
-        const unsigned long in_z   = m_in_a->depth();
-        const unsigned long side   = m_side;
-        const unsigned long stride = m_stride;              // var xy_stride = this.stride |0;
+        const long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
+        const long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
+        const long in_z   = m_in_a->depth();
+        const long side   = m_side;
+        const long stride = m_stride;              // var xy_stride = this.stride |0;
         
-        const unsigned long out_x = m_out_a->width();
-        const unsigned long out_y = m_out_a->height();
-        const unsigned long out_z = m_out_a->depth();       // Filter count
+        const long out_x = m_out_a->width();
+        const long out_y = m_out_a->height();
+        const long out_z = m_out_a->depth();       // Filter count
 
-        const unsigned long last = side-1;
-        for( unsigned long d = 0; d < out_z; d++ ) {        // Filter count
+        const long last = side-1;
+        for( long d = 0; d < out_z; d++ ) {        // Filter count
             long x = -m_pad;
-            for( unsigned long ax = 0; ax < out_x; x += stride, ax++ ) {
+            for( long ax = 0; ax < out_x; x += stride, ax++ ) {
                 long y = -m_pad;
-                for( unsigned long ay = 0; ay < out_y; y += stride, ay++ ) {
+                for( long ay = 0; ay < out_y; y += stride, ay++ ) {
                     // convolve centered at this point
                     DNN_NUMERIC a = 0.0;
-                    for( unsigned long fx = 0; fx < side; fx++ ) {
-                        for( unsigned long  fy = 0; fy < side; fy++ ) {
-                            for( unsigned long fd = 0;fd < in_z; fd++ ) {
+                    for( long fx = 0; fx < side; fx++ ) {
+                        for( long  fy = 0; fy < side; fy++ ) {
+                            for( long fd = 0;fd < in_z; fd++ ) {
                                 long oy = y+fy; // coordinates in the original input array coordinates
                                 long ox = x+fx;
                                 if( oy >= 0 && oy < in_y && ox >= 0 && ox < in_x ) {
@@ -135,30 +135,30 @@ namespace tfs {
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 ) {
             return log_error( "Not configured" );
         }
-        const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
-        const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
-        const unsigned long in_z   = m_in_a->depth();
-        const unsigned long side   = m_side;
-        const unsigned long stride = m_stride;              // var xy_stride = this.stride |0;
+        const long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
+        const long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
+        const long in_z   = m_in_a->depth();
+        const long side   = m_side;
+        const long stride = m_stride;              // var xy_stride = this.stride |0;
         
-        const unsigned long out_x = m_out_dw->width();
-        const unsigned long out_y = m_out_dw->height();
-        const unsigned long out_z = m_out_dw->depth();
+        const long out_x = m_out_dw->width();
+        const long out_y = m_out_dw->height();
+        const long out_z = m_out_dw->depth();
 
         if( m_in_dw != 0 ) {        // Input layer often does not have dw.
             m_in_dw->zero();        // Zero input gradiant, we add to it below.
         }
-        const unsigned long last = side-1;
-        for( unsigned long d = 0; d < out_z; d++ ) {
+        const long last = side-1;
+        for( long d = 0; d < out_z; d++ ) {
             long x = -m_pad;
-            for( unsigned long ax = 0; ax < out_x; x += stride, ax++ ) {
+            for( long ax = 0; ax < out_x; x += stride, ax++ ) {
                 long y = -m_pad;
-                for( unsigned long ay = 0; ay < out_y; y += stride, ay++ ) {
+                for( long ay = 0; ay < out_y; y += stride, ay++ ) {
                     // convolve and add up the gradients.
                     const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, d ); // gradient from chain rule
-                    for( unsigned long fx = 0; fx < side; fx++ ) {
-                        for( unsigned long  fy = 0; fy < side; fy++ ) {
-                            for( unsigned long fd = 0;fd < in_z; fd++ ) {
+                    for( long fx = 0; fx < side; fx++ ) {
+                        for( long  fy = 0; fy < side; fy++ ) {
+                            for( long fd = 0;fd < in_z; fd++ ) {
                                 long oy = y+fy; // coordinates in the original input array coordinates
                                 long ox = x+fx;
                                 if( oy >= 0 && oy < in_y && ox >= 0 && ox < in_x ) {
