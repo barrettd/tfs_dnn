@@ -38,6 +38,23 @@ namespace tfs {
     }
     
     void
+    DnnTrainer::setUpTrainable( Matrix *weights, Matrix *gradiant, const DNN_NUMERIC l1_decay_mul, const DNN_NUMERIC l2_decay_mul ) {
+        if( weights == 0 || gradiant == 0 ) {
+            return;
+        }
+        Trainable *trainable = new Trainable( weights, gradiant );
+        trainable->l1_decay_mul = l1_decay_mul;
+        trainable->l2_decay_mul = l2_decay_mul;
+        if( trainable->ok()) {
+            m_trainables.push_back( trainable );
+        } else {
+            log_error( "Bad trainable detected." );
+            delete trainable;
+        }
+        return;
+    }
+    
+    void
     DnnTrainer::setUpTrainables( void ) {
         if( m_dnn == 0 ) {
             return;
@@ -46,17 +63,15 @@ namespace tfs {
         while( layer != 0 ) {
             Matrix *weights  = layer->weights();
             Matrix *gradiant = layer->gradiant();
-            if( weights != 0 && gradiant != 0 ) {
-                Trainable *trainable = new Trainable( weights, gradiant );
-                trainable->l1_decay_mul = layer->l1DecayMultiplier();
-                trainable->l2_decay_mul = layer->l2DecayMultiplier();
-                if( trainable->ok()) {
-                    m_trainables.push_back( trainable );
-                } else {
-                    log_error( "Bad trainable detected." );
-                    delete trainable;
-                }
-            }
+            Matrix *bias     = layer->bias();
+            Matrix *biasDw   = layer->biasDw();
+            
+            const DNN_NUMERIC l1_decay_mul = layer->l1DecayMultiplier();
+            const DNN_NUMERIC l2_decay_mul = layer->l2DecayMultiplier();
+            
+            setUpTrainable( weights, gradiant, l1_decay_mul, l2_decay_mul );
+            setUpTrainable( bias,    biasDw,   l1_decay_mul, l2_decay_mul );
+            
             layer = layer->getNextLayer();
         }
         const unsigned long trainableCount = m_trainables.size();

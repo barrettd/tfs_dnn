@@ -26,6 +26,7 @@ namespace tfs {
         Trainable               **m_trainable_end;
         std::vector< Trainable* > m_trainables;
         
+        void setUpTrainable( Matrix *weights, Matrix *gradiant, DNN_NUMERIC l1_decay_mul, DNN_NUMERIC l2_decay_mul );
         void setUpTrainables( void );
 //        this.gsum = []; // last iteration gradients (used for momentum calculations)
         

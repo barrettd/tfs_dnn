@@ -112,7 +112,10 @@ namespace tfs {         // Tree Frog Software
             return memcmp( m_data, matrix.m_data, m_length ) == 0;
         }
         
-        inline unsigned long getIndex( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd = 0 ) const {
+        inline unsigned long getIndex( const unsigned long aa,
+                                       const unsigned long bb = 0,
+                                       const unsigned long cc = 0,
+                                       const unsigned long dd = 0 ) const {
             const unsigned long index = ((( m_a * bb) + aa) * m_c + cc) * m_d + dd;
             if( index >= m_count ) {
                 log_error( "Index out of range: %lu/%lu, a = %lu/%lu, b = %lu/%lu, c = %lu/%lu, d = %lu/%lu",
@@ -145,6 +148,12 @@ namespace tfs {         // Tree Frog Software
             const unsigned long index = getIndex( x );
             return m_data[index] = value;
         }
+        
+        inline void set( const T value ) {
+            for( unsigned int ii = 0; ii < m_count; ii++ ) {
+                m_data[ii] = value;
+            }
+        }
 
         inline T plusEquals( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd, const T value ) {
             const unsigned long index = getIndex( aa, bb, cc, dd );
@@ -153,6 +162,16 @@ namespace tfs {         // Tree Frog Software
 
         inline T plusEquals( const unsigned long x, const unsigned long y, const unsigned long z, const T value ) {
             const unsigned long index = getIndex( x, y, z );
+            return m_data[index] += value;
+        }
+
+        inline T plusEquals( const unsigned long x, const unsigned long y, const T value ) {
+            const unsigned long index = getIndex( x, y );
+            return m_data[index] += value;
+        }
+
+        inline T plusEquals( const unsigned long x, const T value ) {
+            const unsigned long index = getIndex( x );
             return m_data[index] += value;
         }
 

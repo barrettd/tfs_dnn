@@ -18,6 +18,8 @@ namespace tfs {
               Matrix *m_in_dw;          // Input:    dw of previous layer, if any.
         Matrix       *m_w;              // Internal: Weights, to act on input activations from previous layer
         Matrix       *m_dw;             // Internal: Weight derivative, will be null when not training.
+        Matrix       *m_bias_w;         // Internal: Bias, to act on input activations from previous layer
+        Matrix       *m_bias_dw;        // Internal: Bias derivative, will be null when not training.
         Matrix       *m_out_a;          // Output:   Activations, output of a neuron.
         Matrix       *m_out_dw;         // Output:   Weight derivative, will be null when not training.
         DNN_NUMERIC   m_l1_decay_mul;
@@ -39,8 +41,10 @@ namespace tfs {
         const char *name( void ) const;
         Matrix     *outA(  void );              // Output Neuron Activations
         Matrix     *outDw( void );              // d/dw Output Neuron Activations
-        Matrix     *weights( void );            // Internal Neuron connection weights   (w)
-        Matrix     *gradiant( void );           // Internal Neuron connection gradiant (dw)
+        Matrix     *weights(  void );           // Internal Neuron connection weights   (w)
+        Matrix     *gradiant( void );           // Internal Neuron connection gradiant  (dw)
+        Matrix     *bias(   void );             // Internal Neuron connection bias      (bias.w)
+        Matrix     *biasDw( void );             // Internal Neuron connection bias dw   (bias.dw)
         
         DNN_NUMERIC l1DecayMultiplier( void ) const;
         DNN_NUMERIC l1DecayMultiplier( DNN_NUMERIC value );
@@ -60,14 +64,14 @@ namespace tfs {
         virtual void initialize( void );                // Zero activations, gradiant and randomize weights. Forward calling.
         virtual void randomize(  void );                // Randomize gradiant. Forward calling.
         
-        virtual void setBiases( DNN_NUMERIC value = 0.0 );
+        virtual bool runBias( DNN_NUMERIC value );
         virtual bool runForward(  void );
         virtual bool runPredict(  void );
         virtual bool runBackprop( void );
         virtual DNN_NUMERIC runBackprop( const  Matrix &expectation );    // Last layer
         virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation ); // Last layer
         
-        void bias( DNN_NUMERIC value = 0.0 );                   // Set biases in all layers.
+        void setBias( DNN_NUMERIC value = 0.0 );                // Set biases in all layers.
         bool forward(  void );                                  // Forward propagate while training
         bool predict(  void );                                  // Forward progagate when predicting
         bool backprop( void );                                  // Back propagate while training

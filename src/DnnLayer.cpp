@@ -11,7 +11,10 @@ namespace tfs {
     
     DnnLayer::DnnLayer( const char *name ):
     m_name( name ),
-    m_in_a( 0 ), m_in_dw( 0 ), m_w( 0 ), m_dw( 0 ), m_out_a( 0 ), m_out_dw( 0 ),
+    m_in_a(   0 ), m_in_dw(   0 ),
+    m_w(      0 ), m_dw(      0 ),
+    m_bias_w( 0 ), m_bias_dw( 0 ),
+    m_out_a(  0 ), m_out_dw(  0 ),
     m_l1_decay_mul( 1.0 ), m_l2_decay_mul( 1.0 ),
     m_prev_layer( 0 ), m_next_layer( 0 ) {
         // Constructor
@@ -19,7 +22,10 @@ namespace tfs {
     
     DnnLayer::DnnLayer( const char *name, DnnLayer *previousLayer ) :
     m_name( name ),
-    m_in_a( 0 ), m_in_dw( 0 ), m_w( 0 ), m_dw( 0 ), m_out_a( 0 ), m_out_dw( 0 ),
+    m_in_a(   0 ), m_in_dw(   0 ),
+    m_w(      0 ), m_dw(      0 ),
+    m_bias_w( 0 ), m_bias_dw( 0 ),
+    m_out_a(  0 ), m_out_dw(  0 ),
     m_l1_decay_mul( 1.0 ), m_l2_decay_mul( 1.0 ),
     m_prev_layer( previousLayer ), m_next_layer( 0 ) {  // Constructor
         if( previousLayer != 0 ) {
@@ -67,16 +73,20 @@ namespace tfs {
 
     void
     DnnLayer::teardown( void ) {
+        delete m_bias_w;
+        delete m_bias_dw;
         delete m_w;
         delete m_dw;
         delete m_out_a;
         delete m_out_dw;
-        m_in_a   = 0;
-        m_in_dw  = 0;
-        m_w      = 0;
-        m_dw     = 0;
-        m_out_a  = 0;
-        m_out_dw = 0;
+        m_in_a    = 0;
+        m_in_dw   = 0;
+        m_bias_w  = 0;
+        m_bias_dw = 0;
+        m_w       = 0;
+        m_dw      = 0;
+        m_out_a   = 0;
+        m_out_dw  = 0;
         return;
     }
 
@@ -106,6 +116,16 @@ namespace tfs {
         return m_dw;
     }
     
+    Matrix*
+    DnnLayer::bias( void ) {             // Internal Neuron connection bias      (bias.w)
+        return m_bias_w;
+    }
+    
+    Matrix*
+    DnnLayer::biasDw( void ) {             // Internal Neuron connection bias dw   (bias.dw)
+        return m_bias_dw;
+    }
+
     DNN_NUMERIC
     DnnLayer::l1DecayMultiplier( void ) const {
         return m_l1_decay_mul;
@@ -163,6 +183,12 @@ namespace tfs {
         if( m_dw != 0 ) {
             m_dw->zero();
         }
+        if( m_bias_w != 0 ) {
+            m_bias_w->randomize();
+        }
+        if( m_bias_dw != 0 ) {
+            m_bias_dw->zero();
+        }
         if( m_out_a != 0 ) {
             m_out_a->zero();
         }
@@ -183,18 +209,24 @@ namespace tfs {
         if( m_w != 0 ) {
             m_w->randomize();
         }
+        if( m_bias_w != 0 ) {
+            m_bias_w->randomize();
+        }
         if( m_next_layer != 0 ) {
             m_next_layer->randomize();  // Forward propagate
         }
         return;
     }
     
-    void
-    DnnLayer::setBiases( DNN_NUMERIC value ) {
+    bool
+    DnnLayer::runBias( DNN_NUMERIC value ) {
         // -----------------------------------------------------------------------------------
         // virtual: Set the biases for the learning layers.
         // -----------------------------------------------------------------------------------
-        return;
+        if( m_bias_w != 0 ) {
+            m_bias_w->set( value );
+        }
+        return true;
     }
     
     bool
@@ -239,14 +271,14 @@ namespace tfs {
     }
     
     void
-    DnnLayer::bias( DNN_NUMERIC value ) {
+    DnnLayer::setBias( DNN_NUMERIC value ) {
         // -----------------------------------------------------------------------------------
         // Set the biases of all the learning layers.
         // Generally, I leave the biases as random for best results.
         // -----------------------------------------------------------------------------------
-        setBiases( value );
+        runBias( value );
         if( m_next_layer != 0 ) {
-            m_next_layer->bias( value );
+            m_next_layer->setBias( value );
         }
         return;
     }

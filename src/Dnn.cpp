@@ -256,10 +256,10 @@ namespace tfs {
     }
     
     void
-    Dnn::bias( DNN_NUMERIC value ) {
+    Dnn::setBias( DNN_NUMERIC value ) {
         // Set biases in all layers.
         if( m_layer_input != 0 ) {
-            m_layer_input->bias( value );       // Calls each layer in the forward direction.
+            m_layer_input->setBias( value );    // Calls each layer in the forward direction.
         }
         log_error( "No input layer" );
         return;
