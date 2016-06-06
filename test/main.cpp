@@ -4,6 +4,7 @@
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
+#include <ctime>
 #include <iostream>
 #include "testBuilder.hpp"
 #include "testCifar10.hpp"
@@ -20,6 +21,8 @@ int
 main( int argc, const char * argv[] ) {
     std::cout << "Test DNN begin\n";
     
+    const time_t startTime = time( 0 );
+    
     testMatrix();
     testBuilder();
     testFullyConnected();
@@ -30,7 +33,9 @@ main( int argc, const char * argv[] ) {
     test2Layer();
     testIO();
     
-    std::cout << "Test DNN end\n";
+    const time_t endTime = time( 0 );
+    
+    std::cout << "Test DNN end. Elapsed time: " << (endTime - startTime) << " seconds.\n";
     return 0;
     
 }

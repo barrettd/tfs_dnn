@@ -116,8 +116,11 @@ namespace tfs {
             return log_error( "Cannot add Softmax layer" );
         }
         dnn.initialize();                                       // Randomize the weights.
+        const unsigned long expected_count = 9;
         const unsigned long count = dnn.count();
-        log_info( "We have set up %lu layers", count );
+        if( count != expected_count ) {
+            return log_error( "We have set up %lu layers, expected %lu", count, expected_count );
+        }
         return true;
     }
     
@@ -168,7 +171,7 @@ namespace tfs {
             average_loss /= DATA_COUNT * MAX_ITERATION;
 //            log_info( "%lu: Average loss = %f", count, average_loss );
         } while( average_loss > TARGET_LOSS );
-        log_info( "%lu: Average loss = %f", count, average_loss );
+        log_info( "Average loss = %f/%f. Count = %lu", average_loss, TARGET_LOSS, count );
         
         return true;
     }

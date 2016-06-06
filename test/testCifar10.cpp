@@ -71,9 +71,11 @@ namespace tfs {
         if( !dnn->addLayerSoftmax()) {                          // Output classifier
             return log_error( "Cannot add Softmax layer" );
         }
+        const unsigned long expected_count = 12;
         const unsigned long count = dnn->count();
-        log_info( "We have set up %lu layers", count );
-        
+        if( count != expected_count ) {
+            return log_error( "We have set up %lu layers, expected %lu", count, expected_count );
+        }
         dnn->initialize();
         
         delete dnn;
