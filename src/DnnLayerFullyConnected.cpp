@@ -53,11 +53,11 @@ namespace tfs {
         const unsigned long N = m_neuron_count;
         const unsigned long S = m_in_a->count(); // 1d input, S elements.
 
-        m_w = new Matrix( N, S+1, 1 );          // 2d neuron weights N x (S+1)
+        m_w = new Matrix( N, S+1 );             // 2d neuron weights N x (S+1)
         if( trainable ) {
             m_dw = new Matrix( *m_w );          // 2d neuron weights N x (S+1)
         }
-        m_out_a = new Matrix( N, 1, 1 );        // 1d N neuron activations (output)
+        m_out_a = new Matrix( N );              // 1d N neuron activations (output)
         if( trainable ) {
             m_out_dw = new Matrix( *m_out_a );  // 1d N neuron dw
         }
@@ -69,13 +69,13 @@ namespace tfs {
         return m_neuron_count;
     }
     
-    void
-    DnnLayerFullyConnected::setBiases( DNN_NUMERIC value ) {
+    bool
+    DnnLayerFullyConnected::runBias( DNN_NUMERIC value ) {
         // -----------------------------------------------------------------------------------
         // virtual: Set the biases for the learning layers.
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_w == 0 || m_out_a == 0 ) {
-            return;
+            return false;
         }
         // TODO: Clean this up.
 //        const unsigned long N = m_neuron_count;
@@ -101,7 +101,7 @@ namespace tfs {
             *ww++ = value;                      // Set the bias
             output++;
         }
-        return;
+        return true;
     }
     
     bool

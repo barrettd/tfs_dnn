@@ -169,7 +169,6 @@ namespace tfs {
                 }
             }
             average_loss /= DATA_COUNT * MAX_ITERATION;
-//            log_info( "%lu: Average loss = %f", count, average_loss );
         } while( average_loss > TARGET_LOSS );
         log_info( "Average loss = %f/%f. Count = %lu", average_loss, TARGET_LOSS, count );
         
