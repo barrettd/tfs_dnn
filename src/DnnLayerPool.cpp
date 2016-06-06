@@ -92,24 +92,24 @@ namespace tfs {
         
         unsigned long n = 0;        // index counter for switches
         for( unsigned long z = 0; z < out_z; z++ ) {
-            long x = -m_pad;
+            long x = - (long) m_pad;
             for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
-                long y = -m_pad;
+                long y = - (long) m_pad;
                 for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
                     // Convolve centered at [ax, ay]
                     DNN_NUMERIC a = -__DBL_MAX__;
-                    long winx = -1;
-                    long winy = -1;
+                    unsigned long winx = 0;
+                    unsigned long winy = 0;
                     for( unsigned long fx = 0; fx < m_side; fx++ ) {
                         for( unsigned long fy = 0; fy < m_side; fy++ ) {
-                            long oy = y + fy;
-                            long ox = x + fx;
-                            if( oy >= 0 && oy < in_y && ox >= 0 && ox < in_x ) {
-                                DNN_NUMERIC v = m_in_a->get( ox, oy, z );
+                            long oy = y + (long) fy;
+                            long ox = x + (long) fx;
+                            if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
+                                DNN_NUMERIC v = m_in_a->get((unsigned long) ox, (unsigned long) oy, z );
                                 if( v > a ) {   // perform max pooling and store indexes to where
                                     a = v;      // the max came from. This will speed up backprop
-                                    winx = ox;
-                                    winy = oy;
+                                    winx = (unsigned long) ox;
+                                    winy = (unsigned long) oy;
                                 }
                             }
                         }
@@ -138,9 +138,9 @@ namespace tfs {
         m_in_dw->zero();
         unsigned long n = 0;        // index counter for switches
         for( unsigned long z = 0; z < out_z; z++ ) {
-            long x = -m_pad;
+            long x = - (long) m_pad;
             for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
-                long y = -m_pad;
+                long y = - (long) m_pad;
                 for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
                     const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, z );
                     const unsigned long ox = m_switch[n++];

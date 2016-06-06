@@ -117,7 +117,7 @@ namespace tfs {
             return 0.0;
         }
               DNN_NUMERIC *inputDw = m_in_dw->data();
-        const DNN_INTEGER    count = m_in_dw->count();
+        const DNN_INTEGER    count = (DNN_INTEGER) m_in_dw->count();
         const DNN_NUMERIC      *es = m_es->data();
         
         DNN_NUMERIC loss = 0.0;
