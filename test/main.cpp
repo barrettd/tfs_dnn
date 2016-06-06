@@ -21,7 +21,7 @@ int
 main( int argc, const char * argv[] ) {
     std::cout << "Test DNN begin\n";
     
-    const time_t startTime = time( 0 );
+    const time_t startTime = time( 0 ); 
     
     testMatrix();
     testBuilder();
@@ -33,9 +33,15 @@ main( int argc, const char * argv[] ) {
     test2Layer();
     testIO();
     
-    const time_t endTime = time( 0 );
+    const time_t endTime     = time( 0 );
+    const time_t elapsedTime = endTime - startTime;
     
-    std::cout << "Test DNN end. Elapsed time: " << (endTime - startTime) << " seconds.\n";
+    std::cout << "Test DNN end. Elapsed time: ";
+    if( elapsedTime == 1 ) {
+       std::cout << "1 second.\n";
+    } else {
+        std::cout << elapsedTime << " seconds.\n";
+    }
     return 0;
     
 }

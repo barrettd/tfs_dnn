@@ -150,14 +150,14 @@ namespace tfs {
         }
         const DNN_INTEGER *ePtr = lPtr + DATA_COUNT;
         
-        const unsigned long MAX_ITERATION = 200;
-        const DNN_NUMERIC   TARGET_LOSS   = 0.02;
+        const unsigned int MAX_ITERATION = 200;
+        const DNN_NUMERIC   TARGET_LOSS  = 0.02;
         unsigned long count = 0;
         DNN_NUMERIC average_loss = 0.0;
         do {
             count++;
             average_loss = 0.0;
-            for( unsigned long ii = 0; ii < MAX_ITERATION; ii++ ) {
+            for( unsigned int ii = 0; ii < MAX_ITERATION; ii++ ) {
                 dPtr = data.data();
                 lPtr = label.data();
                 
