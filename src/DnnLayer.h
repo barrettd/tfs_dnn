@@ -61,16 +61,18 @@ namespace tfs {
         // ----------------------------------------------------------------------------------------------
         // These methods perform a function, then call the next layer in the chain to do the same.
         // ----------------------------------------------------------------------------------------------
-        virtual void initialize( void );                // Zero activations, gradiant and randomize weights. Forward calling.
-        virtual void randomize(  void );                // Randomize gradiant. Forward calling.
+        virtual void initialize( void );        // Zero activations, gradiant and randomize weights. Forward calling.
+        virtual void randomize(  void );        // Randomize gradiant. Forward calling.
         
-        virtual bool runBias( DNN_NUMERIC value );
-        virtual bool runForward(  void );
-        virtual bool runPredict(  void );
-        virtual bool runBackprop( void );
-        virtual DNN_NUMERIC runBackprop( const  Matrix &expectation );    // Last layer
-        virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation ); // Last layer
+        // Perform function in just the current layer
+        virtual bool runBias( DNN_NUMERIC value );              // Set biases in current layer.
+        virtual bool runForward(  void );                       // Forward propagate while training
+        virtual bool runPredict(  void );                       // Forward progagate when predicting
+        virtual bool runBackprop( void );                       // Back propagate while training
+        virtual DNN_NUMERIC runBackprop( const  Matrix    &expectation );   // Back propagate while training (Last layer)
+        virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation );   // Back propagate while training (Last layer)
         
+        // Perform function in all layers (either forward or backward)
         void setBias( DNN_NUMERIC value = 0.0 );                // Set biases in all layers.
         bool forward(  void );                                  // Forward propagate while training
         bool predict(  void );                                  // Forward progagate when predicting

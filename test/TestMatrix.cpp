@@ -12,7 +12,7 @@ namespace tfs {
     
     static bool
     localTestMatrixSize( void ) {
-        const unsigned long X_MAX = 4;
+        const unsigned long X_MAX = 15;
         const unsigned long Y_MAX = 4;
         const unsigned long Z_MAX = 2;
         const unsigned long D_MAX = 3;

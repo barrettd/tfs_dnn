@@ -26,8 +26,8 @@ namespace tfs {
         // Destructor
     }
     
-    bool
-    DnnLayerRectifiedLinearUnit::threshold( const DNN_NUMERIC *src, const DNN_NUMERIC * const end, DNN_NUMERIC *dst ) {
+    inline bool
+    threshold( const DNN_NUMERIC *src, const DNN_NUMERIC * const end, DNN_NUMERIC *dst ) {
         // -----------------------------------------------------------------------------------
         // Copy src to dst, except clamping negative values to 0.0
         // -----------------------------------------------------------------------------------

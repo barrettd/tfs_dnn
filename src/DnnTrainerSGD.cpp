@@ -79,7 +79,7 @@ namespace tfs {
                     return m_loss;
                 }
                 *gradiant++ = 0.0;
-                *weight++ -= m_learning_rate * gij;
+                *weight++  -= m_learning_rate * gij;
             }
         }
         return m_loss += (l1_decay_loss + l2_decay_loss);

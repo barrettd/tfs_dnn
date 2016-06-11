@@ -105,7 +105,6 @@ namespace tfs {
         return m_out_dw;             // d/dw Output Activations
     }
 
-    
     Matrix*
     DnnLayer::weights( void ) {     // Internal Neuron connection weights (w)
         return m_w;

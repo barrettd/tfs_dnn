@@ -19,9 +19,9 @@ namespace tfs {
     m_batch_size( 1 ),
     m_k(          0 ),
     m_trainable_handle( 0 ),    // Beginning of the "trainables" array.
-    m_trainable_end(    0 ) {   // End of the "trainables" array.
-//        this.gsum = []; // last iteration gradients (used for momentum calculations)
-//        this.xsum = []; // used in adam or adadelta
+    m_trainable_end(    0 ),    // End of the "trainables" array.
+    m_gsum(   0 ),              // last iteration gradients (used for momentum calculations)
+    m_xsum(   0 ) {             // used in adam or adadelta
         setUpTrainables();
     }
     
@@ -34,7 +34,11 @@ namespace tfs {
             delete trainable;
         }
         m_trainables.clear();
-        m_dnn = 0;
+        delete m_gsum;
+        delete m_xsum;
+        m_gsum = 0;
+        m_xsum = 0;
+        m_dnn  = 0;
     }
     
     void
@@ -81,6 +85,24 @@ namespace tfs {
         }
         m_trainable_handle = m_trainables.data();
         m_trainable_end    = m_trainable_handle + trainableCount;
+        return;
+    }
+    
+    void
+    DnnTrainer::setupSums( bool xsum ) {
+        Trainable **trainableHandle = m_trainable_handle;
+        Trainable **trainableEnd    = m_trainable_end;
+        unsigned long count         = 0;
+        while( trainableHandle < trainableEnd ) {
+            Trainable *trainable = *trainableHandle++;
+            count += trainable->weightCount();
+        }
+        m_gsum = new Matrix( count );
+        m_gsum->zero();
+        if( xsum ) {
+            m_xsum = new Matrix( count );
+            m_xsum->zero();
+        }
         return;
     }
     

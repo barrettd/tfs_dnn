@@ -25,10 +25,13 @@ namespace tfs {
         Trainable               **m_trainable_handle;
         Trainable               **m_trainable_end;
         std::vector< Trainable* > m_trainables;
-        
+        Matrix     *m_gsum;
+        Matrix     *m_xsum;
+
         void setUpTrainable( Matrix *weights, Matrix *gradiant, DNN_NUMERIC l1_decay_mul, DNN_NUMERIC l2_decay_mul );
         void setUpTrainables( void );
-//        this.gsum = []; // last iteration gradients (used for momentum calculations)
+        void setupSums( bool xsum );    // Set up gsum[] and (optionally) xsum[]
+
         
     public:
         DnnTrainer( Dnn *dnn );

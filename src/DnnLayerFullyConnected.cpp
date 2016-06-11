@@ -51,15 +51,15 @@ namespace tfs {
             return;
         }
         const unsigned long N = m_neuron_count;
-        const unsigned long S = m_in_a->count(); // 1d input, S elements.
+        const unsigned long S = m_in_a->count();    // 1d input, S elements.
 
-        m_w = new Matrix( N, S+1 );             // 2d neuron weights N x (S+1)
+        m_w = new Matrix( N, S+1 );                 // 2d neuron weights N x (S+1)
         if( trainable ) {
-            m_dw = new Matrix( *m_w );          // 2d neuron weights N x (S+1)
+            m_dw = new Matrix( *m_w );              // 2d neuron weights N x (S+1)
         }
-        m_out_a = new Matrix( N );              // 1d N neuron activations (output)
+        m_out_a = new Matrix( N );                  // 1d N neuron activations (output)
         if( trainable ) {
-            m_out_dw = new Matrix( *m_out_a );  // 1d N neuron dw
+            m_out_dw = new Matrix( *m_out_a );      // 1d N neuron dw
         }
         return;
     }
@@ -152,9 +152,7 @@ namespace tfs {
         // m_out_dw[N]
         // ok: 24 May 2016
         // -----------------------------------------------------------------------------------
-        if( matrixBad( m_in_a )  ||
-            matrixBad( m_w  )    || matrixBad( m_dw )   ||
-            matrixBad( m_out_dw )) {
+        if( m_in_a == 0 || m_w == 0 || m_dw == 0 || m_out_dw == 0 ) {
             return log_error( "Not configured for training" );
         }
         const DNN_NUMERIC *          input = m_in_a->dataReadOnly();
@@ -163,7 +161,7 @@ namespace tfs {
         const DNN_NUMERIC *          outDw = m_out_dw->dataReadOnly();
         const DNN_NUMERIC * const outDwEnd = m_out_dw->end();
         
-        if( matrixBad( m_in_dw )) {                     // Previous layer is input layer, no dw backprop needed.
+        if( m_in_dw == 0 ) {                            // Previous layer is input layer, no dw backprop needed.
             while( outDw < outDwEnd ) {                 // for ii = 0 to N: Loop for each neuron activation
                 const DNN_NUMERIC   *in = input;
                 const DNN_NUMERIC  grad = *outDw++;

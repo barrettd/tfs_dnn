@@ -149,10 +149,11 @@ namespace tfs {         // Tree Frog Software
             return m_data[index] = value;
         }
         
-        inline void set( const T value ) {
+        inline T set( const T value ) {
             for( unsigned int ii = 0; ii < m_count; ii++ ) {
                 m_data[ii] = value;
             }
+            return value;
         }
 
         inline T plusEquals( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd, const T value ) {
@@ -307,6 +308,20 @@ namespace tfs {         // Tree Frog Software
             return weightStart != 0 && weightStart < weightEnd && gradiantStart != 0 && gradiantStart < gradiantEnd;
         }
         
+        inline unsigned long weightCount( void ) const {
+            if( weightEnd <= weightStart ) {
+                return 0;
+            }
+            return (unsigned long) ( weightEnd - weightStart );             // Count of Ts
+        }
+
+        inline unsigned long gradiantCount( void ) const {
+            if( gradiantEnd <= gradiantStart ) {
+                return 0;
+            }
+            return (unsigned long) ( gradiantEnd - gradiantStart );         // Count of Ts
+        }
+
         void setWeight( TMatrix< T > *matrix ) {
             if( matrix != 0 ) {
                 weightStart = matrix->data();

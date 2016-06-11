@@ -13,7 +13,6 @@ namespace tfs {
     
     class DnnLayerRectifiedLinearUnit : public DnnLayer {
     protected:
-        bool threshold( const DNN_NUMERIC *src, const DNN_NUMERIC * const end, DNN_NUMERIC *dst );
  
     public:
         static const char *className( void );
