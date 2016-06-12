@@ -65,9 +65,8 @@ namespace tfs {
         const unsigned long out_y = (unsigned long) floor((in_y + m_pad * 2.0 - m_side) / m_stride + 1.0 );
         const unsigned long out_z = in_z;
         
-        
         m_switch = new unsigned long[ out_x * out_y * out_z * 2 ];
-
+        
         m_out_a = new Matrix( out_x, out_y, out_z );
         if( trainable ) {
             m_out_dw = new Matrix( *m_out_a );          // dw dimenstion matches a
@@ -116,9 +115,9 @@ namespace tfs {
                             }
                         }
                     }
+                    m_out_a->set( ax, ay, z, a );
                     *switches++ = winx;
                     *switches++ = winy;
-                    m_out_a->set( ax, ay, z, a );
                 }
             }
         }
