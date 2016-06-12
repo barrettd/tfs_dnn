@@ -90,6 +90,8 @@ namespace tfs {
     DnnLayerConvolution::runForward(  void ) {
         // -----------------------------------------------------------------------------------
         // virtual: Forward propagate, used with forward()
+        // ok 11 June 2016
+        // TODO: Speed up with pointers. (benchmark A/B compare.)
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_out_a == 0 ) {
             return log_error( "Not configured" );
@@ -134,6 +136,7 @@ namespace tfs {
     DnnLayerConvolution::runBackprop( void ) {
         // -----------------------------------------------------------------------------------
         // virtual: Back propagate, used with backprop()
+        // ok 11 June 2016
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 ) {
             return log_error( "Not configured" );

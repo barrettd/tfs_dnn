@@ -26,7 +26,7 @@ namespace tfs {
         DnnLayerPool( DnnLayer *previousLayer,
                      unsigned long side,            // Size of the square side
                      unsigned long stride = 2,
-                     unsigned long pad = 0,
+                     unsigned long pad    = 0,
                      const bool trainable = true );
         virtual ~DnnLayerPool( void );
         

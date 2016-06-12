@@ -90,19 +90,21 @@ namespace tfs {
         const unsigned long out_y = m_out_a->height();
         const unsigned long out_z = m_out_a->depth();
         
-        unsigned long n = 0;        // index counter for switches
+        m_out_a->zero();        // May not need to do this.
+        
+        unsigned long *switches = m_switch;     // Pointer for switches.
         for( unsigned long z = 0; z < out_z; z++ ) {
-            long x = - (long) m_pad;
-            for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
-                long y = - (long) m_pad;
-                for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
+            long y = - (long) m_pad;
+            for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
+                long x = - (long) m_pad;
+                for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
                     // Convolve centered at [ax, ay]
                     DNN_NUMERIC a = -__DBL_MAX__;
                     unsigned long winx = 0;
                     unsigned long winy = 0;
-                    for( unsigned long fx = 0; fx < m_side; fx++ ) {
-                        for( unsigned long fy = 0; fy < m_side; fy++ ) {
-                            long oy = y + (long) fy;
+                    for( unsigned long fy = 0; fy < m_side; fy++ ) {
+                        long oy = y + (long) fy;
+                        for( unsigned long fx = 0; fx < m_side; fx++ ) {
                             long ox = x + (long) fx;
                             if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
                                 DNN_NUMERIC v = m_in_a->get((unsigned long) ox, (unsigned long) oy, z );
@@ -114,8 +116,9 @@ namespace tfs {
                             }
                         }
                     }
-                    m_switch[n++] = winx;
-                    m_switch[n++] = winy;
+                    *switches++ = winx;
+                    *switches++ = winy;
+                    m_out_a->set( ax, ay, z, a );
                 }
             }
         }
@@ -136,15 +139,15 @@ namespace tfs {
         const unsigned long out_z = m_out_dw->depth();
 
         m_in_dw->zero();
-        unsigned long n = 0;        // index counter for switches
+        const unsigned long *switches = m_switch;     // Pointer for switches.
         for( unsigned long z = 0; z < out_z; z++ ) {
-            long x = - (long) m_pad;
-            for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
-                long y = - (long) m_pad;
-                for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
+            long y = - (long) m_pad;
+            for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
+                long x = - (long) m_pad;
+                for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
                     const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, z );
-                    const unsigned long ox = m_switch[n++];
-                    const unsigned long oy = m_switch[n++];
+                    const unsigned long ox = *switches++;
+                    const unsigned long oy = *switches++;
                     m_in_dw->set( ox, oy, z, chain_grad );
                 }
             }
