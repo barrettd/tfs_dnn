@@ -69,7 +69,9 @@ OBJS = 	$(OBJ_DIR)Dnn.o\
         $(OBJ_DIR)DnnTrainerAdam.o\
         $(OBJ_DIR)DnnTrainerSGD.o\
         $(OBJ_DIR)Error.o\
-        $(OBJ_DIR)Utility.o
+        $(OBJ_DIR)Utility.o\
+        $(OBJ_DIR)CsvFile.o
+
 
 
 # -----------------------------------------------------------------------------
@@ -97,6 +99,7 @@ $(OBJ_DIR)DnnTrainerAdam.o                      : DnnTrainerAdam.cpp DnnTrainerA
 $(OBJ_DIR)DnnTrainerSGD.o                       : DnnTrainerSGD.cpp DnnTrainerSGD.h
 $(OBJ_DIR)Error.o                               : Error.cpp Error.h
 $(OBJ_DIR)Utility.o                             : Utility.cpp Utility.h
+$(OBJ_DIR)CsvFile.o                             : CsvFile.cpp CsvFile.h
 
 
 # -----------------------------------------------------------------------------
