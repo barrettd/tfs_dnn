@@ -74,7 +74,7 @@ namespace tfs {
             const DNN_NUMERIC l2_decay_mul = layer->l2DecayMultiplier();
             
             setUpTrainable( weights, gradiant, l1_decay_mul, l2_decay_mul );
-            setUpTrainable( bias,    biasDw,   l1_decay_mul, l2_decay_mul );
+            setUpTrainable( bias,    biasDw,            0.0,          0.0 );
             
             layer = layer->getNextLayer();
         }

@@ -69,8 +69,8 @@ namespace tfs {
             const DNN_NUMERIC *weightEnd   = trainable->weightEnd;
                   DNN_NUMERIC *gradiant    = trainable->gradiantStart;
             const DNN_NUMERIC *gradiantEnd = trainable->gradiantEnd;
-            const DNN_NUMERIC l1_decay     = m_l1_decay * trainable->l1_decay_mul;
-            const DNN_NUMERIC l2_decay     = m_l2_decay * trainable->l2_decay_mul;
+            const DNN_NUMERIC l1_decay     = trainable->l1_decay_mul * m_l1_decay;
+            const DNN_NUMERIC l2_decay     = trainable->l2_decay_mul * m_l2_decay;
             
             if( weight == 0 || gradiant == 0 ) {
                 log_error( "Trainable has weight or gradiant == 0" );

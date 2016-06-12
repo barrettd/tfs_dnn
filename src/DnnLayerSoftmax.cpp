@@ -65,7 +65,7 @@ namespace tfs {
         // m_in_a[S]    Input activations
         // m_es[S]      Exponentials caculated in forward()
         // m_out_a[S]   Output activations
-        // ok: 24 May 2016
+        // ok: 24 May 2016, 11 June 2016
         // -----------------------------------------------------------------------------------
         if( matrixBad( m_in_a ) || matrixBad( m_es ) || matrixBad( m_out_a )) {
             return log_error( "Not configured" );
@@ -76,7 +76,7 @@ namespace tfs {
               DNN_NUMERIC *        output = m_out_a->data();
         const DNN_NUMERIC * const  outEnd = m_out_a->end();
         
-        const DNN_NUMERIC max = m_in_a->max();      // Find input activation maximum
+        const DNN_NUMERIC max  = m_in_a->max();     // Find input activation maximum
               DNN_NUMERIC esum = 0.0;
         
         DNN_NUMERIC *es = esStart;
@@ -106,7 +106,7 @@ namespace tfs {
         // m_es[S]      Exponentials caculated in forward()
         // m_out_a[N]   Output activations
         // m_out_dw[N]
-        // ok: 24 May 2016
+        // ok: 24 May 2016, 11 June 2016
         // -----------------------------------------------------------------------------------
         if( m_in_dw == 0 || m_es == 0 ) {
             log_error( "Not configured for training" );

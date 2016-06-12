@@ -77,7 +77,7 @@ namespace tfs {         // Tree Frog Software
         inline const T* end(  void ) const {         return m_end;  }   // End of data array
         inline const T* dataReadOnly( void ) const { return m_data; }   // Start of data array (const)
         
-        void randomize( void ) {                // Fill matrix with small positive values
+        inline void randomize( void ) {                // Fill matrix with small positive values
             // Weight normalization is done to equalize the output variance of every neuron,
             // otherwise neurons with a lot of incoming connections will have outputs with a larger variance
             if( isEmpty()) {
@@ -92,19 +92,19 @@ namespace tfs {         // Tree Frog Software
             }
         }
 
-        void zero( void ) {                         // Fill matrix with zeros
+        inline void zero( void ) {                         // Fill matrix with zeros
             if( m_data != 0 && m_length > 0 ) {
                 memset( m_data, 0, m_length );      // Yields IEEE 0 for both integer and real valued variables.
             }
         }
         
-        void copy( const TMatrix &matrix ) {        // Copy the contents another matrix.
+        inline void copy( const TMatrix &matrix ) {        // Copy the contents another matrix.
             if( m_data != 0 && matrix.m_data != 0 && m_length > 0  && m_length == matrix.m_length ) {
                 memcpy( m_data, matrix.m_data, m_length );
             }
         }
         
-        bool equal( const TMatrix &matrix ) const { // Return true if matricies same dimension and contents.
+        inline bool equal( const TMatrix &matrix ) const { // Return true if matricies same dimension and contents.
             if( m_data == 0 || matrix.m_data == 0 || m_length < 1 || m_length != matrix.m_length ||
                m_a != matrix.m_a || m_b != matrix.m_b || m_c != matrix.m_c || m_d != matrix.m_d ) {
                 return false;
@@ -124,6 +124,22 @@ namespace tfs {         // Tree Frog Software
             return index;
         }
         
+        inline T getValue( unsigned long index ) {
+            if( index >= m_count ) {
+                log_error( "Index out of range: %lu/%lu", index, m_count );
+                return 0.0;
+            }
+            return m_data[index];
+        }
+        
+        inline T setValue( unsigned long index, const T value ) {
+            if( index >= m_count ) {
+                log_error( "Index out of range: %lu/%lu", index, m_count );
+                return 0.0;
+            }
+            return m_data[index] = value;
+        }
+
         inline T get( const unsigned long aa, const unsigned long bb = 0, const unsigned long cc = 0, const unsigned long dd = 0 ) const {
             const unsigned long index = getIndex( aa, bb, cc, dd );
             return m_data[index];
