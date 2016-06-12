@@ -126,7 +126,6 @@ namespace tfs {         // Tree Frog Software
         if( !preflight( path, columnCount, rowCount )) {
             return 0;
         }
-        log_info( "columns = %lu, rows = %lu", columnCount, rowCount );
         Matrix *matrix = new Matrix( columnCount, rowCount );
         return fill( matrix, path, notPresent );
     }
