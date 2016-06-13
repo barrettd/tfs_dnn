@@ -71,7 +71,7 @@ namespace tfs {
         const unsigned long out_y = (unsigned long) floor((in_y + m_pad * 2.0 - m_side) / m_stride + 1.0 );
         const unsigned long out_z = m_filter_count;
         
-        m_w = new Matrix( m_filter_count, m_side, m_side, in_z );   // N Fiters of side x side x depth
+        m_w = new Matrix( m_side, m_side, in_z, m_filter_count );   // side x side x depth x N Fiters
         if( trainable ) {
             m_dw = new Matrix( *m_w );                      // Gradiant N x side x side + (depth+1)
         }
@@ -119,7 +119,7 @@ namespace tfs {
                             long ox = x + (long) fx;
                             if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
                                 for( unsigned long fd = 0; fd < in_z; fd++ ) {
-                                    a += m_w->get( fd, fx, fy, fd ) * m_in_a->get((unsigned long) ox, (unsigned long)oy, fd );
+                                    a += m_w->get( fx, fy, fd, d ) * m_in_a->get((unsigned long) ox, (unsigned long)oy, fd );
                                 }
                             }
                         }
@@ -169,9 +169,9 @@ namespace tfs {
                             if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
                                for( unsigned long fd = 0; fd < in_z; fd++ ) {
                                     const DNN_NUMERIC in_delta = m_in_a->get((unsigned long)ox, (unsigned long)oy, fd ) * chain_grad;
-                                    m_dw->plusEquals( d, fx, fy, fd, in_delta );
+                                    m_dw->plusEquals( fx, fy, fd, d, in_delta );
                                     if( m_in_dw != 0 ) {
-                                        const DNN_NUMERIC dw_delta = m_w->get( d, fx, fy, fd ) * chain_grad;
+                                        const DNN_NUMERIC dw_delta = m_w->get( fx, fy, fd, d ) * chain_grad;
                                         m_in_dw->plusEquals((unsigned long)ox, (unsigned long)oy, fd, dw_delta );
                                     }
                                 }

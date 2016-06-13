@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------
 //  Matrix.hpp - 3 or 4 D matrix <template> for DNN_NUMERIC and DNN_INTEGER
-//
+//  Possibly use Eigen matricies: https://eigen.tuxfamily.org/
 //  Created by Barrett Davis on 5/10/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
@@ -16,13 +16,15 @@
 
 namespace tfs {         // Tree Frog Software
 
-    template <typename T> class TMatrix  {      // Possibly use Eigen matricies: https://eigen.tuxfamily.org/
+    template <typename T> class TMatrix  {      // Row major order (aa changes fastest, dd changes slowest.)
     protected:
-        unsigned long m_a;      // x Width
-        unsigned long m_b;      // y Height
+        unsigned long m_a;      // x Width  - columns (contigious)
+        unsigned long m_b;      // y Height - rows
         unsigned long m_c;      // z Depth
         unsigned long m_d;      // 4th dimension
-        unsigned long m_count;  // = x * w * h;  // Count of DNN_NUMERIC elements.
+        unsigned long m_ab;     // = aa * bb
+        unsigned long m_abc;    // = aa * bb * cc
+        unsigned long m_count;  // = aa * bb * cc * dd;  Count of T elements.
         unsigned long m_length; // = count * sizeof( T )
         T            *m_data;   // Pointer to data[] array:     = &data[0];
         T            *m_end;    // Pointer to end of the array: = &data[m_count];
@@ -37,7 +39,8 @@ namespace tfs {         // Tree Frog Software
 
     public:
         TMatrix( const TMatrix &other, bool copyOther = false ) :       // Constructor
-        m_a( other.m_a ), m_b( other.m_b ), m_c( other.m_c ), m_d( other.m_d ), m_count( other.m_count ),
+        m_a(  other.m_a ),  m_b(   other.m_b ),   m_c(     other.m_c ), m_d( other.m_d ),
+        m_ab( other.m_ab ), m_abc( other.m_abc ), m_count( other.m_count ),
         m_length( 0 ), m_data( 0 ), m_end( 0 ) {
             allocate();
             if( copyOther ) {
@@ -46,7 +49,8 @@ namespace tfs {         // Tree Frog Software
         }
 
         TMatrix( const unsigned long aa, const unsigned long bb = 1, const unsigned long cc = 1, const unsigned long dd = 1 ):  // Constructor
-        m_a( aa ), m_b( bb ), m_c( cc ), m_d( dd ), m_count( aa * bb * cc * dd ),
+        m_a( aa ), m_b( bb ), m_c( cc ), m_d( dd ),
+        m_ab( aa * bb ), m_abc( aa * bb * cc ), m_count( aa * bb * cc * dd ),
         m_length( 0 ), m_data( 0 ), m_end( 0 ) {
             allocate();
         }
@@ -68,8 +72,8 @@ namespace tfs {         // Tree Frog Software
         inline unsigned long width(  void ) const { return m_a; }       // aa
         inline unsigned long height( void ) const { return m_b; }       // bb
         inline unsigned long depth(  void ) const { return m_c; }       // cc
-        inline unsigned long count(  void ) const { return m_count;  }  // Count of elements.
-        inline unsigned long length( void ) const { return m_length; }  // Length in bytes
+        inline unsigned long count(  void ) const { return m_count;  }  // Count of elements = aa * bb * cc * dd;
+        inline unsigned long length( void ) const { return m_length; }  // Length in bytes   = count * sizeof( T );
         
         inline bool isEmpty( void ) const { return m_data == 0 || m_data >= m_end || m_count < 1 || m_length < 1; }
         
@@ -94,7 +98,7 @@ namespace tfs {         // Tree Frog Software
 
         inline void zero( void ) {                         // Fill matrix with zeros
             if( m_data != 0 && m_length > 0 ) {
-                memset( m_data, 0, m_length );      // Yields IEEE 0 for both integer 0 and real 0.0 valued variables.
+                memset( m_data, 0, m_length );      // Yields IEEE 0 for both integer and real valued variables.
             }
         }
         
@@ -113,38 +117,65 @@ namespace tfs {         // Tree Frog Software
         }
         
         inline unsigned long getIndex( const unsigned long aa,
-                                       const unsigned long bb = 0,
-                                       const unsigned long cc = 0,
-                                       const unsigned long dd = 0 ) const {
-            const unsigned long index = ((( m_a * bb) + aa) * m_c + cc) * m_d + dd;
+                                       const unsigned long bb,
+                                       const unsigned long cc,
+                                       const unsigned long dd ) const {
+            const unsigned long index = dd * m_abc + cc * m_ab + bb * m_a + aa;
             if( index >= m_count ) {
                 log_error( "Index out of range: %lu/%lu, a = %lu/%lu, b = %lu/%lu, c = %lu/%lu, d = %lu/%lu",
                           index, m_count, aa, m_a, bb, m_b, cc, m_c, dd, m_d );
             }
             return index;
         }
-        
-        inline T getValue( unsigned long index ) {
+
+        inline unsigned long getIndex( const unsigned long aa,
+                                       const unsigned long bb,
+                                       const unsigned long cc ) const {
+            const unsigned long index = cc * m_ab + bb * m_a + aa;
             if( index >= m_count ) {
-                log_error( "Index out of range: %lu/%lu", index, m_count );
-                return 0.0;
+                log_error( "Index out of range: %lu/%lu, a = %lu/%lu, b = %lu/%lu, c = %lu/%lu",
+                          index, m_count, aa, m_a, bb, m_b, cc, m_c );
             }
-            return m_data[index];
-        }
-        
-        inline T setValue( unsigned long index, const T value ) {
-            if( index >= m_count ) {
-                log_error( "Index out of range: %lu/%lu", index, m_count );
-                return 0.0;
-            }
-            return m_data[index] = value;
+            return index;
         }
 
-        inline T get( const unsigned long aa, const unsigned long bb = 0, const unsigned long cc = 0, const unsigned long dd = 0 ) const {
+        inline unsigned long getIndex( const unsigned long aa,
+                                       const unsigned long bb ) const {
+            const unsigned long index = bb * m_a + aa;
+            if( index >= m_count ) {
+                log_error( "Index out of range: %lu/%lu, a = %lu/%lu, b = %lu/%lu",
+                          index, m_count, aa, m_a, bb, m_b );
+            }
+            return index;
+        }
+        
+        inline unsigned long getIndex( const unsigned long aa ) const {
+            if( aa >= m_count ) {
+                log_error( "Index out of range: %lu/%lu", aa, m_count );
+            }
+            return aa;
+        }
+        
+        inline T get( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd ) const {
             const unsigned long index = getIndex( aa, bb, cc, dd );
             return m_data[index];
         }
         
+        inline T get( const unsigned long aa, const unsigned long bb, const unsigned long cc ) const {
+            const unsigned long index = getIndex( aa, bb, cc );
+            return m_data[index];
+        }
+        
+        inline T get( const unsigned long aa, const unsigned long bb ) const {
+            const unsigned long index = getIndex( aa, bb );
+            return m_data[index];
+        }
+
+        inline T get( const unsigned long aa ) const {
+            const unsigned long index = getIndex( aa );
+            return m_data[index];
+        }
+
         inline T set( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd, const T value ) {
             const unsigned long index = getIndex( aa, bb, cc, dd );
             return m_data[index] = value;
@@ -165,9 +196,11 @@ namespace tfs {         // Tree Frog Software
             return m_data[index] = value;
         }
         
-        inline T set( const T value ) {
-            for( unsigned int ii = 0; ii < m_count; ii++ ) {
-                m_data[ii] = value;
+        inline T set( const T value ) {         // Set all elements to 'value'
+                  T *      data = m_data;
+            const T * const end = m_end;
+            while( data < end ) {
+                *data++ = value;
             }
             return value;
         }
