@@ -49,7 +49,7 @@ namespace tfs {
             log_error( "input size < 1" );
             return;
         }
-        m_es    = new Matrix( classCount, 1, 1 );
+        m_es    = new Matrix( classCount );
         m_out_a = new Matrix( *m_es );
         if( trainable ) {
             m_out_dw = new Matrix( *m_out_a );
@@ -91,7 +91,7 @@ namespace tfs {
         }
         es = esStart;
         while( output < outEnd ) {                  // normalize
-            *output++ = *es++ /= esum;
+            *output++ = *es++ /= esum;              // sum( m_output_a ) == 1.0 - 12 June 2016 verified
         }
         return true;
     }
@@ -122,11 +122,12 @@ namespace tfs {
         
         DNN_NUMERIC loss = 0.0;
         for( DNN_INTEGER ii = 0; ii < count; ii++ ) {
+            const DNN_NUMERIC esValue = *es++;
             if( ii == yy ) {
-                loss = -log( *es );
-                *inputDw++ = *es++ - 1.0;
+                *inputDw++ = esValue - 1.0;
+                loss = -log( esValue );
             } else {
-                *inputDw++ = *es++;
+                *inputDw++ = esValue;
             }
         }
         return loss;

@@ -52,6 +52,7 @@ namespace tfs {         // Tree Frog Software
     
     static bool
     preflight( const char *path, unsigned long &columnCount, unsigned long &rowCount ) {
+        // rowCount = the number of data rows (ignoring the header row.)
         columnCount = 0;
         rowCount    = 0;
         std::ifstream stream( path );
@@ -87,7 +88,7 @@ namespace tfs {         // Tree Frog Software
                 *data++ = atof( buffer.c_str());
                 buffer.clear();
             } else {
-                *data++ = notPresent;
+                *data++ = notPresent;               // ",,"
             }
         }
         return data;

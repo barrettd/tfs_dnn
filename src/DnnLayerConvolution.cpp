@@ -136,6 +136,7 @@ namespace tfs {
     DnnLayerConvolution::runBackprop( void ) {
         // -----------------------------------------------------------------------------------
         // virtual: Back propagate, used with backprop()
+        // This routine is the biggest time sink in the DigitRecognizer app.
         // ok 11 June 2016
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 ) {
