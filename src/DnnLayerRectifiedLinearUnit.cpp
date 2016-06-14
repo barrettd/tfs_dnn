@@ -26,25 +26,6 @@ namespace tfs {
         // Destructor
     }
     
-    inline bool
-    threshold( DNN_NUMERIC *dst, const DNN_NUMERIC *src, const DNN_NUMERIC * const end ) {
-        // -----------------------------------------------------------------------------------
-        // Copy src to dst, except clamping negative values to 0.0
-        // -----------------------------------------------------------------------------------
-        if( dst == 0 || src == 0 || end == 0 ) {
-            return log_error( "Not configured" );
-        }
-        while( src < end ) {
-            if( *src > 0.0 ) {      // Threshold at 0.0
-                *dst++ = *src++;
-            } else {
-                *dst++ = 0.0;
-                src++;
-            }
-        }
-        return true;
-    }
-
     bool
     DnnLayerRectifiedLinearUnit::runForward( void ) {
         // -----------------------------------------------------------------------------------
@@ -58,7 +39,16 @@ namespace tfs {
         const DNN_NUMERIC *       src = m_in_a->dataReadOnly();
         const DNN_NUMERIC * const end = m_in_a->end();
               DNN_NUMERIC *       dst = m_out_a->data();
-        return threshold( dst, src, end );
+        
+        while( src < end ) {
+            if( *src > 0.0 ) {      // Threshold at 0.0
+                *dst++ = *src++;
+            } else {
+                *dst++ = 0.0;
+                src++;
+            }
+        }
+        return true;
     }
     
     bool
@@ -71,10 +61,20 @@ namespace tfs {
         if( m_in_dw == 0 || m_out_dw == 0  ) {
             return log_error( "Not configured" );
         }
+        const DNN_NUMERIC *       val = m_out_a->dataReadOnly();
         const DNN_NUMERIC *       src = m_out_dw->dataReadOnly();
         const DNN_NUMERIC * const end = m_out_dw->end();
               DNN_NUMERIC *       dst = m_in_dw->data();
-        return threshold( dst, src, end );
+
+        while( src < end ) {
+            if( *val++ <= 0.0 ) {
+                *dst++ = 0.0;
+                src++;
+            } else {
+                *dst++ = *src++;
+            }
+        }
+        return true;
     }
     
 }   // namespace tfs
