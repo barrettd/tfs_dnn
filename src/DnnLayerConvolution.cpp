@@ -44,6 +44,7 @@ namespace tfs {
     DnnLayerConvolution::setup( const bool trainable ) {
         // -----------------------------------------------------------------------------------
         // Allocate filters and output
+        // out_z == filter_count
         // -----------------------------------------------------------------------------------
         if( m_side < 1 || m_filter_count < 1 || m_stride < 1 ) {
             log_error( "Bad params" );
@@ -71,9 +72,9 @@ namespace tfs {
         const unsigned long out_y = (unsigned long) floor((in_y + m_pad * 2.0 - m_side) / m_stride + 1.0 );
         const unsigned long out_z = m_filter_count;
         
-        m_w = new Matrix( m_side, m_side, in_z, m_filter_count );   // side x side x depth x N Fiters
+        m_w = new Matrix( m_side, m_side, in_z, m_filter_count );   // side x side x depth x N filters
         if( trainable ) {
-            m_dw = new Matrix( *m_w );                      // Gradiant N x side x side + (depth+1)
+            m_dw = new Matrix( *m_w );                      // Gradiant side x side + depth x N filters
         }
         m_bias_w = new Matrix( out_z );
         if( trainable ) {
@@ -106,26 +107,26 @@ namespace tfs {
         const unsigned long out_y = m_out_a->height();
         const unsigned long out_z = m_out_a->depth();       // Filter count
 
-        for( unsigned long d = 0; d < out_z; d++ ) {        // Filter count
-            long y = - (long) m_pad;
-            for( unsigned long ay = 0; ay < out_y; y += stride, ay++ ) {
-                long x = - (long) m_pad;
-                for( unsigned long ax = 0; ax < out_x; x += stride, ax++ ) {
+        for( unsigned long az = 0; az < out_z; az++ ) {     // Filter count
+            long yy = - (long) m_pad;
+            for( unsigned long ay = 0; ay < out_y; ay++, yy += stride ) {
+                long xx = - (long) m_pad;
+                for( unsigned long ax = 0; ax < out_x; ax++, xx += stride ) {
                     // convolve centered at this point
                     DNN_NUMERIC a = 0.0;
                     for( unsigned long  fy = 0; fy < side; fy++ ) {
-                        long oy = y + (long) fy;
+                        long oy = yy + (long) fy;
                         for( unsigned long fx = 0; fx < side; fx++ ) {
-                            long ox = x + (long) fx;
+                            long ox = xx + (long) fx;
                             if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
-                                for( unsigned long fd = 0; fd < in_z; fd++ ) {
-                                    a += m_w->get( fx, fy, fd, d ) * m_in_a->get((unsigned long) ox, (unsigned long)oy, fd );
+                                for( unsigned long fz = 0; fz < in_z; fz++ ) {
+                                    a += m_w->get( fx, fy, fz, az ) * m_in_a->get((unsigned long) ox, (unsigned long)oy, fz );
                                 }
                             }
                         }
                     }
-                    a += m_bias_w->get( d );        // bias
-                    m_out_a->set( ax, ay, d, a );   // set output
+                    a += m_bias_w->get( az );        // bias
+                    m_out_a->set( ax, ay, az, a );   // set output
                 }
             }
         }
@@ -155,30 +156,38 @@ namespace tfs {
         if( m_in_dw != 0 ) {        // Input layer often does not have dw.
             m_in_dw->zero();        // Zero input gradiant, we add to it below.
         }
-        for( unsigned long d = 0; d < out_z; d++ ) {
-            long y = -(long) m_pad;
-            for( unsigned long ay = 0; ay < out_y; y += stride, ay++ ) {
-                long x = -(long) m_pad;
-                for( unsigned long ax = 0; ax < out_x; x += stride, ax++ ) {
+        for( unsigned long az = 0; az < out_z; az++ ) {
+            long yy = -(long) m_pad;
+            for( unsigned long ay = 0; ay < out_y; ay++, yy += stride ) {
+                long xx = -(long) m_pad;
+                for( unsigned long ax = 0; ax < out_x; ax++, xx += stride ) {
                     // convolve and add up the gradients.
-                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, d );  // gradient from chain rule
+                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, az );  // gradient from chain rule
                     for( unsigned long  fy = 0; fy < side; fy++ ) {
-                        long oy = y + (long) fy;
+                        long oy = yy + (long) fy;
                         for( unsigned long fx = 0; fx < side; fx++ ) {
-                            long ox = x + (long) fx;
+                            long ox = xx + (long) fx;
                             if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
-                               for( unsigned long fd = 0; fd < in_z; fd++ ) {
-                                    const DNN_NUMERIC in_delta = m_in_a->get((unsigned long)ox, (unsigned long)oy, fd ) * chain_grad;
-                                    m_dw->plusEquals( fx, fy, fd, d, in_delta );
-                                    if( m_in_dw != 0 ) {
-                                        const DNN_NUMERIC dw_delta = m_w->get( fx, fy, fd, d ) * chain_grad;
-                                        m_in_dw->plusEquals((unsigned long)ox, (unsigned long)oy, fd, dw_delta );
-                                    }
+                               for( unsigned long fz = 0; fz < in_z; fz++ ) {
+                                   unsigned long ix1 = m_in_a->getIndex((unsigned long) ox, (unsigned long) oy, fz );
+                                   unsigned long ix2 = m_w->getIndex( fx, fy, fz, az );
+                                   const DNN_NUMERIC value1 = m_in_a->get( ix1 ) * chain_grad;
+                                   const DNN_NUMERIC value2 = m_w->get(    ix2 ) * chain_grad;
+                                   m_dw->plusEquals( ix2, value1 );
+                                   if( m_in_dw != 0 ) {
+                                      m_in_dw->plusEquals( ix1, value2 );
+                                   }
+//                                   const DNN_NUMERIC in_delta = m_in_a->get((unsigned long)ox, (unsigned long)oy, fz ) * chain_grad;
+//                                    m_dw->plusEquals( fx, fy, fz, az, in_delta );
+//                                    if( m_in_dw != 0 ) {
+//                                        const DNN_NUMERIC dw_delta = m_w->get( fx, fy, fz, az ) * chain_grad;
+//                                        m_in_dw->plusEquals((unsigned long)ox, (unsigned long)oy, fz, dw_delta );
+//                                    }
                                 }
                             }
                         }
                     }
-                    m_bias_dw->plusEquals( d, chain_grad );
+                    m_bias_dw->plusEquals( az, chain_grad );
                 }
             }
         }

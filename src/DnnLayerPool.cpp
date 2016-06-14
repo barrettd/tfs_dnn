@@ -69,7 +69,7 @@ namespace tfs {
         
         m_out_a = new Matrix( out_x, out_y, out_z );
         if( trainable ) {
-            m_out_dw = new Matrix( *m_out_a );          // dw dimenstion matches a
+            m_out_dw = new Matrix( *m_out_a );          // dw dimension matches a
         }
         return;
     }
@@ -92,30 +92,30 @@ namespace tfs {
         m_out_a->zero();        // May not need to do this.
         
         unsigned long *switches = m_switch;     // Pointer for switches.
-        for( unsigned long z = 0; z < out_z; z++ ) {
-            long y = - (long) m_pad;
-            for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
-                long x = - (long) m_pad;
-                for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
+        for( unsigned long az = 0; az < out_z; az++ ) {
+            long yy = - (long) m_pad;
+            for( unsigned long ay = 0; ay < out_y; ay++, yy += m_stride ) {
+                long xx = - (long) m_pad;
+                for( unsigned long ax = 0; ax < out_x; ax++, xx += m_stride ) {
                     // Convolve centered at [ax, ay]
-                    DNN_NUMERIC a = -__DBL_MAX__;
+                    DNN_NUMERIC aa = -__DBL_MAX__;
                     unsigned long winx = 0;
                     unsigned long winy = 0;
                     for( unsigned long fy = 0; fy < m_side; fy++ ) {
-                        long oy = y + (long) fy;
+                        const long oy = yy + (long) fy;
                         for( unsigned long fx = 0; fx < m_side; fx++ ) {
-                            long ox = x + (long) fx;
+                            const long ox = xx + (long) fx;
                             if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
-                                DNN_NUMERIC v = m_in_a->get((unsigned long) ox, (unsigned long) oy, z );
-                                if( v > a ) {   // perform max pooling and store indexes to where
-                                    a = v;      // the max came from. This will speed up backprop
+                                const DNN_NUMERIC vv = m_in_a->get((unsigned long) ox, (unsigned long) oy, az );
+                                if( vv > aa ) {   // perform max pooling and store indexes to where
+                                    aa = vv;      // the max came from. This will speed up backprop
                                     winx = (unsigned long) ox;
                                     winy = (unsigned long) oy;
                                 }
                             }
                         }
                     }
-                    m_out_a->set( ax, ay, z, a );
+                    m_out_a->set( ax, ay, az, aa );
                     *switches++ = winx;
                     *switches++ = winy;
                 }
@@ -139,15 +139,13 @@ namespace tfs {
 
         m_in_dw->zero();
         const unsigned long *switches = m_switch;     // Pointer for switches.
-        for( unsigned long z = 0; z < out_z; z++ ) {
-            long y = - (long) m_pad;
-            for( unsigned long ay = 0; ay < out_y; y += m_stride, ay++ ) {
-                long x = - (long) m_pad;
-                for( unsigned long ax = 0; ax < out_x; x += m_stride, ax++ ) {
-                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, z );
-                    const unsigned long ox = *switches++;
-                    const unsigned long oy = *switches++;
-                    m_in_dw->set( ox, oy, z, chain_grad );
+        for( unsigned long az = 0; az < out_z; az++ ) {
+            for( unsigned long ay = 0; ay < out_y; ay++ ) {
+                for( unsigned long ax = 0; ax < out_x; ax++ ) {
+                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, az );
+                    const unsigned long winx = *switches++;
+                    const unsigned long winy = *switches++;
+                    m_in_dw->plusEquals( winx, winy, az, chain_grad );
                 }
             }
         }

@@ -280,7 +280,7 @@ namespace tfs {         // Tree Frog Software
             return result;
         }
  
-        inline T sum( void ) const {                // Return sum of matrix elements.
+        inline T sum( void ) const {                    // Return sum of matrix elements.
             if( isEmpty()) {
                 log_error( "empty matrix" );
                 return 0;
