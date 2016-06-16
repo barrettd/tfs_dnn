@@ -24,7 +24,7 @@ namespace tfs {         // Tree Frog Software
         inline bool bad(   void ) const { return m_stream.bad();  }
         inline bool operator!()   const { return !m_stream; }
         
-        bool write( const char *buffer, unsigned long count );  // All of the writes go through here.
+        bool write( const char *buffer, unsigned long count );  // All of the write operationss go through here.
         
         inline bool write( const unsigned char *buffer, unsigned long count ) { return write((const char *) buffer, count ); }
         
@@ -69,22 +69,22 @@ namespace tfs {         // Tree Frog Software
         inline bool bad(   void ) const { return m_stream.bad();  }
         inline bool operator!()   const { return !m_stream; }
 
-        bool read( char *buffer, unsigned long count );
+        bool read( char *buffer, unsigned long count );         // All of the read operations go through here.
 
         inline bool read( unsigned char *buffer, unsigned long count ) { return read((char*) buffer, count ); }
 
-        inline bool read( bool               &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( long double        &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( double             &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( float              &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( unsigned long long &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( unsigned long      &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( unsigned int       &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( unsigned short     &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( long long          &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( long               &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( int                &value ) { return read(( char *) &value, sizeof( value )); }
-        inline bool read( short              &value ) { return read(( char *) &value, sizeof( value )); }
+        inline bool read( bool               &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( long double        &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( double             &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( float              &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( unsigned long long &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( unsigned long      &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( unsigned int       &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( unsigned short     &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( long long          &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( long               &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( int                &value ) { return read((char *) &value, sizeof( value )); }
+        inline bool read( short              &value ) { return read((char *) &value, sizeof( value )); }
         
         inline InBinaryStream& operator>>(bool               &value) { read((char*) &value, sizeof( value )); return *this; }
         inline InBinaryStream& operator>>(long double        &value) { read((char*) &value, sizeof( value )); return *this; }

@@ -16,6 +16,7 @@ namespace tfs {         // Tree Frog Software
     class OutDnnStream : public OutBinaryStream {
     protected:
         bool writeHeader( void );
+        bool writeEnum( int value );
 
     public:
         OutDnnStream( const char *path );
@@ -26,8 +27,8 @@ namespace tfs {         // Tree Frog Software
     
     class InDnnStream : public InBinaryStream {
     protected:
-        unsigned short readHeader( void );          // Returns the content version
-
+        bool readHeader( unsigned short &contentVersion );
+        
     public:
         InDnnStream( const char *path );
 

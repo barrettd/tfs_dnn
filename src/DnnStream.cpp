@@ -17,7 +17,7 @@
 // Content tag,     char buffer,    4 bytes - "dnn", "net", "dat", etc.
 // Content version, unsigned short, 2 bytes - 1
 // Byte order test, unsigned long,  8 bytes - 0x0102030405060708
-// Type sizes,      char buffer,    8 bytes - 1,2,8,8,0,0,0,0
+// Type sizes,      char buffer,    8 bytes - 1,2,4,8,16,0,0,0,0
 // Padding,         char buffer,    4 bytes - 0,0,0,0
 // ----------------------------------------------------------------------------
 // Total bytes:                    32 bytes - aligned to 8 byte boundary
@@ -27,6 +27,13 @@
 #include "Error.h"
 
 namespace tfs {         // Tree Frog Software
+    
+    enum ObjectType {
+        OBJECT_DNN = 0,
+        OBJECT_LAYER,
+        
+        OBJECT_COUNT        // Used for range checking.
+    };
  
     static const int NN_FILE_TAG_LENGTH  = 4;   // "tfs", "dnn", "net", "dat", etc.
 
@@ -59,11 +66,14 @@ namespace tfs {         // Tree Frog Software
         }
         unsigned char buffer[ TYPE_COUNT ];
         memset( buffer, 0, sizeof( buffer ));                   // Sizes of our base types
-        buffer[0] = (unsigned char) sizeof( bool );
-        buffer[1] = (unsigned char) sizeof( unsigned short );
-        buffer[2] = (unsigned char) sizeof( unsigned long  );
-        buffer[3] = (unsigned char) sizeof( float );
-        buffer[4] = (unsigned char) sizeof( double );           // [5] = [6] = [7] = 0;
+        buffer[0] = (unsigned char) sizeof( bool );                 // 1
+        buffer[1] = (unsigned char) sizeof( unsigned short );       // 2
+        buffer[2] = (unsigned char) sizeof( unsigned int );         // 4
+        buffer[3] = (unsigned char) sizeof( unsigned long  );       // 8
+        buffer[4] = (unsigned char) sizeof( unsigned long long );   // 8
+        buffer[5] = (unsigned char) sizeof( float );                // 4
+        buffer[6] = (unsigned char) sizeof( double );               // 8
+        buffer[7] = (unsigned char) sizeof( long double );          // 16
         if( !this->write( buffer, sizeof( buffer ))) {          // (8) bytes
             return false;
         }
@@ -71,48 +81,54 @@ namespace tfs {         // Tree Frog Software
         return this->write( buffer, PADDING_LENGTH );           // (4) bytes of padding (zeros)
     }
     
-    unsigned short
-    InDnnStream::readHeader( void ) {
+    bool
+    InDnnStream::readHeader( unsigned short &contentVersion ) {
+        contentVersion = 0;
         if( m_stream.bad()) {
-            return 0;
+            return false;
         }
+        // Check for our start tag: "tfs"
         char tag_buffer[ NN_FILE_TAG_LENGTH ];
-        read( tag_buffer, NN_FILE_TAG_LENGTH );
-        if( strncmp( tag_buffer, START_TAG, NN_FILE_TAG_LENGTH ) != 0 ) {   // Check for our start tag: "tfs"
-            return 0;
+        if( !read( tag_buffer, NN_FILE_TAG_LENGTH ) || strncmp( tag_buffer, START_TAG, NN_FILE_TAG_LENGTH ) != 0 ) {
+            return false;
         }
+        
+        // Header format version, different from the content version.
         unsigned short format_version = 0;
-        read( format_version );
-        if( format_version != HEADER_VERSION ) {                            // Header format version, different from the content version.
-            return 0;
+        if( !read( format_version ) || format_version != HEADER_VERSION ) {
+            return false;
         }
-        read( tag_buffer, NN_FILE_TAG_LENGTH );
-        if( strncmp( tag_buffer, DNN_TAG, NN_FILE_TAG_LENGTH ) != 0 ) {     // Check for our content tag: "dnn"
-            return 0;
+        
+        // Check for our content tag: "dnn"
+        if( !read( tag_buffer, NN_FILE_TAG_LENGTH ) || strncmp( tag_buffer, DNN_TAG, NN_FILE_TAG_LENGTH ) != 0 ) {
+            return false;
         }
-        unsigned short content_version = 0;             // Version of the content (after this header)
-        read( content_version );
+        if( !read( contentVersion )) {
+            return false;
+        }
         unsigned long  byte_order_test = 0;
-        read( byte_order_test );
-        if( byte_order_test != BYTE_ORDER_TEST ) {      // Check that the byte order is as expected
-            return 0;
+        if( !read( byte_order_test ) || byte_order_test != BYTE_ORDER_TEST ) {      // Check that the byte order is as expected
+            return false;
         }
         unsigned char buffer[ TYPE_COUNT ];
         memset( buffer, 0, sizeof( buffer ));
         if( !read( buffer, sizeof( buffer ))) {
-            return 0;
+            return false;
         }
-        if( buffer[0] != (unsigned char) sizeof( bool )           ||    // Check the sizes of our base types.
-            buffer[1] != (unsigned char) sizeof( unsigned short ) ||
-            buffer[2] != (unsigned char) sizeof( unsigned long  ) ||
-            buffer[3] != (unsigned char) sizeof( float  )         ||
-            buffer[4] != (unsigned char) sizeof( double )) {
-            return 0;
+        if( buffer[0] != (unsigned char) sizeof( bool )               ||    // Check the sizes of our base types.
+            buffer[1] != (unsigned char) sizeof( unsigned short )     ||
+            buffer[2] != (unsigned char) sizeof( unsigned int )       ||
+            buffer[3] != (unsigned char) sizeof( unsigned long  )     ||
+            buffer[4] != (unsigned char) sizeof( unsigned long long ) ||
+            buffer[5] != (unsigned char) sizeof( float  )             ||
+            buffer[6] != (unsigned char) sizeof( double )             ||
+            buffer[7] != (unsigned char) sizeof( long double )) {
+            return false;
         }
-        if( !read( buffer, PADDING_LENGTH )) {          // Consume padding at end of header.
-            return 0;
+        if( !read( buffer, PADDING_LENGTH )) {  // Consume padding at end of header.
+            return false;
         }
-        return content_version;                         // Return the content version
+        return true;                            // Return the content version
     }
     
     bool
@@ -131,14 +147,15 @@ namespace tfs {         // Tree Frog Software
         DnnLayerInput *inputLayer  = dnn.getLayerInput();
         DnnLayer      *outputLayer = dnn.getLayerOutput();
         
-
+        
         return true;
     }
 
 
     Dnn*
     InDnnStream::readDnn( bool trainable ) {
-        if( readHeader() != CONTENT_VERSION ) {
+        unsigned short contentVersion = 0;
+        if( !readHeader( contentVersion ) || contentVersion != CONTENT_VERSION ) {
             log_error( "Unable to read header" );
             return 0;
         }
