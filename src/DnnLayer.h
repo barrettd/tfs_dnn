@@ -12,7 +12,7 @@
 namespace tfs {
     
     enum LayerType {
-        LAYER_INPUT = 0,
+        LAYER_INPUT = 0,                        // input layer
         LAYER_CONVOLUTION,                      // conv
         LAYER_DROPOUT,                          // dropout
         LAYER_FULLY_CONNECTED,                  // fc
@@ -25,12 +25,13 @@ namespace tfs {
         LAYER_SOFTMAX,                          // softmax
         LAYER_SUPPORT_VECTOR_MACHINE,           // svm
         LAYER_TANH,                             // tanh
-        LAYER_COUNT
+        
+        LAYER_COUNT                             // This is not a layer type, but a max value used when range checking.
     };
     
     class DnnLayer {                    // Base class of all layers.
     protected:
-        const LayerType m_layer_type;   // Used in serialization.
+        const LayerType m_layer_type;   // Used in serialization (low impact RTTI)
         const Matrix   *m_in_a;         // Input:    Activations of previous layer, if any.
               Matrix   *m_in_dw;        // Input:    dw of previous layer, if any.
         Matrix         *m_w;            // Internal: Weights, to act on input activations from previous layer

@@ -97,7 +97,7 @@ namespace tfs {         // Tree Frog Software
             }
         }
 
-        inline void zero( void ) {                         // Fill matrix with zeros
+        inline void zero( void ) {                  // Fill matrix with zeros
             if( m_data != 0 && m_length > 0 ) {
                 memset( m_data, 0, m_length );      // Yields IEEE 0 for both integer and real valued variables.
             }
