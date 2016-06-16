@@ -70,9 +70,9 @@ OBJS = 	$(OBJ_DIR)Dnn.o\
         $(OBJ_DIR)DnnTrainerSGD.o\
         $(OBJ_DIR)Error.o\
         $(OBJ_DIR)Utility.o\
-        $(OBJ_DIR)CsvFile.o
-
-
+        $(OBJ_DIR)CsvFile.o\
+        $(OBJ_DIR)BinaryStream.o\
+        $(OBJ_DIR)DnnStream.o
 
 # -----------------------------------------------------------------------------
 # We list the individual source file dependencies here.
@@ -100,6 +100,8 @@ $(OBJ_DIR)DnnTrainerSGD.o                       : DnnTrainerSGD.cpp DnnTrainerSG
 $(OBJ_DIR)Error.o                               : Error.cpp Error.h
 $(OBJ_DIR)Utility.o                             : Utility.cpp Utility.h
 $(OBJ_DIR)CsvFile.o                             : CsvFile.cpp CsvFile.h
+$(OBJ_DIR)BinaryStream.o                        : BinaryStream.cpp BinaryStream.h
+$(OBJ_DIR)DnnStream.o                           : DnnStream.cpp DnnStream.h
 
 
 # -----------------------------------------------------------------------------

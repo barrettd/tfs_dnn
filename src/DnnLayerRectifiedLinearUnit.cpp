@@ -56,7 +56,7 @@ namespace tfs {
         // -----------------------------------------------------------------------------------
         // virtual: Back propagate, used with backprop()
         // Backpropagate output dw to input dw, except that negative values are clamped to zero.
-        // ok 11 June 2016
+        // ok 14 June 2016
         // -----------------------------------------------------------------------------------
         if( m_in_dw == 0 || m_out_dw == 0  ) {
             return log_error( "Not configured" );
@@ -67,11 +67,11 @@ namespace tfs {
               DNN_NUMERIC *       dst = m_in_dw->data();
 
         while( src < end ) {
-            if( *val++ <= 0.0 ) {
-                *dst++ = 0.0;
+            if( *val++ <= 0.0 ) {   // Use the output value to deturmine thesholding
+                *dst++ = 0.0;       // Input gradiant = 0.0;
                 src++;
             } else {
-                *dst++ = *src++;
+                *dst++ = *src++;    // Input gradiant = output gradiant.
             }
         }
         return true;

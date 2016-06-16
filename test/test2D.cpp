@@ -239,13 +239,6 @@ namespace tfs {
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
-//        setUpDataSimple( data, label );
-//        
-//        localTest2d( dnn, data, label );
-//        
-//        data.clear();
-//        label.clear();
-
         setUpDataSpiral( data, label, 100.0 );
         
         localTest2d( dnn, data, label );

@@ -48,7 +48,7 @@ namespace tfs {
             return log_error( "Probablity did not change for the better: %f to %f", probability1, probability2 );
         }
         
-        log_info( "Test 2 Layer - Start" );
+        log_info( "Test 2 Layer - End" );
         return true;
     }
 

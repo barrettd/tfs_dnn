@@ -4,6 +4,7 @@
 //  Created by Barrett Davis on 5/10/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
+// TODO: add flip horizontal and flip vertical, subsample
 
 #ifndef Matrix_h
 #define Matrix_h

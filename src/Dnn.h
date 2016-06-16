@@ -80,14 +80,6 @@ namespace tfs {     // Tree Frog Software
         DNN_NUMERIC getCostLoss( const Matrix     &expectation );
         DNN_NUMERIC getCostLoss( const DNN_INTEGER expectation );
         
-        // Binary file I/O
-        bool save( const char *file_path ) const;
-        bool load( const char *file_path );
-
-        // JSON file I/O, compatible with ConvNetJs 
-        bool saveJson( const char *file_path ) const;
-        bool loadJson( const char *file_path );
-
     };
     
 
