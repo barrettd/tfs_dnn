@@ -22,6 +22,7 @@
 // ----------------------------------------------------------------------------
 // Total bytes:                    32 bytes - aligned to 8 byte boundary
 // ----------------------------------------------------------------------------
+#include "DnnLayers.h"
 #include "DnnStream.h"
 #include "Error.h"
 
@@ -127,6 +128,10 @@ namespace tfs {         // Tree Frog Software
         if( !write( layerCount )) {
             return false;
         }
+        DnnLayerInput *inputLayer  = dnn.getLayerInput();
+        DnnLayer      *outputLayer = dnn.getLayerOutput();
+        
+
         return true;
     }
 
@@ -145,12 +150,11 @@ namespace tfs {         // Tree Frog Software
         if( !read( layerCount )) {
             return 0;
         }
-        if( savedIsTrainable ) {
-            log_info( "trainable layer count = %lu", layerCount );
-        } else {
-            log_info( "not trainable layer count = %lu", layerCount );
-        }
-        return 0;
+        Dnn *dnn = new Dnn( trainable );
+        
+
+        
+        return dnn;
     }
 
 }   // namespace tfs
