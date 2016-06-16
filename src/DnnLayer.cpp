@@ -9,8 +9,8 @@
 
 namespace tfs {
     
-    DnnLayer::DnnLayer( const char *name ):
-    m_name( name ),
+    DnnLayer::DnnLayer( const LayerType layerType ):
+    m_layer_type( layerType ),
     m_in_a(   0 ), m_in_dw(   0 ),
     m_w(      0 ), m_dw(      0 ),
     m_bias_w( 0 ), m_bias_dw( 0 ),
@@ -20,8 +20,8 @@ namespace tfs {
         // Constructor
     }
     
-    DnnLayer::DnnLayer( const char *name, DnnLayer *previousLayer ) :
-    m_name( name ),
+    DnnLayer::DnnLayer( const LayerType layerType, DnnLayer *previousLayer ) :
+    m_layer_type( layerType ),
     m_in_a(   0 ), m_in_dw(   0 ),
     m_w(      0 ), m_dw(      0 ),
     m_bias_w( 0 ), m_bias_dw( 0 ),
@@ -90,9 +90,9 @@ namespace tfs {
         return;
     }
 
-    const char*
-    DnnLayer::name( void ) const {
-        return m_name;
+    LayerType
+    DnnLayer::layerType( void ) const {
+        return m_layer_type;
     }
     
     Matrix*

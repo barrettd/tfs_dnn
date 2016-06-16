@@ -16,8 +16,6 @@ namespace tfs {
     protected:
         
     public:
-        static const char *className( void );
-
         DnnLayerLocalResponseNormalization( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerLocalResponseNormalization( void );
         

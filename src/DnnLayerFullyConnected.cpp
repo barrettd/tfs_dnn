@@ -9,15 +9,8 @@
 
 namespace tfs {
     
-    static const char *NAME = "fc";
-
-    const char*
-    DnnLayerFullyConnected::className( void ) {
-        return NAME;
-    }
-
     DnnLayerFullyConnected::DnnLayerFullyConnected( DnnLayer *previousLayer, unsigned long neuronCount, const bool trainable ):
-    DnnLayer( NAME, previousLayer ),
+    DnnLayer( LAYER_FULLY_CONNECTED, previousLayer ),
     m_neuron_count( neuronCount ) {         // Constructor
         m_l1_decay_mul = 0.0;
         m_l2_decay_mul = 1.0;

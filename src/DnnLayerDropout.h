@@ -15,8 +15,6 @@ namespace tfs {
     protected:
 
     public:
-        static const char *className( void );
-
         DnnLayerDropout( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerDropout( void );
         

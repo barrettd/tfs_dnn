@@ -11,34 +11,51 @@
 
 namespace tfs {
     
+    enum LayerType {
+        LAYER_INPUT = 0,
+        LAYER_CONVOLUTION,                      // conv
+        LAYER_DROPOUT,                          // dropout
+        LAYER_FULLY_CONNECTED,                  // fc
+        LAYER_LOCAL_RESPONSE_NORMALIZATION,     // lrn
+        LAYER_MAXOUT,                           // maxout
+        LAYER_POOL,                             // pool
+        LAYER_RECTIFIED_LINEAR_UNIT,            // relu
+        LAYER_REGRESSION,                       // regression
+        LAYER_SIGMOID,                          // sigmoid
+        LAYER_SOFTMAX,                          // softmax
+        LAYER_SUPPORT_VECTOR_MACHINE,           // svm
+        LAYER_TANH,                             // tanh
+        LAYER_COUNT
+    };
+    
     class DnnLayer {                    // Base class of all layers.
     protected:
-        const char *m_name;             // Used in serialization.
-        const Matrix *m_in_a;           // Input:    Activations of previous layer, if any.
-              Matrix *m_in_dw;          // Input:    dw of previous layer, if any.
-        Matrix       *m_w;              // Internal: Weights, to act on input activations from previous layer
-        Matrix       *m_dw;             // Internal: Weight derivative, will be null when not training.
-        Matrix       *m_bias_w;         // Internal: Bias, to act on input activations from previous layer
-        Matrix       *m_bias_dw;        // Internal: Bias derivative, will be null when not training.
-        Matrix       *m_out_a;          // Output:   Activations, output of a neuron.
-        Matrix       *m_out_dw;         // Output:   Weight derivative, will be null when not training.
-        DNN_NUMERIC   m_l1_decay_mul;
-        DNN_NUMERIC   m_l2_decay_mul;
+        const LayerType m_layer_type;   // Used in serialization.
+        const Matrix   *m_in_a;         // Input:    Activations of previous layer, if any.
+              Matrix   *m_in_dw;        // Input:    dw of previous layer, if any.
+        Matrix         *m_w;            // Internal: Weights, to act on input activations from previous layer
+        Matrix         *m_dw;           // Internal: Weight derivative, will be null when not training.
+        Matrix         *m_bias_w;       // Internal: Bias, to act on input activations from previous layer
+        Matrix         *m_bias_dw;      // Internal: Bias derivative, will be null when not training.
+        Matrix         *m_out_a;        // Output:   Activations, output of a neuron.
+        Matrix         *m_out_dw;       // Output:   Weight derivative, will be null when not training.
+        DNN_NUMERIC     m_l1_decay_mul;
+        DNN_NUMERIC     m_l2_decay_mul;
 
-        DnnLayer     *m_prev_layer;
-        DnnLayer     *m_next_layer;
+        DnnLayer       *m_prev_layer;
+        DnnLayer       *m_next_layer;
         
         void setup( const bool trainable = true );
         void teardown( void );
         
         
     public:
-        DnnLayer( const char *name );
-        DnnLayer( const char *name, DnnLayer *previousLayer );
+        DnnLayer( const LayerType layerType );
+        DnnLayer( const LayerType layerType, DnnLayer *previousLayer );
         virtual ~DnnLayer( void );
         
         // Layer attributes:
-        const char *name( void ) const;
+        LayerType  layerType( void ) const;
         Matrix     *outA(  void );              // Output Neuron Activations
         Matrix     *outDw( void );              // d/dw Output Neuron Activations
         Matrix     *weights(  void );           // Internal Neuron connection weights   (w)

@@ -14,8 +14,6 @@ namespace tfs {
     class DnnLayerMaxout : public DnnLayer {
     protected:
     public:
-        static const char *className( void );
-
         DnnLayerMaxout( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerMaxout( void );
         

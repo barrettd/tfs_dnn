@@ -10,15 +10,8 @@
 
 namespace tfs {
     
-    static const char *NAME = "pool";
-
-    const char*
-    DnnLayerPool::className( void ) {
-        return NAME;
-    }
-
     DnnLayerPool::DnnLayerPool( DnnLayer *previousLayer, unsigned long side, unsigned long stride, unsigned long pad, const bool trainable ):
-    DnnLayer( NAME, previousLayer ),
+    DnnLayer( LAYER_POOL, previousLayer ),
     m_side(     side ),
     m_stride( stride ),
     m_pad(       pad ),

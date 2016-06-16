@@ -14,8 +14,6 @@ namespace tfs {
     class DnnLayerSupportVectorMachine : public DnnLayer {
     protected:
     public:
-        static const char *className( void );
-
         DnnLayerSupportVectorMachine( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerSupportVectorMachine( void );
         

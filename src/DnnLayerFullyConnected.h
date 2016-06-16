@@ -18,8 +18,6 @@ namespace tfs {
         void setup( const bool trainable = true );
         
     public:
-        static const char *className( void );
-
         DnnLayerFullyConnected( DnnLayer *previousLayer, unsigned long neuronCount, const bool trainable = true );
         virtual ~DnnLayerFullyConnected( void );
 

@@ -9,15 +9,8 @@
 
 namespace tfs {
     
-    static const char *NAME = "relu";
-
-    const char*
-    DnnLayerRectifiedLinearUnit::className( void ) {
-        return NAME;
-    }
-
     DnnLayerRectifiedLinearUnit::DnnLayerRectifiedLinearUnit( DnnLayer *previousLayer, const bool trainable ):
-    DnnLayer( NAME, previousLayer ) {
+    DnnLayer( LAYER_RECTIFIED_LINEAR_UNIT, previousLayer ) {
         // Constructor
         setup( trainable );
     }

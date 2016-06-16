@@ -51,9 +51,6 @@ namespace tfs {
 
         bool addLayerSoftmax( unsigned long numberOfClasses );
         
-        
-
-        
     };
 
 }   // namespace tfs

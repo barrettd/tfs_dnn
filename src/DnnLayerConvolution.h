@@ -21,8 +21,6 @@ namespace tfs {
         void setup( const bool trainable = true );
 
     public:
-        static const char *className( void );
-
         DnnLayerConvolution( DnnLayer    *previousLayer,
                             unsigned long side,             // Square filter size (prefer odd size)
                             unsigned long filterCount,

@@ -14,8 +14,6 @@ namespace tfs {
     class DnnLayerRegression : public DnnLayer {
     protected:
     public:
-        static const char *className( void );
-
         DnnLayerRegression( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerRegression( void );
         

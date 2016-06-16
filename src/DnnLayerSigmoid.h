@@ -14,8 +14,6 @@ namespace tfs {
     class DnnLayerSigmoid : public DnnLayer {
     protected:
     public:
-        static const char *className( void );
-
         DnnLayerSigmoid( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerSigmoid( void );
         

@@ -15,8 +15,6 @@ namespace tfs {
     protected:
  
     public:
-        static const char *className( void );
-
         DnnLayerRectifiedLinearUnit( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerRectifiedLinearUnit( void );
         

@@ -21,8 +21,6 @@ namespace tfs {
         void setup( const bool trainable = true );
 
     public:
-        static const char *className( void );
-
         DnnLayerPool( DnnLayer *previousLayer,
                      unsigned long side,            // Size of the square side
                      unsigned long stride = 2,

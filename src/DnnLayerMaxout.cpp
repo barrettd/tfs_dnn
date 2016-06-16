@@ -9,15 +9,8 @@
 
 namespace tfs {
     
-    static const char *NAME = "maxout";
-
-    const char*
-    DnnLayerMaxout::className( void ) {
-        return NAME;
-    }
-
     DnnLayerMaxout::DnnLayerMaxout( DnnLayer *previousLayer, const bool trainable ):
-    DnnLayer( NAME, previousLayer ) {
+    DnnLayer( LAYER_MAXOUT, previousLayer ) {
         // Constructor
     }
     

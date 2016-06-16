@@ -14,8 +14,6 @@ namespace tfs {
     class DnnLayerTanh : public DnnLayer {      // tanh( radians ) output is between [-1.0, 1.0]
     protected:
     public:
-        static const char *className( void );
-
         DnnLayerTanh( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerTanh( void );
         

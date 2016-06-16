@@ -10,15 +10,8 @@
 
 namespace tfs {
     
-    static const char *NAME = "tanh";
-
-    const char*
-    DnnLayerTanh::className( void ) {
-        return NAME;
-    }
-    
     DnnLayerTanh::DnnLayerTanh( DnnLayer *previousLayer, const bool trainable ):
-    DnnLayer( NAME, previousLayer ) {
+    DnnLayer( LAYER_TANH, previousLayer ) {
         // Constructor
         if( previousLayer != 0 ) {  // previousLayer should not be null.
             setup( trainable );

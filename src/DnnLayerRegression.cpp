@@ -9,15 +9,8 @@
 
 namespace tfs {
     
-    static const char *NAME = "regression";
-
-    const char*
-    DnnLayerRegression::className( void ) {
-        return NAME;
-    }
-    
     DnnLayerRegression::DnnLayerRegression( DnnLayer *previousLayer, const bool trainable ):
-    DnnLayer( NAME, previousLayer ) {
+    DnnLayer( LAYER_REGRESSION, previousLayer ) {
         // Constructor
         if( previousLayer != 0 ) {
 //            setup( previousLayer->outA(), trainable );

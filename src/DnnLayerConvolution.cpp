@@ -9,20 +9,13 @@
 
 namespace tfs {
   
-    static const char *NAME = "conv";
-
-    const char*
-    DnnLayerConvolution::className( void ) {
-        return NAME;
-    }
-
     DnnLayerConvolution::DnnLayerConvolution( DnnLayer *previousLayer,
                                              unsigned long side,
                                              unsigned long filterCount,
                                              unsigned long stride,
                                              unsigned long pad,
                                              const bool trainable ):
-    DnnLayer( NAME, previousLayer ),
+    DnnLayer( LAYER_CONVOLUTION, previousLayer ),
     m_side(    side ),
     m_stride(  stride ),
     m_pad(     pad ),

@@ -18,8 +18,6 @@ namespace tfs {
         void setup( const bool trainable = true );
 
     public:
-        static const char *className( void );
-
         DnnLayerSoftmax( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerSoftmax( void );
       

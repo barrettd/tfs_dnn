@@ -9,15 +9,8 @@
 
 namespace tfs {
     
-    static const char *NAME = "svm";
-
-    const char*
-    DnnLayerSupportVectorMachine::className( void ) {
-        return NAME;
-    }
-
     DnnLayerSupportVectorMachine::DnnLayerSupportVectorMachine( DnnLayer *previousLayer, const bool trainable ):
-    DnnLayer( NAME, previousLayer ) {
+    DnnLayer( LAYER_SUPPORT_VECTOR_MACHINE, previousLayer ) {
         // Constructor
     }
     

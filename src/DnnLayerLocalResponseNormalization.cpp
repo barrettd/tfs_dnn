@@ -9,15 +9,8 @@
 
 namespace tfs {
     
-    static const char *NAME = "lrn";
-    
-    const char*
-    DnnLayerLocalResponseNormalization::className( void ) {
-        return NAME;
-    }
-    
     DnnLayerLocalResponseNormalization::DnnLayerLocalResponseNormalization( DnnLayer *previousLayer, const bool trainable ):
-    DnnLayer( NAME, previousLayer ) {
+    DnnLayer( LAYER_LOCAL_RESPONSE_NORMALIZATION, previousLayer ) {
         // Constructor
     }
     

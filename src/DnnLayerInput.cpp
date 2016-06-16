@@ -9,15 +9,8 @@
 
 namespace tfs {
 
-    static const char *NAME = "input";
-    
-    const char*
-    DnnLayerInput::className( void ) {
-        return NAME;
-    }
-    
     DnnLayerInput::DnnLayerInput( unsigned long xx, unsigned long yy, unsigned long zz, const bool trainable, const bool retain_dw  ) :
-    DnnLayer( NAME ) {                              // Constructor
+    DnnLayer( LAYER_INPUT ) {                              // Constructor
         m_out_a = new Matrix( xx, yy, zz );         // Input data copied to here.
         if( retain_dw ) {
             m_out_dw = new Matrix( xx, yy, zz );    // dw is generally unused here. Lower layers need to check for dw == 0.
