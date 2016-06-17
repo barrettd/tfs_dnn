@@ -89,8 +89,7 @@ namespace tfs {         // Tree Frog Software
             return false;
         }
         // Check for our start tag: "tfs"
-        char tag_buffer[ NN_FILE_TAG_LENGTH ];
-        if( !read( tag_buffer, NN_FILE_TAG_LENGTH ) || strncmp( tag_buffer, START_TAG, NN_FILE_TAG_LENGTH ) != 0 ) {
+        if( !readTag( START_TAG )) {
             return false;
         }
         // Header format version, different from the content version.
@@ -99,7 +98,7 @@ namespace tfs {         // Tree Frog Software
             return false;
         }
         // Check for our content tag: "dnn"
-        if( !read( tag_buffer, NN_FILE_TAG_LENGTH ) || strncmp( tag_buffer, DNN_TAG, NN_FILE_TAG_LENGTH ) != 0 ) {
+        if( !readTag( DNN_TAG )) {
             return false;
         }
         if( !read( contentVersion )) {
@@ -130,6 +129,20 @@ namespace tfs {         // Tree Frog Software
         return true;                            // Return the content version
     }
     
+    bool
+    OutDnnStream::writeFooter( void ) {
+        return write( END_TAG, NN_FILE_TAG_LENGTH );
+    }
+
+    bool
+    InDnnStream::readTag( const char *expected ) {
+        if( expected == 0 || *expected == 0 ) {
+            return false;
+        }
+        char tag_buffer[ NN_FILE_TAG_LENGTH ];
+        return read( tag_buffer, NN_FILE_TAG_LENGTH ) && strncmp( tag_buffer, expected, NN_FILE_TAG_LENGTH ) == 0;
+    }
+
     bool
     InDnnStream::readEnum( int &value, int maxValue ) {
         if( !read( value )) {
@@ -363,7 +376,7 @@ namespace tfs {         // Tree Frog Software
             }
             layer = layer->getNextLayer();
         }
-        return write( END_TAG, NN_FILE_TAG_LENGTH );
+        return writeFooter();
     }
     
     Dnn*
@@ -400,23 +413,27 @@ namespace tfs {         // Tree Frog Software
                 return 0;
             }
             switch ( layerType ) {
-                case LAYER_INPUT:                        readLayerInput( *dnn ); break;    // input
-                case LAYER_CONVOLUTION:                  readLayerConvolution( *dnn ); break;    // conv
-                case LAYER_DROPOUT:                      readLayerDropout( *dnn ); break;    // dropout
-                case LAYER_FULLY_CONNECTED:              readLayerFullyConnected( *dnn ); break;    // fc
+                case LAYER_INPUT:                        readLayerInput(                      *dnn ); break;    // input
+                case LAYER_CONVOLUTION:                  readLayerConvolution(                *dnn ); break;    // conv
+                case LAYER_DROPOUT:                      readLayerDropout(                    *dnn ); break;    // dropout
+                case LAYER_FULLY_CONNECTED:              readLayerFullyConnected(             *dnn ); break;    // fc
                 case LAYER_LOCAL_RESPONSE_NORMALIZATION: readLayerLocalResponseNormalization( *dnn ); break;    // lrn
-                case LAYER_MAXOUT:                       readLayerMaxout( *dnn ); break;    // maxout
-                case LAYER_POOL:                         readLayerPool( *dnn ); break;    // pool
-                case LAYER_RECTIFIED_LINEAR_UNIT:        readLayerRectifiedLinearUnit( *dnn ); break;    // relu
-                case LAYER_REGRESSION:                   readLayerRegression( *dnn ); break;    // regression
-                case LAYER_SIGMOID:                      readLayerSigmoid( *dnn ); break;    // sigmoid
-                case LAYER_SOFTMAX:                      readLayerSoftmax( *dnn ); break;    // softmax
-                case LAYER_SUPPORT_VECTOR_MACHINE:       readLayerSupportVectorMachine( *dnn ); break;    // svm
-                case LAYER_TANH:                         readLayerTanh( *dnn ); break;    // tanh
+                case LAYER_MAXOUT:                       readLayerMaxout(                     *dnn ); break;    // maxout
+                case LAYER_POOL:                         readLayerPool(                       *dnn ); break;    // pool
+                case LAYER_RECTIFIED_LINEAR_UNIT:        readLayerRectifiedLinearUnit(        *dnn ); break;    // relu
+                case LAYER_REGRESSION:                   readLayerRegression(                 *dnn ); break;    // regression
+                case LAYER_SIGMOID:                      readLayerSigmoid(                    *dnn ); break;    // sigmoid
+                case LAYER_SOFTMAX:                      readLayerSoftmax(                    *dnn ); break;    // softmax
+                case LAYER_SUPPORT_VECTOR_MACHINE:       readLayerSupportVectorMachine(       *dnn ); break;    // svm
+                case LAYER_TANH:                         readLayerTanh(                       *dnn ); break;    // tanh
                 default: log_error( "Unknown layer type: %d", layerType );
             }
         }
         
+        if( !readTag( END_TAG )) {
+            delete dnn;
+            return 0;
+        }
         return dnn;
     }
 

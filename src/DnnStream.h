@@ -33,6 +33,7 @@ namespace tfs {         // Tree Frog Software
     class OutDnnStream : public OutBinaryStream {
     protected:
         bool writeHeader( void );
+        bool writeFooter( void );
         bool writeLayerBase( DnnLayer                       *layer );
         bool writeLayer( DnnLayerInput                      *layer );    // input
         bool writeLayer( DnnLayerConvolution                *layer );    // conv
@@ -58,6 +59,7 @@ namespace tfs {         // Tree Frog Software
     class InDnnStream : public InBinaryStream {
     protected:
         bool readHeader( unsigned short &contentVersion );
+        bool readTag( const char *expected );
         bool readEnum( int &value, int maxValue );
 
         bool readLayerBase( DnnLayer *layer );
