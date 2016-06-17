@@ -61,8 +61,11 @@ namespace tfs {     // Tree Frog Software
         const DNN_NUMERIC   *getDataInputEnd( void );
               DNN_NUMERIC   *getDataOutput(   void );
         const DNN_NUMERIC   *getDataOutputEnd(void );
+        
         Matrix        *getMatrixInput(  void );
         Matrix        *getMatrixOutput( void );
+        
+        const DnnLayerInput *getLayerInputReadOnly( void ) const;
         DnnLayerInput *getLayerInput(   void );
         DnnLayer      *getLayerOutput(  void );
         

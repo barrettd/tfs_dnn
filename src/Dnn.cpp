@@ -223,6 +223,11 @@ namespace tfs {
         return matrix;
     }
     
+    const DnnLayerInput*
+    Dnn::getLayerInputReadOnly( void ) const {
+        return m_layer_input;
+    }
+
     DnnLayerInput*
     Dnn::getLayerInput(  void ) {
         return m_layer_input;

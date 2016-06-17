@@ -31,6 +31,7 @@ namespace tfs {         // Tree Frog Software
     enum ObjectType {
         OBJECT_DNN = 0,
         OBJECT_LAYER,
+        OBJECT_MATRIX,
         
         OBJECT_COUNT        // Used for range checking.
     };
@@ -130,11 +131,6 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeFooter( void ) {
-        return write( END_TAG, NN_FILE_TAG_LENGTH );
-    }
-
-    bool
     InDnnStream::readTag( const char *expected ) {
         if( expected == 0 || *expected == 0 ) {
             return false;
@@ -153,9 +149,55 @@ namespace tfs {         // Tree Frog Software
         }
         return true;
     }
-
+    
     bool
-    OutDnnStream::writeLayerBase( DnnLayer *layer ) {
+    OutDnnStream::writeMatrix( const Matrix *matrix ) {
+        if( !write( OBJECT_MATRIX )) {
+            return log_error( "Unable to write matrix" );
+        }
+        const bool matrixIsNull = matrix == 0;
+        if( !write( matrixIsNull )) {
+            return log_error( "Unable to write matrix null / not null boolean" );
+        }
+        if( matrixIsNull ) {
+            return true;            // Our work here is done.
+        }
+        if( !write( matrix->aa()) || !write( matrix->bb()) || !write( matrix->cc()) || !write( matrix->dd())) {
+            return log_error( "Unable to write matrix dimensions" );
+        }
+        const DNN_NUMERIC    *data = matrix->dataReadOnly();
+        const unsigned long length = matrix->length();
+        return write((const char*) data, length );
+    }
+
+    Matrix*
+    InDnnStream::readMatrix( void ) {
+        bool matrixIsNull;
+        if( !read( matrixIsNull )) {
+            log_error( "Unable to read matrix null / not null boolean" );
+            return 0;
+        }
+        if( matrixIsNull ) {
+            return 0;
+        }
+        unsigned long aa, bb, cc, dd;
+        if( !read( aa ) || !read( bb ) || !read( cc ) || !read( dd )) {
+            log_error( "Unable to read matrix dimensions" );
+            return 0;
+        }
+        Matrix *matrix = new Matrix( aa, bb, cc, dd );
+        DNN_NUMERIC *data = matrix->data();
+        const unsigned long length = matrix->length();
+        if( !read((char*) data, length )) {
+            log_error( "Unable to read %lu bytes", length );
+            delete matrix;
+            return 0;
+        }
+        return matrix;
+    }
+    
+    bool
+    OutDnnStream::writeLayerBase( const DnnLayer *layer ) {
         if( layer == 0 || !write( OBJECT_LAYER ) || !write( layer->layerType())) {
             return log_error( "Unable to write basic layer data" );
         }
@@ -169,7 +211,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerInput *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerInput *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -182,7 +224,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerConvolution *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerConvolution *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -195,7 +237,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerDropout *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerDropout *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -208,7 +250,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerFullyConnected *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerFullyConnected *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -221,7 +263,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerLocalResponseNormalization *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerLocalResponseNormalization *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -234,7 +276,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerMaxout *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerMaxout *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -247,7 +289,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerPool *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerPool *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -260,7 +302,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerRectifiedLinearUnit *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerRectifiedLinearUnit *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -273,7 +315,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerRegression *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerRegression *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -286,7 +328,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerSigmoid *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerSigmoid *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -299,7 +341,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerSoftmax *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerSoftmax *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -312,7 +354,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerSupportVectorMachine *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerSupportVectorMachine *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -325,7 +367,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeLayer( DnnLayerTanh *layer ) {
+    OutDnnStream::writeLayer( const DnnLayerTanh *layer ) {
         if( !writeLayerBase( layer )) {
             return false;
         }
@@ -338,7 +380,7 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
-    OutDnnStream::writeDnn( Dnn &dnn ) {
+    OutDnnStream::writeDnn( const Dnn &dnn ) {
         if( !writeHeader()) {
             return log_error( "Unable to write header" );
         }
@@ -351,32 +393,35 @@ namespace tfs {         // Tree Frog Software
         }
         unsigned long layerCount = dnn.count();
         if( !write( layerCount )) {
-            return log_error( "Unable to write DNN layerCount" );;
+            return log_error( "Unable to write DNN layerCount" );
         }
-        DnnLayerInput *inputLayer  = dnn.getLayerInput();
-        writeLayer( inputLayer );
-        DnnLayer *layer = inputLayer->getNextLayer();
+        const DnnLayerInput *inputLayer = dnn.getLayerInputReadOnly();
+        if( !writeLayer( inputLayer )) {
+            return log_error( "Unable to write input layer" );
+        }
+        const DnnLayer *layer = inputLayer->getNextLayer();
         while( layer != 0 ) {
             const LayerType layerType = layer->layerType();
             switch ( layerType ) {
-                case LAYER_INPUT:                        writeLayer((DnnLayerInput*)                      layer ); break;    // input
-                case LAYER_CONVOLUTION:                  writeLayer((DnnLayerConvolution*)                layer ); break;    // conv
-                case LAYER_DROPOUT:                      writeLayer((DnnLayerDropout*)                    layer ); break;    // dropout
-                case LAYER_FULLY_CONNECTED:              writeLayer((DnnLayerFullyConnected*)             layer ); break;    // fc
-                case LAYER_LOCAL_RESPONSE_NORMALIZATION: writeLayer((DnnLayerLocalResponseNormalization*) layer ); break;    // lrn
-                case LAYER_MAXOUT:                       writeLayer((DnnLayerMaxout*)                     layer ); break;    // maxout
-                case LAYER_POOL:                         writeLayer((DnnLayerPool*)                       layer ); break;    // pool
-                case LAYER_RECTIFIED_LINEAR_UNIT:        writeLayer((DnnLayerRectifiedLinearUnit*)        layer ); break;    // relu
-                case LAYER_REGRESSION:                   writeLayer((DnnLayerRegression*)                 layer ); break;    // regression
-                case LAYER_SIGMOID:                      writeLayer((DnnLayerSigmoid*)                    layer ); break;    // sigmoid
-                case LAYER_SOFTMAX:                      writeLayer((DnnLayerSoftmax*)                    layer ); break;    // softmax
-                case LAYER_SUPPORT_VECTOR_MACHINE:       writeLayer((DnnLayerSupportVectorMachine*)       layer ); break;    // svm
-                case LAYER_TANH:                         writeLayer((DnnLayerTanh*)                       layer ); break;    // tanh
+                case LAYER_INPUT:                        writeLayer((const DnnLayerInput*)                      layer ); break;
+                case LAYER_CONVOLUTION:                  writeLayer((const DnnLayerConvolution*)                layer ); break;
+                case LAYER_DROPOUT:                      writeLayer((const DnnLayerDropout*)                    layer ); break;
+                case LAYER_FULLY_CONNECTED:              writeLayer((const DnnLayerFullyConnected*)             layer ); break;
+                case LAYER_LOCAL_RESPONSE_NORMALIZATION: writeLayer((const DnnLayerLocalResponseNormalization*) layer ); break;
+                case LAYER_MAXOUT:                       writeLayer((const DnnLayerMaxout*)                     layer ); break;
+                case LAYER_POOL:                         writeLayer((const DnnLayerPool*)                       layer ); break;
+                case LAYER_RECTIFIED_LINEAR_UNIT:        writeLayer((const DnnLayerRectifiedLinearUnit*)        layer ); break;
+                case LAYER_REGRESSION:                   writeLayer((const DnnLayerRegression*)                 layer ); break;
+                case LAYER_SIGMOID:                      writeLayer((const DnnLayerSigmoid*)                    layer ); break;
+                case LAYER_SOFTMAX:                      writeLayer((const DnnLayerSoftmax*)                    layer ); break;
+                case LAYER_SUPPORT_VECTOR_MACHINE:       writeLayer((const DnnLayerSupportVectorMachine*)       layer ); break;
+                case LAYER_TANH:                         writeLayer((const DnnLayerTanh*)                       layer ); break;
                 default: log_error( "Unknown layer type: %d", layerType );
             }
             layer = layer->getNextLayer();
         }
-        return writeFooter();
+        
+        return write( END_TAG, NN_FILE_TAG_LENGTH );
     }
     
     Dnn*
