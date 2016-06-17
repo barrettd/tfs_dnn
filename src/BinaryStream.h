@@ -24,7 +24,7 @@ namespace tfs {         // Tree Frog Software
         inline bool bad(   void ) const { return m_stream.bad();  }
         inline bool operator!()   const { return !m_stream; }
         
-        bool write( const char *buffer, unsigned long count );  // All of the write operationss go through here.
+        bool write( const char *buffer, unsigned long count );  // All of the write operations go through here.
         
         inline bool write( const unsigned char *buffer, unsigned long count ) { return write((const char *) buffer, count ); }
         

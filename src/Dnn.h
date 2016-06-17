@@ -29,10 +29,6 @@ namespace tfs {     // Tree Frog Software
         DnnLayer                *m_layer_output;
         bool                     m_trainable;           // Allocate gradiant arrays if true.
         
-    protected:
-        bool addLayer( DnnLayerInput *layer );
-        bool addLayer( DnnLayer      *layer );
-
     public:
         Dnn( bool trainable = true );
         virtual ~Dnn( void );
@@ -43,6 +39,9 @@ namespace tfs {     // Tree Frog Software
         void clear( void );                                 // Remove all of the layers.
         unsigned long count( void ) const;                  // Count of the layers.
         
+        bool addLayer( DnnLayerInput *layer );
+        bool addLayer( DnnLayer      *layer );
+
         bool addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz = 1, const bool retain_dw = false ); // input
 
         bool addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride = 1, unsigned long pad = 0 ); // conv (square)

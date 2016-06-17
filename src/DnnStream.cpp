@@ -39,6 +39,7 @@ namespace tfs {         // Tree Frog Software
 
     static const char START_TAG[ NN_FILE_TAG_LENGTH ] = { "tfs" };
     static const char DNN_TAG[   NN_FILE_TAG_LENGTH ] = { "dnn" };
+    static const char END_TAG[   NN_FILE_TAG_LENGTH ] = { "eof" };
     
     static const unsigned short HEADER_VERSION  = 1;                   // Version of the header, not the content.
     static const unsigned short CONTENT_VERSION = 1;                   // Version of the content.
@@ -92,13 +93,11 @@ namespace tfs {         // Tree Frog Software
         if( !read( tag_buffer, NN_FILE_TAG_LENGTH ) || strncmp( tag_buffer, START_TAG, NN_FILE_TAG_LENGTH ) != 0 ) {
             return false;
         }
-        
         // Header format version, different from the content version.
         unsigned short format_version = 0;
         if( !read( format_version ) || format_version != HEADER_VERSION ) {
             return false;
         }
-        
         // Check for our content tag: "dnn"
         if( !read( tag_buffer, NN_FILE_TAG_LENGTH ) || strncmp( tag_buffer, DNN_TAG, NN_FILE_TAG_LENGTH ) != 0 ) {
             return false;
@@ -132,31 +131,251 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
+    InDnnStream::readEnum( int &value, int maxValue ) {
+        if( !read( value )) {
+            return false;
+        }
+        if( value < 0 || value >= maxValue ) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    OutDnnStream::writeLayerBase( DnnLayer *layer ) {
+        if( layer == 0 || !write( OBJECT_LAYER ) || !write( layer->layerType())) {
+            return log_error( "Unable to write basic layer data" );
+        }
+        
+        return true;
+    }
+    
+    bool
+    InDnnStream::readLayerBase( DnnLayer *layer ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerInput *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+    
+    bool
+    InDnnStream::readLayerInput( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerConvolution *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerConvolution( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerDropout *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerDropout( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerFullyConnected *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerFullyConnected( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerLocalResponseNormalization *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerLocalResponseNormalization( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerMaxout *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerMaxout( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerPool *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerPool( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerRectifiedLinearUnit *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerRectifiedLinearUnit( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerRegression *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerRegression( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerSigmoid *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerSigmoid( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerSoftmax *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerSoftmax( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerSupportVectorMachine *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerSupportVectorMachine( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
+    OutDnnStream::writeLayer( DnnLayerTanh *layer ) {
+        if( !writeLayerBase( layer )) {
+            return false;
+        }
+        return true;
+    }
+
+    bool
+    InDnnStream::readLayerTanh( Dnn &dnn ) {
+        return true;
+    }
+    
+    bool
     OutDnnStream::writeDnn( Dnn &dnn ) {
         if( !writeHeader()) {
             return log_error( "Unable to write header" );
         }
+        if( !write( OBJECT_DNN )) {
+            return log_error( "Unable to write DNN enum" );
+        }
         bool trainable = dnn.trainable();
         if( !write( trainable )) {
-            return false;
+            return log_error( "Unable to write DNN trainable" );
         }
         unsigned long layerCount = dnn.count();
         if( !write( layerCount )) {
-            return false;
+            return log_error( "Unable to write DNN layerCount" );;
         }
         DnnLayerInput *inputLayer  = dnn.getLayerInput();
-        DnnLayer      *outputLayer = dnn.getLayerOutput();
-        
-        
-        return true;
+        writeLayer( inputLayer );
+        DnnLayer *layer = inputLayer->getNextLayer();
+        while( layer != 0 ) {
+            const LayerType layerType = layer->layerType();
+            switch ( layerType ) {
+                case LAYER_INPUT:                        writeLayer((DnnLayerInput*)                      layer ); break;    // input
+                case LAYER_CONVOLUTION:                  writeLayer((DnnLayerConvolution*)                layer ); break;    // conv
+                case LAYER_DROPOUT:                      writeLayer((DnnLayerDropout*)                    layer ); break;    // dropout
+                case LAYER_FULLY_CONNECTED:              writeLayer((DnnLayerFullyConnected*)             layer ); break;    // fc
+                case LAYER_LOCAL_RESPONSE_NORMALIZATION: writeLayer((DnnLayerLocalResponseNormalization*) layer ); break;    // lrn
+                case LAYER_MAXOUT:                       writeLayer((DnnLayerMaxout*)                     layer ); break;    // maxout
+                case LAYER_POOL:                         writeLayer((DnnLayerPool*)                       layer ); break;    // pool
+                case LAYER_RECTIFIED_LINEAR_UNIT:        writeLayer((DnnLayerRectifiedLinearUnit*)        layer ); break;    // relu
+                case LAYER_REGRESSION:                   writeLayer((DnnLayerRegression*)                 layer ); break;    // regression
+                case LAYER_SIGMOID:                      writeLayer((DnnLayerSigmoid*)                    layer ); break;    // sigmoid
+                case LAYER_SOFTMAX:                      writeLayer((DnnLayerSoftmax*)                    layer ); break;    // softmax
+                case LAYER_SUPPORT_VECTOR_MACHINE:       writeLayer((DnnLayerSupportVectorMachine*)       layer ); break;    // svm
+                case LAYER_TANH:                         writeLayer((DnnLayerTanh*)                       layer ); break;    // tanh
+                default: log_error( "Unknown layer type: %d", layerType );
+            }
+            layer = layer->getNextLayer();
+        }
+        return write( END_TAG, NN_FILE_TAG_LENGTH );
     }
-
-
+    
     Dnn*
     InDnnStream::readDnn( bool trainable ) {
         unsigned short contentVersion = 0;
         if( !readHeader( contentVersion ) || contentVersion != CONTENT_VERSION ) {
             log_error( "Unable to read header" );
+            return 0;
+        }
+        int objectType;
+        if( !readEnum( objectType, OBJECT_COUNT ) || objectType != OBJECT_DNN ) {
+            log_error( "Unable to read object type dnn" );
             return 0;
         }
         bool savedIsTrainable = false;
@@ -168,8 +387,35 @@ namespace tfs {         // Tree Frog Software
             return 0;
         }
         Dnn *dnn = new Dnn( trainable );
-        
-
+        for( unsigned long ii = 0; ii < layerCount; ii++ ) {
+            if( !readEnum( objectType, OBJECT_COUNT ) || objectType != OBJECT_LAYER ) {
+                log_error( "Unable to read object type Layer %lu", ii );
+                delete dnn;
+                return 0;
+            }
+            int layerType;
+            if( !readEnum( layerType, LAYER_COUNT )) {
+                log_error( "Unable to read layer type" );
+                delete dnn;
+                return 0;
+            }
+            switch ( layerType ) {
+                case LAYER_INPUT:                        readLayerInput( *dnn ); break;    // input
+                case LAYER_CONVOLUTION:                  readLayerConvolution( *dnn ); break;    // conv
+                case LAYER_DROPOUT:                      readLayerDropout( *dnn ); break;    // dropout
+                case LAYER_FULLY_CONNECTED:              readLayerFullyConnected( *dnn ); break;    // fc
+                case LAYER_LOCAL_RESPONSE_NORMALIZATION: readLayerLocalResponseNormalization( *dnn ); break;    // lrn
+                case LAYER_MAXOUT:                       readLayerMaxout( *dnn ); break;    // maxout
+                case LAYER_POOL:                         readLayerPool( *dnn ); break;    // pool
+                case LAYER_RECTIFIED_LINEAR_UNIT:        readLayerRectifiedLinearUnit( *dnn ); break;    // relu
+                case LAYER_REGRESSION:                   readLayerRegression( *dnn ); break;    // regression
+                case LAYER_SIGMOID:                      readLayerSigmoid( *dnn ); break;    // sigmoid
+                case LAYER_SOFTMAX:                      readLayerSoftmax( *dnn ); break;    // softmax
+                case LAYER_SUPPORT_VECTOR_MACHINE:       readLayerSupportVectorMachine( *dnn ); break;    // svm
+                case LAYER_TANH:                         readLayerTanh( *dnn ); break;    // tanh
+                default: log_error( "Unknown layer type: %d", layerType );
+            }
+        }
         
         return dnn;
     }
