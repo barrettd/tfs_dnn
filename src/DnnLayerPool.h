@@ -16,6 +16,7 @@ namespace tfs {
         unsigned long  m_side;
         unsigned long  m_stride;
         unsigned long  m_pad;
+        unsigned long  m_switch_count;
         unsigned long *m_switch;  // Contains index to max max values
         
         void setup( const bool trainable = true );
@@ -27,6 +28,15 @@ namespace tfs {
                      unsigned long pad    = 0,
                      const bool trainable = true );
         virtual ~DnnLayerPool( void );
+        
+        unsigned long side(   void ) const;
+        unsigned long stride( void ) const;
+        unsigned long pad(    void ) const;
+        unsigned long switchCount( void ) const;
+        
+        const unsigned long* switchsReadOnly( void ) const;
+              unsigned long* switchs( void );
+        
         
         virtual bool runForward(  void );
         virtual bool runBackprop( void );

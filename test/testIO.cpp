@@ -98,7 +98,7 @@ namespace tfs {
         const DNN_INTEGER *ePtr = lPtr + DATA_COUNT;
         
         const unsigned int MAX_ITERATION = 200;
-        const DNN_NUMERIC   TARGET_LOSS  = 0.02;
+        const DNN_NUMERIC   TARGET_LOSS  = 0.05;
         unsigned long count = 0;
         DNN_NUMERIC average_loss = 0.0;
         do {

@@ -49,7 +49,7 @@ namespace tfs {     // Tree Frog Software
         bool addLayerFullyConnected( unsigned long neuronCount );           // fully connected
         bool addLayerLocalResponseNormalization( void );                    // lrn
         bool addLayerMaxout( void );                                        // maxout
-        bool addLayerPool( unsigned long side, unsigned long stride = 1 );  // pool (square)
+        bool addLayerPool( unsigned long side, unsigned long stride = 1, unsigned long pad = 0 );  // pool (square)
         bool addLayerRectifiedLinearUnit( void );                           // relu
         bool addLayerRegression( void );                                    // regression
         bool addLayerSigmoid( void );                                       // sigmoid

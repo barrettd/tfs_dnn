@@ -50,6 +50,15 @@ namespace tfs {
         return;
     }
     
+    Matrix*
+    DnnLayerSoftmax::exponentialsReadOnly( void ) const {
+        return m_es;
+    }
+    Matrix*
+    DnnLayerSoftmax::exponentials( void ) {
+        return m_es;
+    }
+    
     bool
     DnnLayerSoftmax::runForward( void ) {
         // -----------------------------------------------------------------------------------

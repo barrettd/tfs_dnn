@@ -127,8 +127,8 @@ namespace tfs {
     }
     
     bool
-    Dnn::addLayerPool( unsigned long side, unsigned long stride ) {
-        DnnLayerPool *layer = new DnnLayerPool( m_layer_previous, side, stride, 0, m_trainable );
+    Dnn::addLayerPool( unsigned long side, unsigned long stride, unsigned long pad ) {
+        DnnLayerPool *layer = new DnnLayerPool( m_layer_previous, side, stride, pad, m_trainable );
         return addLayer( layer );
     }
     

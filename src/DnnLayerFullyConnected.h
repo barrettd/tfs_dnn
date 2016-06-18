@@ -20,6 +20,8 @@ namespace tfs {
     public:
         DnnLayerFullyConnected( DnnLayer *previousLayer, unsigned long neuronCount, const bool trainable = true );
         virtual ~DnnLayerFullyConnected( void );
+        
+        unsigned long getNeuronCount( void ) const;
 
         virtual bool runBias( DNN_NUMERIC value = 0.0 );    // Generally random biases seem to work quite well.
         

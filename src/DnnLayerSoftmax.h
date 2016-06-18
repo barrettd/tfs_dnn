@@ -20,6 +20,9 @@ namespace tfs {
     public:
         DnnLayerSoftmax( DnnLayer *previousLayer, const bool trainable = true );
         virtual ~DnnLayerSoftmax( void );
+        
+        Matrix *exponentialsReadOnly( void ) const;
+        Matrix *exponentials( void );
       
         virtual bool runForward(  void );   // Forward propagate
         virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation );   // Back propagate

@@ -7,6 +7,7 @@
 // ----------------------------------------------------------------------------
 #include "BinaryStream.h"
 #include "Dnn.h"
+#include "DnnLayer.h"
 
 // Forward declarations:
 class DnnLayerInput;
@@ -33,22 +34,24 @@ namespace tfs {         // Tree Frog Software
     class OutDnnStream : public OutBinaryStream {
     protected:
         bool writeHeader( void );
+        bool writeArray( const unsigned long *array, const unsigned long count );
         bool writeMatrix( const Matrix *matrix );
 
-        bool writeLayerBase( const DnnLayer                       *layer );
-        bool writeLayer( const DnnLayerInput                      *layer );    // input
-        bool writeLayer( const DnnLayerConvolution                *layer );    // conv
-        bool writeLayer( const DnnLayerDropout                    *layer );    // dropout
-        bool writeLayer( const DnnLayerFullyConnected             *layer );    // fc
-        bool writeLayer( const DnnLayerLocalResponseNormalization *layer );    // lrn
-        bool writeLayer( const DnnLayerMaxout                     *layer );    // maxout
-        bool writeLayer( const DnnLayerPool                       *layer );    // pool
-        bool writeLayer( const DnnLayerRectifiedLinearUnit        *layer );    // relu
-        bool writeLayer( const DnnLayerRegression                 *layer );    // regression
-        bool writeLayer( const DnnLayerSigmoid                    *layer );    // sigmoid
-        bool writeLayer( const DnnLayerSoftmax                    *layer );    // softmax
-        bool writeLayer( const DnnLayerSupportVectorMachine       *layer );    // svm
-        bool writeLayer( const DnnLayerTanh                       *layer );    // tanh
+        bool writeLayerBegin( LayerType layerType );
+        bool writeLayerBase( const DnnLayer                       &layer );
+        bool writeLayer( const DnnLayerInput                      &layer );    // input
+        bool writeLayer( const DnnLayerConvolution                &layer );    // conv
+        bool writeLayer( const DnnLayerDropout                    &layer );    // dropout
+        bool writeLayer( const DnnLayerFullyConnected             &layer );    // fc
+        bool writeLayer( const DnnLayerLocalResponseNormalization &layer );    // lrn
+        bool writeLayer( const DnnLayerMaxout                     &layer );    // maxout
+        bool writeLayer( const DnnLayerPool                       &layer );    // pool
+        bool writeLayer( const DnnLayerRectifiedLinearUnit        &layer );    // relu
+        bool writeLayer( const DnnLayerRegression                 &layer );    // regression
+        bool writeLayer( const DnnLayerSigmoid                    &layer );    // sigmoid
+        bool writeLayer( const DnnLayerSoftmax                    &layer );    // softmax
+        bool writeLayer( const DnnLayerSupportVectorMachine       &layer );    // svm
+        bool writeLayer( const DnnLayerTanh                       &layer );    // tanh
 
     public:
         OutDnnStream( const char *path );
@@ -64,6 +67,7 @@ namespace tfs {         // Tree Frog Software
         bool readEnum( int &value, int maxValue );
         bool expectEnum( int value );
         
+        unsigned long *readArrayUnsignedLong( unsigned long expectedCount );
         Matrix *readMatrix( void );
 
         bool readLayerBase( DnnLayer *layer );

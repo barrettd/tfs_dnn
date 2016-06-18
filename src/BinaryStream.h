@@ -28,31 +28,38 @@ namespace tfs {         // Tree Frog Software
         
         inline bool write( const unsigned char *buffer, unsigned long count ) { return write((const char *) buffer, count ); }
         
-        inline bool write( const bool               value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const long double        value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const double             value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const float              value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const unsigned long long value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const unsigned long      value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const unsigned int       value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const unsigned short     value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const long long          value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const long               value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const int                value ) { return write((const char *) &value, sizeof( value )); }
-        inline bool write( const short              value ) { return write((const char *) &value, sizeof( value )); }
+        inline bool write( const bool               value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const long double        value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const double             value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const float              value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const unsigned long long value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const unsigned long      value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const unsigned int       value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const unsigned short     value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const long long          value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const long               value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const int                value ) { return write((const char*) &value, sizeof( value )); }
+        inline bool write( const short              value ) { return write((const char*) &value, sizeof( value )); }
         
-        inline OutBinaryStream& operator<<(const bool               value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const long double        value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const double             value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const float              value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const unsigned long long value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const unsigned long      value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const unsigned int       value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const unsigned short     value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const long long          value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const long               value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const int                value) { write((const char *) &value, sizeof( value )); return *this; }
-        inline OutBinaryStream& operator<<(const short              value) { write((const char *) &value, sizeof( value )); return *this; }
+        inline bool write( const unsigned long *array, const unsigned long count ) {
+            return write((const char*) array, count * sizeof( unsigned long ));
+        }
+        inline bool write( const double *array, const unsigned long count ) {
+            return write((const char*) array, count * sizeof( double ));
+        }
+        
+        inline OutBinaryStream& operator<<(const bool               value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const long double        value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const double             value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const float              value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const unsigned long long value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const unsigned long      value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const unsigned int       value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const unsigned short     value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const long long          value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const long               value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const int                value) { write((const char*) &value, sizeof( value )); return *this; }
+        inline OutBinaryStream& operator<<(const short              value) { write((const char*) &value, sizeof( value )); return *this; }
     };
     
     
@@ -73,19 +80,26 @@ namespace tfs {         // Tree Frog Software
 
         inline bool read( unsigned char *buffer, unsigned long count ) { return read((char*) buffer, count ); }
 
-        inline bool read( bool               &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( long double        &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( double             &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( float              &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( unsigned long long &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( unsigned long      &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( unsigned int       &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( unsigned short     &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( long long          &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( long               &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( int                &value ) { return read((char *) &value, sizeof( value )); }
-        inline bool read( short              &value ) { return read((char *) &value, sizeof( value )); }
-        
+        inline bool read( bool               &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( long double        &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( double             &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( float              &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( unsigned long long &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( unsigned long      &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( unsigned int       &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( unsigned short     &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( long long          &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( long               &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( int                &value ) { return read((char*) &value, sizeof( value )); }
+        inline bool read( short              &value ) { return read((char*) &value, sizeof( value )); }
+
+        inline bool read( unsigned long *array, const unsigned long count ) {
+            return read((char*) array, count * sizeof( unsigned long ));
+        }
+        inline bool read( double *array, const unsigned long count ) {
+            return read((char*) array, count * sizeof( double ));
+        }
+
         inline InBinaryStream& operator>>(bool               &value) { read((char*) &value, sizeof( value )); return *this; }
         inline InBinaryStream& operator>>(long double        &value) { read((char*) &value, sizeof( value )); return *this; }
         inline InBinaryStream& operator>>(double             &value) { read((char*) &value, sizeof( value )); return *this; }

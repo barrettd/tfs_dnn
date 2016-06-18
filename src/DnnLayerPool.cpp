@@ -12,10 +12,11 @@ namespace tfs {
     
     DnnLayerPool::DnnLayerPool( DnnLayer *previousLayer, unsigned long side, unsigned long stride, unsigned long pad, const bool trainable ):
     DnnLayer( LAYER_POOL, previousLayer ),
-    m_side(     side ),
-    m_stride( stride ),
-    m_pad(       pad ),
-    m_switch(      0 ) {
+    m_side(      side ),
+    m_stride(  stride ),
+    m_pad(        pad ),
+    m_switch_count( 0 ),
+    m_switch(       0 ) {
         // Constructor
         setup( trainable );
         
@@ -25,6 +26,32 @@ namespace tfs {
         // Destructor
         delete[] m_switch;
         m_switch = 0;
+    }
+    
+    unsigned long
+    DnnLayerPool::side( void ) const {
+        return m_side;
+    }
+    unsigned long
+    DnnLayerPool::stride( void ) const {
+        return m_stride;
+    }
+    unsigned long
+    DnnLayerPool::pad( void ) const {
+        return m_pad;
+    }
+    unsigned long
+    DnnLayerPool::switchCount( void ) const {
+        return m_switch_count;
+    }
+    
+    const unsigned long*
+    DnnLayerPool::switchsReadOnly( void ) const {
+        return m_switch;
+    }
+    unsigned long*
+    DnnLayerPool::switchs( void ) {
+        return m_switch;
     }
     
     void
@@ -58,7 +85,8 @@ namespace tfs {
         const unsigned long out_y = (unsigned long) floor((in_y + m_pad * 2.0 - m_side) / m_stride + 1.0 );
         const unsigned long out_z = in_z;
         
-        m_switch = new unsigned long[ out_x * out_y * out_z * 2 ];
+        m_switch_count = out_x * out_y * out_z * 2;
+        m_switch = new unsigned long[ m_switch_count ];
         
         m_out_a = new Matrix( out_x, out_y, out_z );
         if( trainable ) {

@@ -29,7 +29,7 @@ main( int argc, const char * argv[] ) {
     testCifar10();
     testSimple();
     testCircle();
-    testSpiral();
+//    testSpiral();
     test2Layer();
     testIO();
     

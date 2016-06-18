@@ -33,6 +33,23 @@ namespace tfs {
         // Destructor
     }
     
+    unsigned long
+    DnnLayerConvolution::side( void ) const {
+        return m_side;
+    }
+    unsigned long
+    DnnLayerConvolution::stride( void ) const {
+        return m_stride;
+    }
+    unsigned long
+    DnnLayerConvolution::pad( void ) const {
+        return m_pad;
+    }
+    unsigned long
+    DnnLayerConvolution::filterCount( void ) const {
+        return m_filter_count;
+    }
+
     void
     DnnLayerConvolution::setup( const bool trainable ) {
         // -----------------------------------------------------------------------------------

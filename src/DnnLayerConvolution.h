@@ -29,6 +29,11 @@ namespace tfs {
                             const bool    trainable = true );
         virtual ~DnnLayerConvolution( void );
         
+        unsigned long side(        void ) const;
+        unsigned long stride(      void ) const;
+        unsigned long pad(         void ) const;
+        unsigned long filterCount( void ) const;
+        
         virtual bool runForward(  void );
         virtual bool runBackprop( void );
     };

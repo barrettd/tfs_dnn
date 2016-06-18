@@ -25,6 +25,11 @@ namespace tfs {
         // Destructor
     }
     
+    unsigned long
+    DnnLayerFullyConnected::getNeuronCount( void ) const {
+        return m_neuron_count;
+    }
+    
     void
     DnnLayerFullyConnected::setup( const bool trainable ) {
         // -----------------------------------------------------------------------------------
