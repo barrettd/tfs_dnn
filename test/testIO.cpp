@@ -71,7 +71,7 @@ namespace tfs {
         return;
     }
     
-    static bool
+    DNN_NUMERIC
     localTest2d( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
         DnnTrainerAdaDelta trainer( &dnn );
         trainer.learningRate( 0.01  );
@@ -81,19 +81,23 @@ namespace tfs {
         
         Matrix *input = trainer.getMatrixInput();       // get the input matrix: x,y pair Matrix( 1, 1, 2 )
         if( input == 0 ) {
-            return log_error( "Unable to obtain input matrix." );
+            log_error( "Unable to obtain input matrix." );
+            return 0.0;
         }
         const DNN_NUMERIC *dPtr = data.data();
         if( dPtr == 0 ) {
-            return log_error( "Unable to obtain input data." );
+            log_error( "Unable to obtain input data." );
+            return 0.0;
         }
         const DNN_INTEGER *lPtr = label.data();
         if( lPtr == 0 ) {
-            return log_error( "Unable to obtain input labels." );
+            log_error( "Unable to obtain input labels." );
+            return 0.0;
         }
         const unsigned long DATA_COUNT = label.size();
         if( DATA_COUNT < 1 ) {
-            return log_error( "Label data size < 1" );
+            log_error( "Label data size < 1" );
+            return 0.0;
         }
         const DNN_INTEGER *ePtr = lPtr + DATA_COUNT;
         
@@ -117,9 +121,8 @@ namespace tfs {
             }
             average_loss /= DATA_COUNT * MAX_ITERATION;
         } while( average_loss > TARGET_LOSS );
-        log_info( "Average loss = %f/%f. Count = %lu", average_loss, TARGET_LOSS, count );
-        
-        return true;
+//        log_info( "Average loss = %f/%f. Count = %lu", average_loss, TARGET_LOSS, count );
+        return average_loss;
     }
 
 
@@ -146,13 +149,18 @@ namespace tfs {
         outStream.close();
         
         InDnnStream inStream( "dnn_test.dnn" );
-        Dnn *otherDnn = inStream.readDnn();
+        Dnn *otherDnn = inStream.readDnn( true );
         inStream.close();
         if( otherDnn == 0 ) {
             log_error( "Unable to read a DNN" );
         }
-        
+        DNN_NUMERIC orginal_loss = localTest2d(       dnn, data, label );
+        DNN_NUMERIC other_loss   = localTest2d( *otherDnn, data, label );
         delete otherDnn;
+        
+        if( orginal_loss != other_loss ) {
+            log_error( "Training loss for new dnn does not match orginial: %f/%f", other_loss, orginal_loss );
+        }
         log_info( "Test I/O - End" );
         return true;
     }
