@@ -37,8 +37,7 @@ namespace tfs {         // Tree Frog Software
         OBJECT_COUNT        // Used for range checking.
     };
  
-    static const int NN_FILE_TAG_LENGTH  = 4;   // "tfs", "dnn", "net", "dat", etc.
-
+    static const int  NN_FILE_TAG_LENGTH  = 4;                          // "tfs", "dnn", "net", "dat", etc.
     static const char START_TAG[ NN_FILE_TAG_LENGTH ] = { "tfs" };
     static const char DNN_TAG[   NN_FILE_TAG_LENGTH ] = { "dnn" };
     static const char END_TAG[   NN_FILE_TAG_LENGTH ] = { "eof" };
@@ -50,7 +49,9 @@ namespace tfs {         // Tree Frog Software
     static const int            PADDING_LENGTH  = 4;
     
     void copy( unsigned long *dst, const unsigned long *src, const unsigned long count ) {
-        memcpy( dst, src, count * sizeof( unsigned long ));
+        if( dst != 0 && src != 0 && count > 0 ) {
+            memcpy( dst, src, count * sizeof( unsigned long ));
+        }
     }
     
     OutDnnStream::OutDnnStream( const char *path ) :
@@ -110,8 +111,8 @@ namespace tfs {         // Tree Frog Software
         if( !read( contentVersion )) {
             return false;
         }
-        unsigned long  byte_order_test = 0;
-        if( !read( byte_order_test ) || byte_order_test != BYTE_ORDER_TEST ) {      // Check that the byte order is as expected
+        unsigned long byte_order_test = 0;
+        if( !read( byte_order_test ) || byte_order_test != BYTE_ORDER_TEST ) {  // Check that the byte order is as expected
             return false;
         }
         unsigned char buffer[ TYPE_COUNT ];
@@ -119,14 +120,14 @@ namespace tfs {         // Tree Frog Software
         if( !read( buffer, sizeof( buffer ))) {
             return false;
         }
-        if( buffer[0] != (unsigned char) sizeof( bool )               ||    // Check the sizes of our base types.
-            buffer[1] != (unsigned char) sizeof( unsigned short )     ||
-            buffer[2] != (unsigned char) sizeof( unsigned int )       ||
-            buffer[3] != (unsigned char) sizeof( unsigned long  )     ||
-            buffer[4] != (unsigned char) sizeof( unsigned long long ) ||
-            buffer[5] != (unsigned char) sizeof( float  )             ||
-            buffer[6] != (unsigned char) sizeof( double )             ||
-            buffer[7] != (unsigned char) sizeof( long double )) {
+        if( buffer[0] != (unsigned char) sizeof( bool )               ||    //  1, Check the sizes of our base types.
+            buffer[1] != (unsigned char) sizeof( unsigned short )     ||    //  2
+            buffer[2] != (unsigned char) sizeof( unsigned int )       ||    //  4
+            buffer[3] != (unsigned char) sizeof( unsigned long  )     ||    //  8
+            buffer[4] != (unsigned char) sizeof( unsigned long long ) ||    //  8
+            buffer[5] != (unsigned char) sizeof( float  )             ||    //  6
+            buffer[6] != (unsigned char) sizeof( double )             ||    //  8
+            buffer[7] != (unsigned char) sizeof( long double )) {           // 16
             return false;
         }
         if( !read( buffer, PADDING_LENGTH )) {  // Consume padding at end of header.

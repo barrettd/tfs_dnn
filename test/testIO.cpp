@@ -125,8 +125,6 @@ namespace tfs {
         return average_loss;
     }
 
-
-
     static bool
     localTestIO( void ) {
         log_info( "Test I/O - Start" );
@@ -134,7 +132,6 @@ namespace tfs {
         if( !setupDnn( dnn )) {
             return false;
         }
-
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         

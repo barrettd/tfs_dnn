@@ -1,5 +1,6 @@
 //
 //  BinaryStream.h
+//  Binary file stream for TFS DNN and intermediate files.
 //
 //  Created by Barrett Davis on 6/15/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.

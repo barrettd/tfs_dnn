@@ -1,6 +1,7 @@
 // ----------------------------------------------------------------------------
 //  DnnStream.hpp
-//  Binary file stream for the Neural Net and intermediate files.
+//  Binary file stream for TFS DNN.
+//  All of the file I/O is external to the DNN, layers and Matrices.
 //
 //  Created by Barrett Davis on 6/15/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
@@ -36,8 +37,8 @@ namespace tfs {         // Tree Frog Software
         bool writeHeader( void );
         bool writeArray( const unsigned long *array, const unsigned long count );
         bool writeMatrix( const Matrix *matrix );
-
         bool writeLayerBegin( LayerType layerType );
+        
         bool writeLayerBase( const DnnLayer                       &layer );
         bool writeLayer( const DnnLayerInput                      &layer );    // input
         bool writeLayer( const DnnLayerConvolution                &layer );    // conv
@@ -68,7 +69,7 @@ namespace tfs {         // Tree Frog Software
         bool expectEnum( int value );
         
         unsigned long *readArrayUnsignedLong( unsigned long expectedCount );
-        Matrix *readMatrix( void );
+        Matrix        *readMatrix( void );
 
         bool readLayerBase( DnnLayer *layer );
         bool readLayerInput(                      Dnn &dnn );    // input
