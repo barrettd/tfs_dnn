@@ -151,6 +151,13 @@ namespace tfs {         // Tree Frog Software
     }
     
     bool
+    InDnnStream::expectEnum( int expectedValue ) {
+        int value = -1;
+        return read( value ) && value == expectedValue;
+    }
+
+    
+    bool
     OutDnnStream::writeMatrix( const Matrix *matrix ) {
         if( !write( OBJECT_MATRIX )) {
             return log_error( "Unable to write matrix" );
@@ -162,7 +169,11 @@ namespace tfs {         // Tree Frog Software
         if( matrixIsNull ) {
             return true;            // Our work here is done.
         }
-        if( !write( matrix->aa()) || !write( matrix->bb()) || !write( matrix->cc()) || !write( matrix->dd())) {
+        unsigned long aa = matrix->aa();
+        unsigned long bb = matrix->bb();
+        unsigned long cc = matrix->cc();
+        unsigned long dd = matrix->dd();
+        if( !write( aa ) || !write( bb ) || !write( cc ) || !write( dd )) {
             return log_error( "Unable to write matrix dimensions" );
         }
         const DNN_NUMERIC    *data = matrix->dataReadOnly();
@@ -172,6 +183,10 @@ namespace tfs {         // Tree Frog Software
 
     Matrix*
     InDnnStream::readMatrix( void ) {
+        if( !expectEnum( OBJECT_MATRIX )) {
+            log_error( "Did not find matrix object marker." );
+            return 0;
+        }
         bool matrixIsNull;
         if( !read( matrixIsNull )) {
             log_error( "Unable to read matrix null / not null boolean" );
@@ -201,25 +216,105 @@ namespace tfs {         // Tree Frog Software
         if( layer == 0 || !write( OBJECT_LAYER ) || !write( layer->layerType())) {
             return log_error( "Unable to write basic layer data" );
         }
-        
+        writeMatrix( layer->weightsReadOnly());     // Internal: Weights, to act on input activations from previous layer
+        writeMatrix( layer->gradiantReadOnly());    // Internal: Gradiant, will be null when not training.
+        writeMatrix( layer->biasReadOnly());        // Internal: Bias, to act on input activations from previous layer
+        writeMatrix( layer->biasDwReadOnly());      // Internal: Bias derivative, will be null when not training.
+        writeMatrix( layer->outAReadOnly());        // Output:   Activations, output of a neuron.
+        writeMatrix( layer->outDwReadOnly());       // Output:   Weight derivative, will be null when not training.
+        write( layer->l1DecayMultiplier());
+        write( layer->l2DecayMultiplier());
         return true;
     }
     
     bool
     InDnnStream::readLayerBase( DnnLayer *layer ) {
-        return true;
+        Matrix *weights  = readMatrix();
+        Matrix *gradiant = readMatrix();
+        Matrix *bias     = readMatrix();
+        Matrix *biasDw   = readMatrix();
+        Matrix *outA     = readMatrix();
+        Matrix *outDw    = readMatrix();
+        
+        Matrix *layerWeights = layer->weights();
+        if( layerWeights != 0 && weights != 0 ) {
+            layerWeights->copy( *weights );
+            delete weights;
+            weights = 0;
+        }
+        Matrix *layerGradiant = layer->gradiant();
+        if( layerGradiant != 0 && gradiant != 0 ) {
+            layerGradiant->copy( *gradiant );
+            delete gradiant;
+            gradiant = 0;
+        }
+        Matrix *layerBias = layer->bias();
+        if( layerBias != 0 && bias != 0 ) {
+            layerBias->copy( *bias );
+            delete bias;
+            bias = 0;
+        }
+        Matrix *layerBiasDw = layer->biasDw();
+        if( layerBiasDw != 0 && biasDw != 0 ) {
+            layerBiasDw->copy( *biasDw );
+            delete biasDw;
+            biasDw = 0;
+        }
+        Matrix *layerOutA = layer->outA();
+        if( layerOutA != 0 && outA != 0 ) {
+            layerOutA->copy( *outA );
+            delete outA;
+            outA = 0;
+        }
+        Matrix *layerOutDw = layer->outDw();
+        if( layerOutDw != 0 && outDw != 0 ) {
+            layerOutDw->copy( *outDw );
+            delete outDw;
+            outDw = 0;
+        }
+        
+        DNN_NUMERIC l1DecayMultiplier;
+        DNN_NUMERIC l2DecayMultiplier;
+        read( l1DecayMultiplier );
+        read( l2DecayMultiplier );
+        layer->l1DecayMultiplier( l1DecayMultiplier );
+        layer->l2DecayMultiplier( l2DecayMultiplier );
+        return good();
     }
     
     bool
     OutDnnStream::writeLayer( const DnnLayerInput *layer ) {
-        if( !writeLayerBase( layer )) {
-            return false;
+        if( layer == 0 || !write( OBJECT_LAYER ) || !write( layer->layerType())) {
+            return log_error( "Unable to write basic layer data" );
         }
+        writeMatrix( layer->outAReadOnly());        // Output:   Activations, output of a neuron.
+        writeMatrix( layer->outDwReadOnly());       // Output:   Weight derivative, will be null when not training.
         return true;
     }
     
     bool
     InDnnStream::readLayerInput( Dnn &dnn ) {
+        Matrix *outA  = readMatrix();
+        Matrix *outDw = readMatrix();
+        if( outA == 0 ) {
+            delete outDw;
+            return false;
+        }
+        dnn.addLayerInput( outA->aa(), outA->bb(), outA->cc());
+        DnnLayerInput *layer = dnn.getLayerInput();
+        
+        Matrix *layerOutA = layer->outA();
+        if( layerOutA != 0 && outA != 0 ) {
+            layerOutA->copy( *outA );
+            delete outA;
+            outA = 0;
+        }
+        Matrix *layerOutDw = layer->outDw();
+        if( layerOutDw != 0 && outDw != 0 ) {
+            layerOutDw->copy( *outDw );
+            delete outDw;
+            outDw = 0;
+        }
         return true;
     }
     
@@ -431,8 +526,7 @@ namespace tfs {         // Tree Frog Software
             log_error( "Unable to read header" );
             return 0;
         }
-        int objectType;
-        if( !readEnum( objectType, OBJECT_COUNT ) || objectType != OBJECT_DNN ) {
+        if( !expectEnum( OBJECT_DNN )) {
             log_error( "Unable to read object type dnn" );
             return 0;
         }
@@ -446,7 +540,7 @@ namespace tfs {         // Tree Frog Software
         }
         Dnn *dnn = new Dnn( trainable );
         for( unsigned long ii = 0; ii < layerCount; ii++ ) {
-            if( !readEnum( objectType, OBJECT_COUNT ) || objectType != OBJECT_LAYER ) {
+            if( !expectEnum( OBJECT_LAYER )) {
                 log_error( "Unable to read object type Layer %lu", ii );
                 delete dnn;
                 return 0;

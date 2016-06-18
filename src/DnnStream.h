@@ -62,6 +62,8 @@ namespace tfs {         // Tree Frog Software
         bool readHeader( unsigned short &contentVersion );
         bool readTag( const char *expected );
         bool readEnum( int &value, int maxValue );
+        bool expectEnum( int value );
+        
         Matrix *readMatrix( void );
 
         bool readLayerBase( DnnLayer *layer );

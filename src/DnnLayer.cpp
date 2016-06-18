@@ -99,9 +99,17 @@ namespace tfs {
     DnnLayer::outA( void ) {
         return m_out_a;             // Output Activations
     }
-    
+    const Matrix*
+    DnnLayer::outAReadOnly( void ) const {              // Output Neuron Activations
+        return m_out_a;             // Output Activations
+    }
+
     Matrix*
     DnnLayer::outDw( void ) {
+        return m_out_dw;             // d/dw Output Activations
+    }
+    const Matrix*
+    DnnLayer::outDwReadOnly( void ) const {              // d/dw Output Neuron Activations
         return m_out_dw;             // d/dw Output Activations
     }
 
@@ -109,9 +117,17 @@ namespace tfs {
     DnnLayer::weights( void ) {     // Internal Neuron connection weights (w)
         return m_w;
     }
+    const Matrix*
+    DnnLayer::weightsReadOnly( void ) const { // Internal Neuron connection weights   (w)
+        return m_w;
+    }
     
     Matrix*
     DnnLayer::gradiant( void ) {    // Internal Neuron connection gradiant (dw)
+        return m_dw;
+    }
+    const Matrix*
+    DnnLayer::gradiantReadOnly( void ) const { // Internal Neuron connection gradiant  (dw)
         return m_dw;
     }
     
@@ -119,9 +135,17 @@ namespace tfs {
     DnnLayer::bias( void ) {             // Internal Neuron connection bias      (bias.w)
         return m_bias_w;
     }
+    const Matrix*
+    DnnLayer::biasReadOnly( void ) const {   // Internal Neuron connection bias      (bias.w)
+        return m_bias_w;
+    }
     
     Matrix*
     DnnLayer::biasDw( void ) {             // Internal Neuron connection bias dw   (bias.dw)
+        return m_bias_dw;
+    }
+    const Matrix*
+    DnnLayer::biasDwReadOnly( void ) const {   // Internal Neuron connection bias dw   (bias.dw)
         return m_bias_dw;
     }
 
