@@ -1,11 +1,10 @@
 // --------------------------------------------------------------------
-//  Matrix.hpp - 3 or 4 D matrix <template> for DNN_NUMERIC and DNN_INTEGER
+//  Matrix.h - 3 or 4 D matrix <template> for DNN_NUMERIC and DNN_INTEGER
 //  Possibly use Eigen matricies: https://eigen.tuxfamily.org/
 //  Created by Barrett Davis on 5/10/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
 // TODO: add flip horizontal and flip vertical, subsample
-
 #ifndef Matrix_h
 #define Matrix_h
 
@@ -402,6 +401,8 @@ namespace tfs {         // Tree Frog Software
     
     inline bool matrixBad( const  Matrix * const matrix ) { return matrix == 0 || !matrix->ok(); }
     inline bool matrixBad( const DMatrix * const matrix ) { return matrix == 0 || !matrix->ok(); }
+    
+    bool softmax( Matrix &dst, const Matrix &src );
     
 }   // namespace tfs
 

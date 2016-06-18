@@ -1,11 +1,11 @@
 // --------------------------------------------------------------------
-//  Utility.hpp
+//  Utility.h
 //
 //  Created by Barrett Davis on 5/11/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#ifndef Utility_hpp
-#define Utility_hpp
+#ifndef Utility_h
+#define Utility_h
 
 #include "Constants.h"
 
@@ -29,7 +29,6 @@ namespace tfs {     // Tree Frog Software
     inline DNN_NUMERIC randn( DNN_NUMERIC sigma ) { return randomGauss() * sigma; }
     inline DNN_NUMERIC randn( DNN_NUMERIC mu, DNN_NUMERIC sigma ) { return randomGauss() * sigma + mu; }
 
-
 }   // namespace tfs
 
-#endif /* Utility_hpp */
+#endif /* Utility_h */

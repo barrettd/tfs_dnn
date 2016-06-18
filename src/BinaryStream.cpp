@@ -23,7 +23,7 @@ namespace tfs {         // Tree Frog Software
         if( count < 1 ) {
             return true;
         }
-        m_stream.write( buffer, count );
+        m_stream.write( buffer, (std::streamsize)count );
         return m_stream.good();
     }
 
@@ -43,7 +43,7 @@ namespace tfs {         // Tree Frog Software
         if( count < 1 ) {
             return true;
         }
-        m_stream.read( buffer, count );
+        m_stream.read( buffer, (std::streamsize)count );
         return m_stream.good();
     }
 
