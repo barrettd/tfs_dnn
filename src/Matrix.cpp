@@ -40,6 +40,66 @@ namespace tfs {     // Tree Frog Software
         return true;
     }
     
+    Matrix*
+    gaussianKernel( const unsigned long side, const DNN_NUMERIC sigma ) {
+        Matrix *kernel = new Matrix( side, side );
+        const DNN_NUMERIC denominator = 2.0 * M_PI * sigma * sigma;
+        const DNN_NUMERIC mean = side / 2.0;
+        DNN_NUMERIC sum = 0.0;
+        for( unsigned long xx = 0; xx < side; xx++ ) {
+            for( unsigned long yy = 0; yy < side; yy++ ) {
+                const DNN_NUMERIC value = exp( -0.5 * ( pow((xx-mean)/sigma, 2.0) + pow((yy-mean)/sigma, 2.0))) / denominator;
+                kernel->set(xx, yy, value );
+                sum += value;
+            }
+        }
+        for( unsigned long xx = 0; xx < side; xx++ ) {
+            for( unsigned long yy = 0; yy < side; yy++ ) {
+                DNN_NUMERIC value = kernel->get( xx, yy );
+                kernel->set( xx, yy, value / sum );
+            }
+        }
+        return kernel;
+    }
+    
+    Matrix*
+    kernelOperation( const Matrix &src, const Matrix &kernel, const unsigned long stride ) {
+        const unsigned long kernalX = kernel.aa();
+        const unsigned long kernalY = kernel.bb();
+        if( src.aa() < kernalX || src.bb() < kernalY ) {
+            log_error( "Source matrix smaller than kernel" );
+            return 0;
+        }
+        if( stride < 1 ) {
+            log_error( "Stride too small" );
+            return 0;
+        }
+        const unsigned long dstX = (unsigned long) floor((src.aa() - kernel.aa()) / stride + 1.0 );
+        const unsigned long dstY = (unsigned long) floor((src.bb() - kernel.bb()) / stride + 1.0 );
+        const unsigned long dstZ = src.cc();
+        Matrix *dst = new Matrix( dstX, dstY, dstZ );
+        for( unsigned long dz = 0.0; dz < dstZ; dz++ ) {
+            for( unsigned long dy = 0.0; dy < dstY; dy++ ) {
+                const unsigned long sy = dy * stride;
+                for( unsigned long dx = 0.0; dx < dstX; dx++ ) {
+                    const unsigned long sx = dx * stride;
+                    DNN_NUMERIC sum = 0.0;
+                    for( unsigned long ky = 0.0; ky < kernalY; ky++ ) {
+                        for( unsigned long kx = 0.0; kx < kernalX; kx++ ) {
+                            const DNN_NUMERIC sourceValue = src.get( sx, sy, dz );
+                            const DNN_NUMERIC kernalValue = kernel.get( kx, ky );
+                            sum += sourceValue * kernalValue;
+                        }
+                    }
+                    dst->set( dx, dy, dz, sum );
+                }
+            }
+        }
+        return dst;
+    }
+
+    
+    
 }   // namespace tfs
 
 

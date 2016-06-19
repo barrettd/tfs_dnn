@@ -149,7 +149,7 @@ namespace tfs {
         Dnn *otherDnn = inStream.readDnn( true );
         inStream.close();
         if( otherDnn == 0 ) {
-            log_error( "Unable to read a DNN" );
+            return log_error( "Unable to read a DNN" );
         }
         DNN_NUMERIC orginal_loss = localTest2d(       dnn, data, label );
         DNN_NUMERIC other_loss   = localTest2d( *otherDnn, data, label );
