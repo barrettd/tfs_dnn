@@ -407,7 +407,6 @@ namespace tfs {         // Tree Frog Software
     Matrix *gaussianKernel( const unsigned long side, const DNN_NUMERIC sigma = 1.0 );   // Typically 5 or 7
     
     Matrix *kernelOperation( const Matrix &src, const Matrix &kernel, const unsigned long stride );
-    Matrix *kernelOperationImage( const Matrix &src, const Matrix &kernel, const unsigned long stride );
     
 }   // namespace tfs
 

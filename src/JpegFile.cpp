@@ -15,32 +15,41 @@ namespace tfs {
     
     Matrix*
     createMatrix( ImageRgb &image ) {
-        Matrix *matrix = new Matrix( 3, image.width(), image.height());
+        const unsigned long maxX = image.width();
+        const unsigned long maxY = image.height();
+        const unsigned long maxZ = 3;                   // RGB
+        Matrix *matrix = new Matrix( maxX, maxY, maxZ );
         const unsigned char *in  = image.data();
-        const unsigned char *end = in + image.size();
-        DNN_NUMERIC         *out = matrix->data();
-        while( in < end ) {
-            *out++ = (DNN_NUMERIC) (*in++ & 0x00FF);
+        for( unsigned long yy = 0; yy < maxY; yy++ ) {
+            for( unsigned long xx = 0; xx < maxX; xx++ ) {
+                for( unsigned long zz = 0; zz < maxZ; zz++ ) {
+                    const DNN_NUMERIC value = (DNN_NUMERIC) (*in++ & 0x00FF);
+                    matrix->set( xx, yy, zz, value );
+                }
+            }
         }
         return matrix;
     }
     
     bool
     createImage( ImageRgb &image, const Matrix &matrix ) {
-        const unsigned long matrixX = matrix.bb();
-        const unsigned long matrixY = matrix.cc();
-        image.create( matrixX, matrixY );
-        const DNN_NUMERIC *in  = matrix.dataReadOnly();
-        const DNN_NUMERIC *end = matrix.end();
-        unsigned char     *out = image.data();
-        while( in < end ) {
-            DNN_NUMERIC value = *in++;
-            if( value < 0.0 ) {
-                value = 0.0;
-            } else if( value > 255.0 ) {
-                value = 255.0;
+        const unsigned long maxX = matrix.width();
+        const unsigned long maxY = matrix.height();
+        const unsigned long maxZ = 3;                   // RGB
+        image.create( maxX, maxY );
+        unsigned char *dst = image.data();
+        for( unsigned long yy = 0; yy < maxY; yy++ ) {
+            for( unsigned long xx = 0; xx < maxX; xx++ ) {
+                for( unsigned long zz = 0; zz < maxZ; zz++ ) {
+                    DNN_NUMERIC value = matrix.get( xx, yy, zz );
+                    if( value < 0.0 ) {
+                        value = 0.0;
+                    } else if( value > 255.0 ) {
+                        value = 255.0;
+                    }
+                    *dst++ = (unsigned char) value;
+                }
             }
-            *out++ = (unsigned char) value;
         }
         return true;
     }
