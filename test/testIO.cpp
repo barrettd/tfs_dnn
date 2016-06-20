@@ -14,7 +14,7 @@
 namespace tfs {
     
     static bool
-    setupDnn( Dnn &dnn ) {                                      // Same DNN for all 2d tests.
+    setupDnn1( Dnn &dnn ) {                                      // Same DNN for all 2d tests.
         DnnBuilder builder( dnn, ACTIVATION_TANH );
         if( !builder.addLayerInput( 1, 1, 2 )) {                // Input layer a single x, y data point.
             return log_error( "Cannot add Input layer" );
@@ -37,6 +37,39 @@ namespace tfs {
         if( count != expected_count ) {
             return log_error( "We have set up %lu layers, expected %lu", count, expected_count );
         }
+        return true;
+    }
+    
+    static bool
+    setupDnn2( Dnn &dnn ) {
+        DnnBuilder builder( dnn, ACTIVATION_RELU );
+        if( !builder.addLayerInput( 159, 119, 3 )) {            // Input layer: 159x119x3
+            return log_error( "Cannot add Input layer" );
+        }
+        if( !builder.addLayerConvolution( 5, 16, 1, 2 )) {      // sx:5, filters:16, stride:1, pad:2
+            return log_error( "Cannot add Convolution layer" );
+        }
+        if( !builder.addLayerPool( 2, 2 )) {                    // sx:2, stride:2
+            return log_error( "Cannot add Pool layer" );
+        }
+        if( !builder.addLayerConvolution( 5, 20, 1, 2 )) {      // sx:5, filters:20, stride:1, pad:2
+            return log_error( "Cannot add Convolution layer" );
+        }
+        if( !builder.addLayerPool( 2, 2 )) {                    // sx:2, stride:2
+            return log_error( "Cannot add Pool layer" );
+        }
+        if( !builder.addLayerConvolution( 5, 20, 1, 2 )) {      // sx:5, filters:20, stride:1, pad:2
+            return log_error( "Cannot add Convolution layer" );
+        }
+        if( !builder.addLayerPool( 2, 2 )) {                    // sx:2, stride:2
+            return log_error( "Cannot add Pool layer" );
+        }
+        if( !builder.addLayerSoftmax( 10 )) {                   // Output classifier, 10 classes (digits 0 to 9)
+            return log_error( "Cannot add Softmax layer" );
+        }
+        dnn.initialize();                                       // Randomize the weights.
+        const unsigned long count = dnn.count();
+        log_info( "We have set up %lu layers", count );
         return true;
     }
     
@@ -126,10 +159,21 @@ namespace tfs {
     }
 
     static bool
-    localTestIO( void ) {
-        log_info( "Test I/O - Start" );
+    writeDnn( const Dnn &dnn, const char *fileName ) {
+        OutDnnStream outStream( fileName );
+        const bool rc = outStream.writeDnn( dnn );
+        if( !rc ) {
+            log_error( "DNN write failed" );
+        }
+        outStream.close();
+        return rc;
+    }
+
+    static bool
+    localTestIO1( void ) {
+        log_info( "Test I/O (1) - Start" );
         Dnn dnn;
-        if( !setupDnn( dnn )) {
+        if( !setupDnn1( dnn )) {
             return false;
         }
         std::vector< DNN_NUMERIC > data;    // x,y pairs
@@ -139,13 +183,13 @@ namespace tfs {
         
         localTest2d( dnn, data, label );
         
-        OutDnnStream outStream( "dnn_test.dnn" );
+        OutDnnStream outStream( "dnn_test1.dnn" );
         if( !outStream.writeDnn( dnn )) {
             log_error( "DNN write failed" );
         }
         outStream.close();
         
-        InDnnStream inStream( "dnn_test.dnn" );
+        InDnnStream inStream( "dnn_test1.dnn" );
         Dnn *otherDnn = inStream.readDnn( true );
         inStream.close();
         if( otherDnn == 0 ) {
@@ -158,14 +202,28 @@ namespace tfs {
         if( orginal_loss != other_loss ) {
             log_error( "Training loss for new dnn does not match orginial: %f/%f", other_loss, orginal_loss );
         }
-        log_info( "Test I/O - End" );
+        log_info( "Test I/O (1) - End" );
         return true;
     }
     
+    static bool
+    localTestIO2( void ) {
+        log_info( "Test I/O (2) - Start" );
+        Dnn dnn;
+        if( !setupDnn2( dnn )) {
+            return false;
+        }
+        writeDnn( dnn, "dnn_test2.dnn" );
+        log_info( "Test I/O (2) - End" );
+        return true;
+    }
+
     
 }  // tfs namespace
 
+
+
 bool
 testIO( void ) {
-    return tfs::localTestIO();
+    return tfs::localTestIO1() &&  tfs::localTestIO2();
 }
