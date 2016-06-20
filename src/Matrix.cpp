@@ -64,6 +64,9 @@ namespace tfs {     // Tree Frog Software
     
     Matrix*
     kernelOperation( const Matrix &src, const Matrix &kernel, const unsigned long stride ) {
+        // ---------------------------------------------------------------------------------
+        // This is a zero pad reducing kernel function. Useful for sub-sampling
+        // ---------------------------------------------------------------------------------
         const unsigned long srcX    = src.width();      // X
         const unsigned long srcY    = src.height();     // Y
         const unsigned long srcZ    = src.cc();         // r,g,b channel (if image)
