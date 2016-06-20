@@ -153,7 +153,7 @@ namespace tfs {
     }
     
     static bool
-    localTestMatricCopy( void ) {
+    localTestMatrixCopy( void ) {
         Matrix aa = Matrix( 3, 2, 1 );
               DNN_NUMERIC *      data = aa.data();
         const DNN_NUMERIC * const end = aa.end();
@@ -197,7 +197,7 @@ namespace tfs {
         if( !localTestMatrixMath()) {
             return false;
         }
-        if( !localTestMatricCopy()) {
+        if( !localTestMatrixCopy()) {
             return false;
         }
         log_info( "Test Matrix - End" );
