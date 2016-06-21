@@ -104,6 +104,11 @@ namespace tfs {     // Tree Frog Software
         return dst;
     }
     
+    bool
+    subsample( Matrix &dst, const Matrix &src, const unsigned long dx, const unsigned long dy ) {
+        return true;
+    }
+    
 
 }   // namespace tfs
 

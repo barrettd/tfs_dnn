@@ -12,12 +12,12 @@ namespace tfs {
     
     static bool
     localTestMatrixSize( void ) {
-        const unsigned long X_MAX = 15;
-        const unsigned long Y_MAX = 4;
-        const unsigned long Z_MAX = 2;
+        const unsigned long A_MAX = 15;
+        const unsigned long B_MAX = 4;
+        const unsigned long C_MAX = 2;
         const unsigned long D_MAX = 3;
-        const unsigned long EXPECTED_COUNT = X_MAX * Y_MAX * Z_MAX * D_MAX;
-        DMatrix matrix = DMatrix( X_MAX, Y_MAX, Z_MAX, D_MAX );
+        const unsigned long EXPECTED_COUNT = A_MAX * B_MAX * C_MAX * D_MAX;
+        DMatrix matrix = DMatrix( A_MAX, B_MAX, C_MAX, D_MAX );
         if( matrix.count() != EXPECTED_COUNT ) {
             return log_error( "Matrix count is not %lu, it is %lu", EXPECTED_COUNT, matrix.count());
         }
@@ -39,47 +39,47 @@ namespace tfs {
                 return log_error( "Data element not zero" );
             }
         }
-        if( matrix.width() != X_MAX || matrix.aa() != X_MAX ) {
-            return log_error( "Width != %lu", X_MAX );
+        if( matrix.width() != A_MAX || matrix.aa() != A_MAX ) {
+            return log_error( "Width != %lu", A_MAX );
         }
-        if( matrix.height() != Y_MAX || matrix.bb() != Y_MAX ) {
-            return log_error( "Height != %lu", Y_MAX );
+        if( matrix.height() != B_MAX || matrix.bb() != B_MAX ) {
+            return log_error( "Height != %lu", B_MAX );
         }
-        if( matrix.depth() != Z_MAX || matrix.cc() != Z_MAX ) {
-            return log_error( "Depth != %lu", Z_MAX );
+        if( matrix.depth() != C_MAX || matrix.cc() != C_MAX ) {
+            return log_error( "Depth != %lu", C_MAX );
         }
         if( matrix.dd() != D_MAX ) {
             return log_error( "4th dimension != %lu", D_MAX );
         }
         DNN_INTEGER count = 0;
-        for( unsigned long d = 0; d < D_MAX; d++ ) {
-            for( unsigned long z = 0; z < Z_MAX; z++ ) {
-                for( unsigned long y; y < Y_MAX; y++ ) {
-                    for( unsigned long x; x < X_MAX; x++ ) {
-                        DNN_INTEGER val = matrix.get( x, y, z, d );
+        for( unsigned long dd = 0; dd < D_MAX; dd++ ) {
+            for( unsigned long cc = 0; cc < C_MAX; cc++ ) {
+                for( unsigned long bb = 0; bb < B_MAX; bb++ ) {
+                    for( unsigned long aa = 0; aa < A_MAX; aa++ ) {
+                        DNN_INTEGER val = matrix.get( aa, bb, cc, dd );
                         val += count++;
-                        matrix.set( x, y, z, d, val );
-                        matrix.plusEquals( x, y, z, count++ );
+                        matrix.set( aa, bb, cc, dd, val );
+                        matrix.plusEquals( aa, bb, cc, dd, count++ );
                     }
                 }
             }
         }
         count = 0;
-        for( unsigned long d = 0; d < D_MAX; d++ ) {
-            for( unsigned long z = 0; z < Z_MAX; z++ ) {
-                for( unsigned long y; y < Y_MAX; y++ ) {
-                    for( unsigned long x; x < X_MAX; x++ ) {
-                        matrix.set( x, y, z, d, count++ );
+        for( unsigned long dd = 0; dd < D_MAX; dd++ ) {
+            for( unsigned long cc = 0; cc < C_MAX; cc++ ) {
+                for( unsigned long bb = 0; bb < B_MAX; bb++ ) {
+                    for( unsigned long aa = 0; aa < A_MAX; aa++ ) {
+                        matrix.set( aa, bb, cc, dd, count++ );
                     }
                 }
             }
         }
         count = 0;
-        for( unsigned long d = 0; d < D_MAX; d++ ) {
-            for( unsigned long z = 0; z < Z_MAX; z++ ) {
-                for( unsigned long y; y < Y_MAX; y++ ) {
-                    for( unsigned long x; x < X_MAX; x++ ) {
-                        DNN_INTEGER val = matrix.get( x, y, z, d );
+        for( unsigned long dd = 0; dd < D_MAX; dd++ ) {
+            for( unsigned long cc = 0; cc < C_MAX; cc++ ) {
+                for( unsigned long bb = 0; bb < B_MAX; bb++ ) {
+                    for( unsigned long aa = 0; aa < A_MAX; aa++ ) {
+                        DNN_INTEGER val = matrix.get( aa, bb, cc, dd );
                         if( val != count ) {
                             return log_error( "value %lu != %lu", val, count );
                         }
@@ -188,6 +188,53 @@ namespace tfs {
         return true;
     }
     
+    static void
+    fill( Matrix &matrix ) {
+        const unsigned long maxA = matrix.aa();
+        const unsigned long maxB = matrix.bb();
+        const unsigned long maxC = matrix.cc();
+        const unsigned long maxD = matrix.dd();
+        DNN_NUMERIC value = 0.0;
+        for( unsigned long dd = 0; dd < maxD; dd++ ) {
+            for( unsigned long cc = 0; cc < maxC; cc++ ) {
+                for( unsigned long bb = 0; bb < maxB; bb++ ) {
+                    for( unsigned long aa = 0; aa < maxA; aa++ ) {
+                        matrix.set( aa, bb, cc, dd, value );
+                        value += 1.0;
+                    }
+                }
+            }
+        }
+        return;
+    }
+    
+    static bool
+    localTestMatrixEqual( void ) {
+        Matrix left( 10, 10, 3, 2 );
+        Matrix right(10, 10, 3, 2 );
+        fill( left );
+        fill( right );
+        if( !left.equal( right )) {
+            return log_error( "matricies are equal, but reporting as different" );
+        }
+        right.set( 5, 5, 1, 1, 3.1415926 );
+        if( left.equal( right )) {
+            return log_error( "matricies are different, but reporting as equal" );
+        }
+        return true;
+    }
+
+    static bool
+    localTestMatrixSubsample( void ) {
+        Matrix source( 4, 4, 3 );
+        Matrix destination( 2, 2, 3 );
+        
+        fill( source );
+        destination.zero();
+        
+        return true;
+    }
+    
     static bool
     localTestMatrix( void ) {
         log_info( "Test Matrix - Start" );
@@ -198,6 +245,12 @@ namespace tfs {
             return false;
         }
         if( !localTestMatrixCopy()) {
+            return false;
+        }
+        if( !localTestMatrixEqual()) {
+            return false;
+        }
+        if( !localTestMatrixSubsample()) {
             return false;
         }
         log_info( "Test Matrix - End" );
