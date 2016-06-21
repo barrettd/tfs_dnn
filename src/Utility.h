@@ -18,7 +18,11 @@ namespace tfs {     // Tree Frog Software
     DNN_NUMERIC random( const DNN_NUMERIC minValue, const DNN_NUMERIC maxValue );   // minValue to maxValue
     
     inline DNN_NUMERIC random( const DNN_INTEGER maxValue ) { return random((const DNN_NUMERIC) maxValue ); }
-    
+
+    DNN_INTEGER randomInt( void );
+    DNN_INTEGER randomInt( const DNN_INTEGER maxValue );
+    DNN_INTEGER randomInt( const DNN_INTEGER minValue, const DNN_INTEGER maxValue  );
+        
     DNN_NUMERIC randomSigmoid( void );  //  0.0 to 1.0
     DNN_NUMERIC randomTanh(    void );  // -1.0 to 1.0
     

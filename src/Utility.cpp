@@ -28,16 +28,31 @@ namespace tfs {     // Tree Frog Software
 
     DNN_NUMERIC
     random( const DNN_NUMERIC maxValue ) {    // 0.0 to maxValue
-        return ((DNN_NUMERIC) rand() / (DNN_NUMERIC)(RAND_MAX)) * maxValue;
+        return (((DNN_NUMERIC) rand() * maxValue ) / (DNN_NUMERIC)(RAND_MAX));
     }
     
     DNN_NUMERIC
     random( const DNN_NUMERIC minValue, const DNN_NUMERIC maxValue ) {  // minValue to maxValue
         const DNN_NUMERIC difference = maxValue - minValue;
         return (((DNN_NUMERIC) rand() / (DNN_NUMERIC)(RAND_MAX)) * difference) + minValue;
-        
     }
     
+    DNN_INTEGER
+    randomInt( void ) {
+        return (DNN_INTEGER) rand() / (DNN_INTEGER)(RAND_MAX);
+    }
+    
+    DNN_INTEGER
+    randomInt( const DNN_INTEGER maxValue ) {
+        return (((DNN_INTEGER) rand() * maxValue ) / (DNN_INTEGER)(RAND_MAX));
+    }
+    
+    DNN_INTEGER
+    randomInt( const DNN_INTEGER minValue, const DNN_INTEGER maxValue ) {
+        const DNN_INTEGER difference = maxValue - minValue;
+        return ((((DNN_INTEGER) rand() * difference ) / (DNN_INTEGER)(RAND_MAX))) + minValue;
+    }
+
     DNN_NUMERIC
     randomSigmoid( void ) {  //  0.0 to 1.0
         return ((DNN_NUMERIC) rand() / (DNN_NUMERIC)(RAND_MAX));

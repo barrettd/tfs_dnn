@@ -160,6 +160,39 @@ namespace tfs {         // Tree Frog Software
             return aa;
         }
         
+        inline T* getPtr( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd ) {
+            const unsigned long index = getIndex( aa, bb, cc, dd );
+            return &m_data[index];
+        }
+        inline T* getPtr( const unsigned long aa, const unsigned long bb, const unsigned long cc ) {
+            const unsigned long index = getIndex( aa, bb, cc );
+            return &m_data[index];
+        }
+        inline T* getPtr( const unsigned long aa, const unsigned long bb ) {
+            const unsigned long index = getIndex( aa, bb );
+            return &m_data[index];
+        }
+        inline T* getPtr( const unsigned long aa ) {
+            const unsigned long index = getIndex( aa );
+            return &m_data[index];
+        }
+        inline const T* getPtr( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd ) const {
+            const unsigned long index = getIndex( aa, bb, cc, dd );
+            return &m_data[index];
+        }
+        inline const T* getPtr( const unsigned long aa, const unsigned long bb, const unsigned long cc ) const {
+            const unsigned long index = getIndex( aa, bb, cc );
+            return &m_data[index];
+        }
+        inline const T* getPtr( const unsigned long aa, const unsigned long bb ) const {
+            const unsigned long index = getIndex( aa, bb );
+            return &m_data[index];
+        }
+        inline const T* getPtr( const unsigned long aa ) const {
+            const unsigned long index = getIndex( aa );
+            return &m_data[index];
+        }
+
         inline T get( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd ) const {
             const unsigned long index = getIndex( aa, bb, cc, dd );
             return m_data[index];
