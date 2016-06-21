@@ -65,13 +65,17 @@ namespace tfs {         // Tree Frog Software
         
         inline bool ok( void ) const { return m_data != 0 && m_data <= m_end; }
         
-        inline unsigned long aa(     void ) const { return m_a; }
-        inline unsigned long bb(     void ) const { return m_b; }
-        inline unsigned long cc(     void ) const { return m_c; }
+        inline unsigned long aa(     void ) const { return m_a; }       // x
+        inline unsigned long bb(     void ) const { return m_b; }       // y
+        inline unsigned long cc(     void ) const { return m_c; }       // z
         inline unsigned long dd(     void ) const { return m_d; }
-        inline unsigned long width(  void ) const { return m_a; }       // aa
-        inline unsigned long height( void ) const { return m_b; }       // bb
-        inline unsigned long depth(  void ) const { return m_c; }       // cc
+        
+        inline unsigned long width(  void ) const { return m_a; }       // aa, x
+        inline unsigned long height( void ) const { return m_b; }       // bb, y
+        inline unsigned long depth(  void ) const { return m_c; }       // cc, z
+ 
+        inline unsigned long ab(     void ) const { return m_ab;  }     // aa * bb
+        inline unsigned long abc(    void ) const { return m_abc; }     // aa * bb * cc
         inline unsigned long count(  void ) const { return m_count;  }  // Count of elements = aa * bb * cc * dd;
         inline unsigned long length( void ) const { return m_length; }  // Length in bytes   = count * sizeof( T );
         
@@ -130,7 +134,7 @@ namespace tfs {         // Tree Frog Software
 
         inline unsigned long getIndex( const unsigned long aa,
                                        const unsigned long bb,
-                                       const unsigned long cc ) const {
+                                       const unsigned long cc ) const {     // Assumes dd == 0
             const unsigned long index = cc * m_ab + bb * m_a + aa;
             if( index >= m_count ) {
                 log_error( "Index out of range: %lu/%lu, a = %lu/%lu, b = %lu/%lu, c = %lu/%lu",
@@ -140,7 +144,7 @@ namespace tfs {         // Tree Frog Software
         }
 
         inline unsigned long getIndex( const unsigned long aa,
-                                       const unsigned long bb ) const {
+                                       const unsigned long bb ) const {     // Assumes dd == 0, cc == 0
             const unsigned long index = bb * m_a + aa;
             if( index >= m_count ) {
                 log_error( "Index out of range: %lu/%lu, a = %lu/%lu, b = %lu/%lu",
@@ -149,7 +153,7 @@ namespace tfs {         // Tree Frog Software
             return index;
         }
         
-        inline unsigned long getIndex( const unsigned long aa ) const {
+        inline unsigned long getIndex( const unsigned long aa ) const {     // Assumes dd == 0, cc == 0, bb == 0
             if( aa >= m_count ) {
                 log_error( "Index out of range: %lu/%lu", aa, m_count );
             }

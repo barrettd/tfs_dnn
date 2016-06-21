@@ -105,10 +105,59 @@ namespace tfs {     // Tree Frog Software
     }
     
     bool
-    subsample( Matrix &dst, const Matrix &src, const unsigned long dx, const unsigned long dy ) {
+    subsample( Matrix &dstMatrix, const Matrix &srcMatrix, const unsigned long da, const unsigned long db ) {
+        const unsigned long srcA  = srcMatrix.aa();     // X
+        const unsigned long srcB  = srcMatrix.bb();     // Y
+        const unsigned long srcC  = srcMatrix.cc();     // r,g,b channel (if image)
+        const unsigned long srcD  = srcMatrix.dd();
+        const unsigned long dstA  = dstMatrix.aa();
+        const unsigned long dstB  = dstMatrix.bb();
+        const unsigned long dstC  = dstMatrix.cc();
+        const unsigned long dstD  = dstMatrix.dd();
+        if(( dstA + da ) > srcA || (dstB + db ) > srcB || dstC != srcC || srcD != dstD ) {
+            return log_error( "Matricies not compatible for subsample." );
+        }
+        const DNN_NUMERIC *data = srcMatrix.dataReadOnly();
+              DNN_NUMERIC *dst  = dstMatrix.data();
+        if( dstD == 1 ) {
+            if( dstC == 1 ) {
+                // 2D matrix( aa, bb )
+                for( unsigned long bb = 0; bb < dstB; bb++ ) {
+                    const unsigned long srcIndex = srcMatrix.getIndex( da, db + bb );
+                    const DNN_NUMERIC *src = &data[srcIndex];
+                    for( unsigned long aa = 0; aa < dstA; aa++ ) {
+                        *dst++ = *src++;
+                    }
+                }
+                return true;
+            }
+            // 3D matrix( aa, bb, cc )
+            for( unsigned long cc = 0; cc < dstC; cc++ ) {
+                for( unsigned long bb = 0; bb < dstB; bb++ ) {
+                    const unsigned long srcIndex = srcMatrix.getIndex( da, db + bb, cc );
+                    const DNN_NUMERIC *src = &data[srcIndex];
+                    for( unsigned long aa = 0; aa < dstA; aa++ ) {
+                        *dst++ = *src++;
+                    }
+                }
+            }
+            return true;
+        }
+        // 4D matrix( aa, bb, cc, dd )
+        for( unsigned long dd = 0; dd < dstD; dd++ ) {
+            for( unsigned long cc = 0; cc < dstC; cc++ ) {
+                for( unsigned long bb = 0; bb < dstB; bb++ ) {
+                    const unsigned long srcIndex = srcMatrix.getIndex( da, db + bb, cc, dd );
+                    const DNN_NUMERIC *src = &data[srcIndex];
+                    for( unsigned long aa = 0; aa < dstA; aa++ ) {
+                        *dst++ = *src++;
+                    }
+                }
+            }
+        }
         return true;
     }
-    
+
 
 }   // namespace tfs
 

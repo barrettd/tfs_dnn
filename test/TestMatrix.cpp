@@ -232,6 +232,58 @@ namespace tfs {
         fill( source );
         destination.zero();
         
+        unsigned long dx = 1;
+        unsigned long dy = 1;
+        if( !subsample( destination, source, dx, dy )) {
+            return false;
+        }
+        const unsigned long maxY = destination.height();
+        const unsigned long maxX = destination.width();
+        const unsigned long maxZ = destination.depth();
+        for( unsigned long zz = 0; zz < maxZ; zz++ ) {
+            for( unsigned long yy = 0; yy < maxY; yy++ ) {
+                for( unsigned long xx = 0; xx < maxX; xx++ ) {
+                    const DNN_NUMERIC srcValue = source.get( xx + dx, yy + dy, zz );
+                    const DNN_NUMERIC dstValue = destination.get( xx, yy, zz );
+                    if( srcValue != dstValue ) {
+                        return log_error( "Values do not match: %f/%f, %lu, %lu, %lu", srcValue, dstValue, xx, yy, zz );
+                    }
+                }
+            }
+        }
+        dx = 1;
+        dy = 2;
+        if( !subsample( destination, source, dx, dy )) {
+            return false;
+        }
+        for( unsigned long zz = 0; zz < maxZ; zz++ ) {
+            for( unsigned long yy = 0; yy < maxY; yy++ ) {
+                for( unsigned long xx = 0; xx < maxX; xx++ ) {
+                    const DNN_NUMERIC srcValue = source.get( xx + dx, yy + dy, zz );
+                    const DNN_NUMERIC dstValue = destination.get( xx, yy, zz );
+                    if( srcValue != dstValue ) {
+                        return log_error( "Values do not match: %f/%f, %lu, %lu, %lu", srcValue, dstValue, xx, yy, zz );
+                    }
+                }
+            }
+        }
+        dx = 0;
+        dy = 0;
+        if( !subsample( destination, source, dx, dy )) {
+            return false;
+        }
+        for( unsigned long zz = 0; zz < maxZ; zz++ ) {
+            for( unsigned long yy = 0; yy < maxY; yy++ ) {
+                for( unsigned long xx = 0; xx < maxX; xx++ ) {
+                    const DNN_NUMERIC srcValue = source.get( xx + dx, yy + dy, zz );
+                    const DNN_NUMERIC dstValue = destination.get( xx, yy, zz );
+                    if( srcValue != dstValue ) {
+                        return log_error( "Values do not match: %f/%f, %lu, %lu, %lu", srcValue, dstValue, xx, yy, zz );
+                    }
+                }
+            }
+        }
+        
         return true;
     }
     
