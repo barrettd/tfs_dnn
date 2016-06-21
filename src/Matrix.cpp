@@ -117,13 +117,14 @@ namespace tfs {     // Tree Frog Software
         if(( dstA + da ) > srcA || (dstB + db ) > srcB || dstC != srcC || srcD != dstD ) {
             return log_error( "Matricies not compatible for subsample." );
         }
-        const DNN_NUMERIC *data = srcMatrix.dataReadOnly();
-              DNN_NUMERIC *dst  = dstMatrix.data();
+        const unsigned long maxB = dstB + db;
+        const DNN_NUMERIC  *data = srcMatrix.dataReadOnly();
+              DNN_NUMERIC  *dst  = dstMatrix.data();
         if( dstD == 1 ) {
             if( dstC == 1 ) {
                 // 2D matrix( aa, bb )
-                for( unsigned long bb = 0; bb < dstB; bb++ ) {
-                    const unsigned long srcIndex = srcMatrix.getIndex( da, db + bb );
+                for( unsigned long bb = db; bb < maxB; bb++ ) {
+                    const unsigned long srcIndex = srcMatrix.getIndex( da, bb );
                     const DNN_NUMERIC *src = &data[srcIndex];
                     for( unsigned long aa = 0; aa < dstA; aa++ ) {
                         *dst++ = *src++;
@@ -133,8 +134,8 @@ namespace tfs {     // Tree Frog Software
             }
             // 3D matrix( aa, bb, cc )
             for( unsigned long cc = 0; cc < dstC; cc++ ) {
-                for( unsigned long bb = 0; bb < dstB; bb++ ) {
-                    const unsigned long srcIndex = srcMatrix.getIndex( da, db + bb, cc );
+                for( unsigned long bb = db; bb < maxB; bb++ ) {
+                    const unsigned long srcIndex = srcMatrix.getIndex( da, bb, cc );
                     const DNN_NUMERIC *src = &data[srcIndex];
                     for( unsigned long aa = 0; aa < dstA; aa++ ) {
                         *dst++ = *src++;
@@ -146,8 +147,8 @@ namespace tfs {     // Tree Frog Software
         // 4D matrix( aa, bb, cc, dd )
         for( unsigned long dd = 0; dd < dstD; dd++ ) {
             for( unsigned long cc = 0; cc < dstC; cc++ ) {
-                for( unsigned long bb = 0; bb < dstB; bb++ ) {
-                    const unsigned long srcIndex = srcMatrix.getIndex( da, db + bb, cc, dd );
+                for( unsigned long bb = db; bb < maxB; bb++ ) {
+                    const unsigned long srcIndex = srcMatrix.getIndex( da, bb, cc, dd );
                     const DNN_NUMERIC *src = &data[srcIndex];
                     for( unsigned long aa = 0; aa < dstA; aa++ ) {
                         *dst++ = *src++;
