@@ -103,6 +103,7 @@ namespace tfs {
         // virtual: Forward propagate, used with forward()
         // ok 11 June 2016
         // TODO: Speed up with pointers. (benchmark A/B compare.)
+        // Old: 35.4%
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_out_a == 0 ) {
             return log_error( "Not configured" );
@@ -143,62 +144,159 @@ namespace tfs {
         return true;
     }
     
+//    bool
+//    DnnLayerConvolution::runBackpropPrevious( void ) {
+//        // -----------------------------------------------------------------------------------
+//        // virtual: Back propagate, used with backprop()
+//        // This routine is the biggest time sink in the DigitRecognizer app.
+//        // ok 11 June 2016
+//        // Old: 61.1%
+//        // -----------------------------------------------------------------------------------
+//        if( m_in_a == 0 || m_w == 0 || m_dw == 0 ) {
+//            return log_error( "Not configured" );
+//        }
+//        const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx;
+//        const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy;
+//        const unsigned long in_z   = m_in_a->depth();
+//        const unsigned long side   = m_side;
+//        const unsigned long stride = m_stride;              // var xy_stride = this.stride;
+//        
+//        const unsigned long out_x = m_out_dw->width();
+//        const unsigned long out_y = m_out_dw->height();
+//        const unsigned long out_z = m_out_dw->depth();
+//        
+//        if( m_in_dw != 0 ) {        // Input layer often does not have dw.
+//            m_in_dw->zero();        // Zero input gradiant, we add to it below.
+//        }
+//        for( unsigned long az = 0; az < out_z; az++ ) {
+//            long yy = -(long) m_pad;
+//            for( unsigned long ay = 0; ay < out_y; ay++, yy += stride ) {
+//                long xx = -(long) m_pad;
+//                for( unsigned long ax = 0; ax < out_x; ax++, xx += stride ) {
+//                    // convolve and add up the gradients.
+//                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, az );  // gradient from chain rule
+//                    for( unsigned long  fy = 0; fy < side; fy++ ) {
+//                        long oy = yy + (long) fy;
+//                        for( unsigned long fx = 0; fx < side; fx++ ) {
+//                            long ox = xx + (long) fx;
+//                            if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
+//                                for( unsigned long fz = 0; fz < in_z; fz++ ) {
+//                                    unsigned long ix1 = m_in_a->getIndex((unsigned long) ox, (unsigned long) oy, fz );
+//                                    unsigned long ix2 = m_w->getIndex( fx, fy, fz, az );
+//                                    const DNN_NUMERIC value1 = m_in_a->get( ix1 ) * chain_grad;
+//                                    const DNN_NUMERIC value2 = m_w->get(    ix2 ) * chain_grad;
+//                                    m_dw->plusEquals( ix2, value1 );
+//                                    if( m_in_dw != 0 ) {
+//                                        m_in_dw->plusEquals( ix1, value2 );
+//                                    }
+//                                    //                                   const DNN_NUMERIC in_delta = m_in_a->get((unsigned long)ox, (unsigned long)oy, fz ) * chain_grad;
+//                                    //                                    m_dw->plusEquals( fx, fy, fz, az, in_delta );
+//                                    //                                    if( m_in_dw != 0 ) {
+//                                    //                                        const DNN_NUMERIC dw_delta = m_w->get( fx, fy, fz, az ) * chain_grad;
+//                                    //                                        m_in_dw->plusEquals((unsigned long)ox, (unsigned long)oy, fz, dw_delta );
+//                                    //                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                    m_bias_dw->plusEquals( az, chain_grad );
+//                }
+//            }
+//        }
+//        return true;
+//    }
+
     bool
     DnnLayerConvolution::runBackprop( void ) {
         // -----------------------------------------------------------------------------------
         // virtual: Back propagate, used with backprop()
         // This routine is the biggest time sink in the DigitRecognizer app.
         // ok 11 June 2016
+        // 61.1% -> 17.5% 22 June 2016
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 ) {
             return log_error( "Not configured" );
         }
-        const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx;
-        const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy;
+        const unsigned long in_x   = m_in_a->width();
+        const unsigned long in_y   = m_in_a->height();
         const unsigned long in_z   = m_in_a->depth();
         const unsigned long side   = m_side;
-        const unsigned long stride = m_stride;              // var xy_stride = this.stride;
+        const unsigned long stride = m_stride;
         
         const unsigned long out_x = m_out_dw->width();
         const unsigned long out_y = m_out_dw->height();
         const unsigned long out_z = m_out_dw->depth();
-
-        if( m_in_dw != 0 ) {        // Input layer often does not have dw.
-            m_in_dw->zero();        // Zero input gradiant, we add to it below.
-        }
-        for( unsigned long az = 0; az < out_z; az++ ) {
-            long yy = -(long) m_pad;
-            for( unsigned long ay = 0; ay < out_y; ay++, yy += stride ) {
-                long xx = -(long) m_pad;
-                for( unsigned long ax = 0; ax < out_x; ax++, xx += stride ) {
-                    // convolve and add up the gradients.
-                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, az );  // gradient from chain rule
-                    for( unsigned long  fy = 0; fy < side; fy++ ) {
-                        long oy = yy + (long) fy;
-                        for( unsigned long fx = 0; fx < side; fx++ ) {
-                            long ox = xx + (long) fx;
-                            if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
-                               for( unsigned long fz = 0; fz < in_z; fz++ ) {
-                                   unsigned long ix1 = m_in_a->getIndex((unsigned long) ox, (unsigned long) oy, fz );
-                                   unsigned long ix2 = m_w->getIndex( fx, fy, fz, az );
-                                   const DNN_NUMERIC value1 = m_in_a->get( ix1 ) * chain_grad;
-                                   const DNN_NUMERIC value2 = m_w->get(    ix2 ) * chain_grad;
-                                   m_dw->plusEquals( ix2, value1 );
-                                   if( m_in_dw != 0 ) {
-                                      m_in_dw->plusEquals( ix1, value2 );
-                                   }
-//                                   const DNN_NUMERIC in_delta = m_in_a->get((unsigned long)ox, (unsigned long)oy, fz ) * chain_grad;
-//                                    m_dw->plusEquals( fx, fy, fz, az, in_delta );
-//                                    if( m_in_dw != 0 ) {
-//                                        const DNN_NUMERIC dw_delta = m_w->get( fx, fy, fz, az ) * chain_grad;
-//                                        m_in_dw->plusEquals((unsigned long)ox, (unsigned long)oy, fz, dw_delta );
-//                                    }
+        
+        const unsigned long ix1_delta  = m_in_a->ab();
+        const unsigned long ix2_delta  = m_w->ab();
+        
+        const unsigned long filter_aa  = m_w->aa();
+        const unsigned long filter_abc = m_w->abc();
+        
+        const DNN_NUMERIC *inA      = m_in_a->dataReadOnly();
+        const DNN_NUMERIC *filter   = m_w->dataReadOnly();
+              DNN_NUMERIC *filterDw = m_dw->data();
+        const DNN_NUMERIC *outDw    = m_out_dw->dataReadOnly();
+              DNN_NUMERIC *biasDw   = m_bias_dw->data();         // [out_z]
+        
+        if( m_in_dw != 0 ) {
+            m_in_dw->zero();                                    // Zero input gradiant, we add to it below.
+            DNN_NUMERIC *inDw = m_in_dw->data();
+            for( unsigned long az = 0; az < out_z; az++ ) {
+                long yy = -(long) m_pad;
+                for( unsigned long ay = 0; ay < out_y; ay++, yy += stride ) {
+                    long xx = -(long) m_pad;
+                    for( unsigned long ax = 0; ax < out_x; ax++, xx += stride ) {
+                        // convolve and add up the gradients.
+                        const DNN_NUMERIC chain_grad = *outDw++;        // m_out_dw( ax, ay, az ) : chain rule
+                        for( unsigned long  fy = 0; fy < side; fy++ ) {
+                            const long oy = yy + (long) fy;
+                            for( unsigned long fx = 0; fx < side; fx++ ) {
+                                const long ox = xx + (long) fx;
+                                if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
+                                    unsigned long ix1 = oy * in_x + ox;                             // m_in_a( ox, oy, 0 )
+                                    unsigned long ix2 = az * filter_abc + fy * filter_aa + fx;      // m_w( fx, fy, 0, az );
+                                    for( unsigned long fz = 0; fz < in_z; fz++ ) {
+                                        filterDw[ix2] += inA[   ix1] * chain_grad;
+                                        inDw[    ix1] += filter[ix2] * chain_grad;
+                                        ix1 += ix1_delta;
+                                        ix2 += ix2_delta;
+                                    }
                                 }
                             }
                         }
+                        *biasDw += chain_grad;
                     }
-                    m_bias_dw->plusEquals( az, chain_grad );
                 }
+                biasDw++;
+            }
+        } else {
+            for( unsigned long az = 0; az < out_z; az++ ) {
+                long yy = -(long) m_pad;
+                for( unsigned long ay = 0; ay < out_y; ay++, yy += stride ) {
+                    long xx = -(long) m_pad;
+                    for( unsigned long ax = 0; ax < out_x; ax++, xx += stride ) {
+                        // convolve and add up the gradients.
+                        const DNN_NUMERIC chain_grad = *outDw++;        // m_out_dw->get( ax, ay, az );  // gradient from chain rule
+                        for( unsigned long  fy = 0; fy < side; fy++ ) {
+                            const long oy = yy + (long) fy;
+                            for( unsigned long fx = 0; fx < side; fx++ ) {
+                                const long ox = xx + (long) fx;
+                                if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
+                                    unsigned long ix1 = oy * in_x + ox;                             // m_in_a( ox, oy, 0 )
+                                    unsigned long ix2 = az * filter_abc + fy * filter_aa + fx;      // m_w( fx, fy, 0, az );
+                                    for( unsigned long fz = 0; fz < in_z; fz++ ) {
+                                        filterDw[ix2] += inA[ix1] * chain_grad;
+                                        ix1 += ix1_delta;
+                                        ix2 += ix2_delta;
+                                    }
+                                }
+                            }
+                        }
+                        *biasDw += chain_grad;
+                    }
+                }
+                biasDw++;
             }
         }
         return true;
