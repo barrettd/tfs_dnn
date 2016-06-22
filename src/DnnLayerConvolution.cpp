@@ -107,11 +107,11 @@ namespace tfs {
         if( m_in_a == 0 || m_out_a == 0 ) {
             return log_error( "Not configured" );
         }
-        const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
-        const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
+        const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx;
+        const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy;
         const unsigned long in_z   = m_in_a->depth();
         const unsigned long side   = m_side;
-        const unsigned long stride = m_stride;              // var xy_stride = this.stride |0;
+        const unsigned long stride = m_stride;              // var xy_stride = this.stride;
         
         const unsigned long out_x = m_out_a->width();
         const unsigned long out_y = m_out_a->height();
@@ -123,20 +123,20 @@ namespace tfs {
                 long xx = - (long) m_pad;
                 for( unsigned long ax = 0; ax < out_x; ax++, xx += stride ) {
                     // convolve centered at this point
-                    DNN_NUMERIC a = 0.0;
+                    DNN_NUMERIC aa = 0.0;
                     for( unsigned long  fy = 0; fy < side; fy++ ) {
                         long oy = yy + (long) fy;
                         for( unsigned long fx = 0; fx < side; fx++ ) {
                             long ox = xx + (long) fx;
                             if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
                                 for( unsigned long fz = 0; fz < in_z; fz++ ) {
-                                    a += m_w->get( fx, fy, fz, az ) * m_in_a->get((unsigned long) ox, (unsigned long)oy, fz );
+                                    aa += m_w->get( fx, fy, fz, az ) * m_in_a->get((unsigned long) ox, (unsigned long)oy, fz );
                                 }
                             }
                         }
                     }
-                    a += m_bias_w->get( az );        // bias
-                    m_out_a->set( ax, ay, az, a );   // set output
+                    aa += m_bias_w->get( az );        // bias
+                    m_out_a->set( ax, ay, az, aa );  // set output
                 }
             }
         }
@@ -153,11 +153,11 @@ namespace tfs {
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 ) {
             return log_error( "Not configured" );
         }
-        const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx |0;
-        const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy |0;
+        const unsigned long in_x   = m_in_a->width();        // var V_sx = V.sx;
+        const unsigned long in_y   = m_in_a->height();       // var V_sy = V.sy;
         const unsigned long in_z   = m_in_a->depth();
         const unsigned long side   = m_side;
-        const unsigned long stride = m_stride;              // var xy_stride = this.stride |0;
+        const unsigned long stride = m_stride;              // var xy_stride = this.stride;
         
         const unsigned long out_x = m_out_dw->width();
         const unsigned long out_y = m_out_dw->height();
