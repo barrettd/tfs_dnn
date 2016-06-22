@@ -110,6 +110,8 @@ namespace tfs {
         const unsigned long out_y = m_out_a->height();
         const unsigned long out_z = m_out_a->depth();
         
+        DNN_NUMERIC *outA = m_out_a->data();
+        
         m_out_a->zero();        // May not need to do this.
         
         unsigned long *switches = m_switch;     // Pointer for switches.
@@ -136,7 +138,7 @@ namespace tfs {
                             }
                         }
                     }
-                    m_out_a->set( ax, ay, az, aa );
+                    *outA++ = aa;           // m_out_a->set( ax, ay, az, aa );
                     *switches++ = winx;
                     *switches++ = winy;
                 }
@@ -157,13 +159,15 @@ namespace tfs {
         const unsigned long out_x = m_out_dw->width();
         const unsigned long out_y = m_out_dw->height();
         const unsigned long out_z = m_out_dw->depth();
+        
+        const DNN_NUMERIC *outDw = m_out_dw->dataReadOnly();
 
         m_in_dw->zero();
         const unsigned long *switches = m_switch;     // Pointer for switches.
         for( unsigned long az = 0; az < out_z; az++ ) {
             for( unsigned long ay = 0; ay < out_y; ay++ ) {
                 for( unsigned long ax = 0; ax < out_x; ax++ ) {
-                    const DNN_NUMERIC chain_grad = m_out_dw->get( ax, ay, az );
+                    const DNN_NUMERIC chain_grad = *outDw++;            // m_out_dw->get( ax, ay, az );
                     const unsigned long winx = *switches++;
                     const unsigned long winy = *switches++;
                     m_in_dw->plusEquals( winx, winy, az, chain_grad );
