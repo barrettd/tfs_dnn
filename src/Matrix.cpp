@@ -90,9 +90,11 @@ namespace tfs {     // Tree Frog Software
                 for( unsigned long dx = 0; dx < dstX; dx++ ) {
                     const unsigned long sx = dx * stride;
                     DNN_NUMERIC sum = 0.0;
-                    for( unsigned long ky = 0; ky < kernalY; ky++ ) {
-                        for( unsigned long kx = 0; kx < kernalX; kx++ ) {
-                            const DNN_NUMERIC sourceValue = src.get( sx, sy, dz );
+                    unsigned long iy = sy;
+                    unsigned long ix = sx;
+                    for( unsigned long ky = 0; ky < kernalY; ky++, iy++ ) {
+                        for( unsigned long kx = 0; kx < kernalX; kx++, ix++ ) {
+                            const DNN_NUMERIC sourceValue = src.get( ix, iy, dz ); 
                             const DNN_NUMERIC kernalValue = kernel.get( kx, ky );
                             sum += sourceValue * kernalValue;
                         }
