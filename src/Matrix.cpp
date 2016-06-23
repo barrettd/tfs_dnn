@@ -67,11 +67,13 @@ namespace tfs {     // Tree Frog Software
         // ---------------------------------------------------------------------------------
         // This is a zero pad reducing kernel function. Useful for sub-sampling
         // ---------------------------------------------------------------------------------
-        const unsigned long srcX    = src.width();      // X
-        const unsigned long srcY    = src.height();     // Y
-        const unsigned long srcZ    = src.cc();         // r,g,b channel (if image)
-        const unsigned long kernalX = kernel.aa();
-        const unsigned long kernalY = kernel.bb();
+        const unsigned long srcX      = src.width();      // X
+        const unsigned long srcY      = src.height();     // Y
+        const unsigned long srcZ      = src.cc();         // r,g,b channel (if image)
+        const unsigned long kernalX   = kernel.aa();
+        const unsigned long kernalY   = kernel.bb();
+        const DNN_NUMERIC *kernelData = kernel.dataReadOnly();
+        
         if( srcX < kernalX || srcY < kernalY ) {
             log_error( "Source matrix smaller than kernel" );
             return 0;
@@ -92,11 +94,11 @@ namespace tfs {     // Tree Frog Software
                     DNN_NUMERIC sum = 0.0;
                     unsigned long iy = sy;
                     unsigned long ix = sx;
+                    const DNN_NUMERIC *kernelPtr = kernelData;
                     for( unsigned long ky = 0; ky < kernalY; ky++, iy++ ) {
                         for( unsigned long kx = 0; kx < kernalX; kx++, ix++ ) {
                             const DNN_NUMERIC sourceValue = src.get( ix, iy, dz ); 
-                            const DNN_NUMERIC kernalValue = kernel.get( kx, ky );
-                            sum += sourceValue * kernalValue;
+                            sum += sourceValue * *kernelPtr++;
                         }
                     }
                     dst->set( dx, dy, dz, sum );
