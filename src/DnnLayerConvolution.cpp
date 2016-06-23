@@ -170,11 +170,12 @@ namespace tfs {
         if( m_in_a == 0 || m_w == 0 || m_dw == 0 ) {
             return log_error( "Not configured" );
         }
-        const unsigned long in_x   = m_in_a->width();
-        const unsigned long in_y   = m_in_a->height();
-        const unsigned long in_z   = m_in_a->depth();
-        const unsigned long side   = m_side;
-        const unsigned long stride = m_stride;
+        const unsigned long in_x     = m_in_a->width();
+        const unsigned long in_y     = m_in_a->height();
+        const unsigned long in_z     = m_in_a->depth();
+        const unsigned long side     = m_side;
+        const unsigned long stride   = m_stride;
+        const          long padStart = -(long) m_pad;
         
         const unsigned long out_x = m_out_dw->width();
         const unsigned long out_y = m_out_dw->height();
@@ -196,9 +197,9 @@ namespace tfs {
             m_in_dw->zero();                                    // Zero input gradiant, we add to it below.
             DNN_NUMERIC *inDw = m_in_dw->data();
             for( unsigned long az = 0; az < out_z; az++ ) {
-                long yy = -(long) m_pad;
+                long yy = padStart;
                 for( unsigned long ay = 0; ay < out_y; ay++, yy += stride ) {
-                    long xx = -(long) m_pad;
+                    long xx = padStart;
                     for( unsigned long ax = 0; ax < out_x; ax++, xx += stride ) {
                         // convolve and add up the gradients.
                         const DNN_NUMERIC chain_grad = *outDw++;        // m_out_dw( ax, ay, az ) : chain rule
@@ -225,9 +226,9 @@ namespace tfs {
             }
         } else {
             for( unsigned long az = 0; az < out_z; az++ ) {
-                long yy = -(long) m_pad;
+                long yy = padStart;
                 for( unsigned long ay = 0; ay < out_y; ay++, yy += stride ) {
-                    long xx = -(long) m_pad;
+                    long xx = padStart;
                     for( unsigned long ax = 0; ax < out_x; ax++, xx += stride ) {
                         // convolve and add up the gradients.
                         const DNN_NUMERIC chain_grad = *outDw++;        // m_out_dw->get( ax, ay, az );  // gradient from chain rule

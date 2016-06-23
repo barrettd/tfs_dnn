@@ -104,11 +104,14 @@ namespace tfs {
         if( m_in_a == 0 || m_out_a == 0 ) {
             return log_error( "Not configured" );
         }
-        const unsigned long in_x  = m_in_a->width();
-        const unsigned long in_y  = m_in_a->height();
-        const unsigned long out_x = m_out_a->width();
-        const unsigned long out_y = m_out_a->height();
-        const unsigned long out_z = m_out_a->depth();
+        const unsigned long in_x   = m_in_a->width();
+        const unsigned long in_y   = m_in_a->height();
+        const unsigned long out_x  = m_out_a->width();
+        const unsigned long out_y  = m_out_a->height();
+        const unsigned long out_z  = m_out_a->depth();
+        const unsigned long side   = m_side;
+        const unsigned long stride = m_stride;
+        const          long padStart = -(long) m_pad;
         
         DNN_NUMERIC *outA = m_out_a->data();
         
@@ -116,17 +119,17 @@ namespace tfs {
         
         unsigned long *switches = m_switch;     // Pointer for switches.
         for( unsigned long az = 0; az < out_z; az++ ) {
-            long yy = - (long) m_pad;
-            for( unsigned long ay = 0; ay < out_y; ay++, yy += m_stride ) {
-                long xx = - (long) m_pad;
-                for( unsigned long ax = 0; ax < out_x; ax++, xx += m_stride ) {
+            long yy = padStart;
+            for( unsigned long ay = 0; ay < out_y; ay++, yy += stride ) {
+                long xx = padStart;
+                for( unsigned long ax = 0; ax < out_x; ax++, xx += stride ) {
                     // Convolve centered at [ax, ay]
                     DNN_NUMERIC aa = -__DBL_MAX__;
                     unsigned long winx = 0;
                     unsigned long winy = 0;
-                    for( unsigned long fy = 0; fy < m_side; fy++ ) {
+                    for( unsigned long fy = 0; fy < side; fy++ ) {
                         const long oy = yy + (long) fy;
-                        for( unsigned long fx = 0; fx < m_side; fx++ ) {
+                        for( unsigned long fx = 0; fx < side; fx++ ) {
                             const long ox = xx + (long) fx;
                             if( oy >= 0 && oy < (long) in_y && ox >= 0 && ox < (long) in_x ) {
                                 const DNN_NUMERIC vv = m_in_a->get((unsigned long) ox, (unsigned long) oy, az );
