@@ -92,12 +92,10 @@ namespace tfs {     // Tree Frog Software
                 const unsigned long sy = dy * stride;
                 for( unsigned long dx = 0; dx < dstX; dx++ ) {
                     const unsigned long sx = dx * stride;
-                    DNN_NUMERIC  sum = 0.0;
-                    unsigned long iy = sy;
                     const DNN_NUMERIC *kernelPtr = kernelData;
-                    for( unsigned long ky = 0; ky < kernelY; ky++, iy++ ) {
-                        unsigned long ix = sx;
-                        for( unsigned long kx = 0; kx < kernelX; kx++, ix++ ) {
+                    DNN_NUMERIC sum = 0.0;
+                    for( unsigned long iy = sy; iy < (kernelY + sy); iy++ ) {
+                        for( unsigned long ix = sx; ix < (kernelX + sx); ix++ ) {
                             const DNN_NUMERIC sourceValue = src.get( ix, iy, dz ); 
                             sum += sourceValue * *kernelPtr++;
                         }
