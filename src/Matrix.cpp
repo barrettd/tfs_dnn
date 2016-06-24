@@ -70,11 +70,11 @@ namespace tfs {     // Tree Frog Software
         const unsigned long srcX      = src.width();      // X
         const unsigned long srcY      = src.height();     // Y
         const unsigned long srcZ      = src.cc();         // r,g,b channel (if image)
-        const unsigned long kernalX   = kernel.aa();
-        const unsigned long kernalY   = kernel.bb();
+        const unsigned long kernelX   = kernel.aa();
+        const unsigned long kernelY   = kernel.bb();
         const DNN_NUMERIC *kernelData = kernel.dataReadOnly();
         
-        if( srcX < kernalX || srcY < kernalY ) {
+        if( srcX < kernelX || srcY < kernelY ) {
             log_error( "Source matrix smaller than kernel" );
             return 0;
         }
@@ -82,26 +82,27 @@ namespace tfs {     // Tree Frog Software
             log_error( "Stride too small" );
             return 0;
         }
-        const unsigned long dstX = (unsigned long) floor((srcX - kernalX) / stride + 1.0 );
-        const unsigned long dstY = (unsigned long) floor((srcY - kernalY) / stride + 1.0 );
+        const unsigned long dstX = (unsigned long) floor((srcX - kernelX) / stride + 1.0 );
+        const unsigned long dstY = (unsigned long) floor((srcY - kernelY) / stride + 1.0 );
         const unsigned long dstZ = srcZ;
-        Matrix *dst = new Matrix( dstX, dstY, dstZ );
+        Matrix      *dst = new Matrix( dstX, dstY, dstZ );
+        DNN_NUMERIC *ptr = dst->data();
         for( unsigned long dz = 0; dz < dstZ; dz++ ) {
             for( unsigned long dy = 0; dy < dstY; dy++ ) {
                 const unsigned long sy = dy * stride;
                 for( unsigned long dx = 0; dx < dstX; dx++ ) {
                     const unsigned long sx = dx * stride;
-                    DNN_NUMERIC sum = 0.0;
+                    DNN_NUMERIC  sum = 0.0;
                     unsigned long iy = sy;
-                    unsigned long ix = sx;
                     const DNN_NUMERIC *kernelPtr = kernelData;
-                    for( unsigned long ky = 0; ky < kernalY; ky++, iy++ ) {
-                        for( unsigned long kx = 0; kx < kernalX; kx++, ix++ ) {
+                    for( unsigned long ky = 0; ky < kernelY; ky++, iy++ ) {
+                        unsigned long ix = sx;
+                        for( unsigned long kx = 0; kx < kernelX; kx++, ix++ ) {
                             const DNN_NUMERIC sourceValue = src.get( ix, iy, dz ); 
                             sum += sourceValue * *kernelPtr++;
                         }
                     }
-                    dst->set( dx, dy, dz, sum );
+                    *ptr++ = sum;       //  dst->set( dx, dy, dz, sum );
                 }
             }
         }
@@ -128,7 +129,7 @@ namespace tfs {     // Tree Frog Software
             if( dstC == 1 ) {
                 // 2D matrix( aa, bb )
                 for( unsigned long bb = db; bb < maxB; bb++ ) {
-                    const unsigned long srcIndex = srcMatrix.getIndex( da, bb );
+                    const unsigned long srcIndex = srcMatrix.getIndex( da, bb );    // TODO: Speed up subsample
                     const DNN_NUMERIC *src = &data[srcIndex];
                     for( unsigned long aa = 0; aa < dstA; aa++ ) {
                         *dst++ = *src++;
