@@ -67,7 +67,7 @@ namespace tfs {     // Tree Frog Software
     randomGauss( void ) {
         // --------------------------------------------------------------------
         // 0.0 to 1.0, gausian distribution. Box–Muller transform
-        // This form probably a little faster than randomGaussian() below.
+        // This form is probably a little faster than randomGaussian() below.
         // --------------------------------------------------------------------
         const DNN_NUMERIC scale = 2.0 / (DNN_NUMERIC) RAND_MAX;
         
@@ -99,11 +99,10 @@ namespace tfs {     // Tree Frog Software
         const DNN_NUMERIC two_pi  = 2.0 * M_PI;
         const DNN_NUMERIC scale   = 1.0 / (DNN_NUMERIC) RAND_MAX;
         
-        static DNN_NUMERIC z1 = 0.0;
-        static bool generate  = false;
-        
+        static bool generate = false;
         generate = !generate;
         
+        static DNN_NUMERIC z1 = 0.0;
         if( !generate ) {
             return z1 * sigma + mu;
         }
