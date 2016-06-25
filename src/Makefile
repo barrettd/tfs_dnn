@@ -52,6 +52,7 @@ OBJS = 	$(OBJ_DIR)Dnn.o\
         $(OBJ_DIR)DnnBuilder.o\
         $(OBJ_DIR)DnnLayer.o\
         $(OBJ_DIR)DnnLayerConvolution.o\
+        $(OBJ_DIR)DnnLayerDeconvolution.o\
         $(OBJ_DIR)DnnLayerDropout.o\
         $(OBJ_DIR)DnnLayerFullyConnected.o\
         $(OBJ_DIR)DnnLayerInput.o\
@@ -83,6 +84,7 @@ $(OBJ_DIR)Dnn.o                                 : Dnn.cpp Dnn.h
 $(OBJ_DIR)DnnBuilder.o                          : DnnBuilder.cpp DnnBuilder.h
 $(OBJ_DIR)DnnLayer.o                            : DnnLayer.cpp DnnLayer.h
 $(OBJ_DIR)DnnLayerConvolution.o                 : DnnLayerConvolution.cpp DnnLayerConvolution.h
+$(OBJ_DIR)DnnLayerDeconvolution.o               : DnnLayerDeconvolution.cpp DnnLayerDeconvolution.h
 $(OBJ_DIR)DnnLayerDropout.o                     : DnnLayerDropout.cpp DnnLayerDropout.h
 $(OBJ_DIR)DnnLayerFullyConnected.o              : DnnLayerFullyConnected.cpp DnnLayerFullyConnected.h
 $(OBJ_DIR)DnnLayerInput.o                       : DnnLayerInput.cpp DnnLayerInput.h
