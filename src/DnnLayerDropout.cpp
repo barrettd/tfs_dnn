@@ -86,7 +86,7 @@ namespace tfs {
         // virtual: Forward propagate, used with forward()
         // -----------------------------------------------------------------------------------
         if( m_in_a == 0 || m_out_a == 0 || m_dropped == 0 ) {
-            return log_error( "Not configured for training" );
+            return log_error( "Not configured for forward propagation" );
         }
         const DNN_NUMERIC *src    = m_in_a->dataReadOnly();
         const DNN_NUMERIC *srcEnd = m_in_a->end();
