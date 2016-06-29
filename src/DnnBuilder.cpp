@@ -65,8 +65,8 @@ namespace tfs {
     }
    
     bool
-    DnnBuilder::addLayerDropout( void ) {
-        return m_dnn.addLayerDropout();
+    DnnBuilder::addLayerDropout( DNN_NUMERIC probability ) {
+        return m_dnn.addLayerDropout( probability );
     }
     
     bool

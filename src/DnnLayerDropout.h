@@ -13,13 +13,18 @@ namespace tfs {
     
     class DnnLayerDropout : public DnnLayer {
     protected:
+        DNN_NUMERIC m_probability;
+        bool       *m_dropped;
+        void setup( const bool trainable = true );
 
     public:
-        DnnLayerDropout( DnnLayer *previousLayer, const bool trainable = true );
+        DnnLayerDropout( DnnLayer *previousLayer, DNN_NUMERIC probability = 0.5, const bool trainable = true );
         virtual ~DnnLayerDropout( void );
         
+        DNN_NUMERIC probability( void ) const;
+        
         virtual bool runForward(  void );
-        virtual bool runPredict(  void );
+        virtual bool runPredict(  void );                       // Forward progagate when predicting
         virtual bool runBackprop( void );
     };
     

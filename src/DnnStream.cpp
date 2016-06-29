@@ -399,12 +399,19 @@ namespace tfs {         // Tree Frog Software
     
     bool
     OutDnnStream::writeLayer( const DnnLayerDropout &layer ) {
+        if( !write( layer.probability())) {
+            return log_error( "Unable to write attribute" );
+        }
         return writeLayerBase( layer );
     }
 
     bool
     InDnnStream::readLayerDropout( Dnn &dnn ) {
-        if( !dnn.addLayerDropout()) {
+        DNN_NUMERIC probability;
+        if( !read( probability )) {
+            return log_error( "Unable to read attribute" );
+        }
+        if( !dnn.addLayerDropout( probability )) {
             return log_error( "Unable to add layer" );
         }
         return readLayerBase( dnn.getLayerOutput());    // Fill layer just added.

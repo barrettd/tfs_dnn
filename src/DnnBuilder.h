@@ -42,7 +42,7 @@ namespace tfs {
         
         bool addLayerFullyConnected( unsigned long neuronCount, Activation activation = ACTIVATION_CURRENT );
 
-        bool addLayerDropout( void );
+        bool addLayerDropout( DNN_NUMERIC probability = 0.5 );
         bool addLayerLocalResponseNormalization( void );
         bool addLayerPool( unsigned long side, unsigned long stride = 1 );
         bool addLayerRegression( unsigned long neuronCount );

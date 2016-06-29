@@ -103,8 +103,8 @@ namespace tfs {
     }
     
     bool
-    Dnn::addLayerDropout( void ) {
-        DnnLayerDropout *layer = new DnnLayerDropout( m_layer_previous, m_trainable );
+    Dnn::addLayerDropout( DNN_NUMERIC probability ) {
+        DnnLayerDropout *layer = new DnnLayerDropout( m_layer_previous, probability, m_trainable );
         return addLayer( layer );
     }
     
