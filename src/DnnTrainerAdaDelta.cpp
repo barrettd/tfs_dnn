@@ -39,7 +39,7 @@ namespace tfs {
             return m_loss;
         }
         if( m_trainable_handle == 0 || m_trainable_end == 0 ) {
-            log_error( "No gradiants available for training" );
+            log_error( "No gradients available for training" );
             return m_loss;
         }
         if( !m_dnn->forward()) {
@@ -53,7 +53,7 @@ namespace tfs {
         if( m_gsum == 0 ) {
             setupSums( true );  // setup gsum[] and xsum[]
         }
-        // Set up for modifying the gradiants.
+        // Set up for modifying the gradients.
         DNN_NUMERIC l1_decay_loss = 0.0;
         DNN_NUMERIC l2_decay_loss = 0.0;
         
@@ -67,13 +67,13 @@ namespace tfs {
                   Trainable   *trainable   = *trainableHandle++;      // trainable != 0 & ok() from DnnTrainer::setUpTrainables()
                   DNN_NUMERIC *weight      = trainable->weightStart;
             const DNN_NUMERIC *weightEnd   = trainable->weightEnd;
-                  DNN_NUMERIC *gradiant    = trainable->gradiantStart;
-            const DNN_NUMERIC *gradiantEnd = trainable->gradiantEnd;
+                  DNN_NUMERIC *gradient    = trainable->gradientStart;
+            const DNN_NUMERIC *gradientEnd = trainable->gradientEnd;
             const DNN_NUMERIC l1_decay     = trainable->l1_decay_mul * m_l1_decay;
             const DNN_NUMERIC l2_decay     = trainable->l2_decay_mul * m_l2_decay;
             
-            if( weight == 0 || gradiant == 0 ) {
-                log_error( "Trainable has weight or gradiant == 0" );
+            if( weight == 0 || gradient == 0 ) {
+                log_error( "Trainable has weight or gradient == 0" );
                 return m_loss;
             }
         
@@ -86,10 +86,10 @@ namespace tfs {
                 const DNN_NUMERIC l1grad = l1_decay * (ww > 0.0 ? 1.0 : -1.0);
                 const DNN_NUMERIC l2grad = l2_decay * ww;
                 
-                const DNN_NUMERIC gij = ( l1grad + l2grad + *gradiant ) / m_batch_size; // raw batch gradient
+                const DNN_NUMERIC gij = ( l1grad + l2grad + *gradient ) / m_batch_size; // raw batch gradient
                 
-                if( gradiant >= gradiantEnd ) {
-                    log_error( "Trainable has gradiant[] smaller than weight[] in size." );
+                if( gradient >= gradientEnd ) {
+                    log_error( "Trainable has gradient[] smaller than weight[] in size." );
                     return m_loss;
                 }
                 *gsum = m_ro * *gsum + ( 1 - m_ro ) * gij * gij;
@@ -100,7 +100,7 @@ namespace tfs {
                 *weight++ += dx;
                 gsum++;
                 xsum++;
-                *gradiant++ = 0.0;
+                *gradient++ = 0.0;
             }
         }
         return m_loss += (l1_decay_loss + l2_decay_loss);

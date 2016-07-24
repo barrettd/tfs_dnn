@@ -268,7 +268,7 @@ namespace tfs {         // Tree Frog Software
                 return 0;
             }
             if( matrix.m_count != m_count ) {
-                log_error( "Matricies not the same size" );
+                log_error( "Matrices not the same size" );
                 return 0;
             }
             const T *       lhs = m_data;
@@ -363,35 +363,35 @@ namespace tfs {         // Tree Frog Software
         
     };  // class TMatrix
     
-    template <typename T> struct TTrainable {       // Tuple of weight Matrix and gradiant Matrix.
-              T *weightStart;                       // Convienience pointers to the start and end of data arrays
+    template <typename T> struct TTrainable {       // Tuple of weight Matrix and gradient Matrix.
+              T *weightStart;                       // Convenience pointers to the start and end of data arrays
         const T *weightEnd;
-              T *gradiantStart;
-        const T *gradiantEnd;
+              T *gradientStart;
+        const T *gradientEnd;
               T  l1_decay_mul;
               T  l2_decay_mul;
 
         TTrainable( void ):
-        weightStart( 0 ), weightEnd( 0 ), gradiantStart( 0 ), gradiantEnd( 0 ),
+        weightStart( 0 ), weightEnd( 0 ), gradientStart( 0 ), gradientEnd( 0 ),
         l1_decay_mul( 1.0 ), l2_decay_mul( 1.0 ) {
         }
         
-        TTrainable( TMatrix< T > *weights, TMatrix< T > *gradiants ) :
-        weightStart( 0 ), weightEnd( 0 ), gradiantStart( 0 ), gradiantEnd( 0 ),
+        TTrainable( TMatrix< T > *weights, TMatrix< T > *gradients ) :
+        weightStart( 0 ), weightEnd( 0 ), gradientStart( 0 ), gradientEnd( 0 ),
         l1_decay_mul( 1.0 ), l2_decay_mul( 1.0 ) {
             setWeight(   weights   );
-            setGradiant( gradiants );
+            setGradient( gradients );
         }
         
         ~TTrainable( void ) {
             weightStart   = 0;
             weightEnd     = 0;
-            gradiantStart = 0;
-            gradiantEnd   = 0;
+            gradientStart = 0;
+            gradientEnd   = 0;
         }
         
         inline bool ok( void ) const {
-            return weightStart != 0 && weightStart < weightEnd && gradiantStart != 0 && gradiantStart < gradiantEnd;
+            return weightStart != 0 && weightStart < weightEnd && gradientStart != 0 && gradientStart < gradientEnd;
         }
         
         inline unsigned long weightCount( void ) const {
@@ -401,11 +401,11 @@ namespace tfs {         // Tree Frog Software
             return (unsigned long) ( weightEnd - weightStart );             // Count of Ts
         }
 
-        inline unsigned long gradiantCount( void ) const {
-            if( gradiantEnd <= gradiantStart ) {
+        inline unsigned long gradientCount( void ) const {
+            if( gradientEnd <= gradientStart ) {
                 return 0;
             }
-            return (unsigned long) ( gradiantEnd - gradiantStart );         // Count of Ts
+            return (unsigned long) ( gradientEnd - gradientStart );         // Count of Ts
         }
 
         void setWeight( TMatrix< T > *matrix ) {
@@ -418,13 +418,13 @@ namespace tfs {         // Tree Frog Software
             }
         }
 
-        void setGradiant( TMatrix< T > *matrix ) {
+        void setGradient( TMatrix< T > *matrix ) {
             if( matrix != 0 ) {
-                gradiantStart = matrix->data();
-                gradiantEnd   = matrix->end();
+                gradientStart = matrix->data();
+                gradientEnd   = matrix->end();
             } else {
-                gradiantStart = 0;
-                gradiantEnd   = 0;
+                gradientStart = 0;
+                gradientEnd   = 0;
             }
         }
 

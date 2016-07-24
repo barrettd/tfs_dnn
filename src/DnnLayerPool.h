@@ -11,19 +11,19 @@
 
 namespace tfs {
     
-    class DnnLayerPool : public DnnLayer {
+    class DnnLayerPool : public DnnLayer {      // Max pooling layer.
     protected:
         unsigned long  m_side;
         unsigned long  m_stride;
         unsigned long  m_pad;
         unsigned long  m_switch_count;
-        unsigned long *m_switch;  // Contains index to max max values
+        unsigned long *m_switch;                // Contains index to max values
         
         void setup( const bool trainable = true );
 
     public:
         DnnLayerPool( DnnLayer *previousLayer,
-                     unsigned long side,            // Size of the square side
+                     unsigned long side,        // Size of the square side
                      unsigned long stride = 2,
                      unsigned long pad    = 0,
                      const bool trainable = true );
