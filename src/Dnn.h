@@ -42,7 +42,7 @@ namespace tfs {     // Tree Frog Software
         bool addLayer( DnnLayerInput *layer );
         bool addLayer( DnnLayer      *layer );
 
-        bool addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz = 1, const bool retain_dw = false ); // input
+        bool addLayerInput( unsigned long xx, unsigned long yy = 1, unsigned long zz = 1, const bool retain_dw = false ); // input
 
         bool addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride = 1, unsigned long pad = 0 ); // conv (square)
         bool addLayerDropout( DNN_NUMERIC probability = 0.5 );              // dropout

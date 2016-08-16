@@ -1,7 +1,7 @@
 # tfs_dnn
 C++ Deep Neural Net library - Version 1.00 is now available.
-The currenly implemented features work well, but there is still some more work to do.
 
+The currenly implemented features work well, but there is still some more work to do.
 
 
 This implementation was inspired by a Java Script library called ConvNetJS by Andrej Karpathy.

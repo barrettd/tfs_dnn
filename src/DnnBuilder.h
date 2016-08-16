@@ -36,7 +36,7 @@ namespace tfs {
         Activation activation( void ) const;
         Activation activation( Activation value );
 
-        bool addLayerInput( unsigned long xx, unsigned long yy, unsigned long zz = 1 );
+        bool addLayerInput( unsigned long xx, unsigned long yy = 1, unsigned long zz = 1 );
         
         bool addLayerConvolution( unsigned long side, unsigned long filters, unsigned long stride = 1, unsigned long pad = 0, Activation activation = ACTIVATION_CURRENT );
         
