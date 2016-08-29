@@ -29,7 +29,7 @@ main( int argc, const char * argv[] ) {
     testCifar10();
     testSimple();
     testCircle();
-//    testSpiral();
+    testSpiral();           // This may take a little time, depending on your computer.
     test2Layer();
     testIO();
     
@@ -40,7 +40,7 @@ main( int argc, const char * argv[] ) {
     if( elapsedTime == 1 ) {
        std::cout << "1 second.\n";
     } else {
-        std::cout << elapsedTime << " seconds.\n";
+        std::cout << elapsedTime << " seconds.\n";  // From my 2009 Macbook pro: Elapsed time: 28 seconds.
     }
     return 0;
     

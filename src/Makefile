@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------------
 # Makefile research static library: tfs_dnn.a
-# Version 1, 7 May 2016
+# Version 2, 20 Aug 2016
 # ---------------------------------------------------------------------------- 
 # Note:
 # $@ = File name of the target.
@@ -25,7 +25,7 @@ INSTALL_DIR = $(LIB_DIR)
 # CC      = 
 # CDEFS   =
 
-CFLAGS  = -Wall -O3
+CFLAGS  = -Wall -O3 -std=c++11 
 IFLAGS  = -I $(INC_LIB_DIR)
 LDFLAGS = 
 COMPILE_DYNAMIC  = $(CC) $(IFLAGS) $(CFLAGS) -fpic $(CDEFS) -c
