@@ -72,8 +72,8 @@ OBJS = 	$(OBJ_DIR)Dnn.o\
         $(OBJ_DIR)BinaryStream.o\
         $(OBJ_DIR)CsvFile.o\
         $(OBJ_DIR)DnnStream.o\
-        $(OBJ_DIR)Error.o\
-        $(OBJ_DIR)JpegFile.o\
+	$(OBJ_DIR)Error.o\
+#        $(OBJ_DIR)JpegFile.o\
         $(OBJ_DIR)Matrix.o\
         $(OBJ_DIR)Utility.o
 
