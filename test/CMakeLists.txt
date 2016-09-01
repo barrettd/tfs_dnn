@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 2.8)
+# test app for tfs_dnn
+
 
 set(SOURCE_FILES
         main.cpp
