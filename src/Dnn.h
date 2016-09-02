@@ -27,7 +27,7 @@ namespace tfs {     // Tree Frog Software
         DnnLayerInput           *m_layer_input;
         DnnLayer                *m_layer_previous;      // Used during creation of the layer stack.
         DnnLayer                *m_layer_output;
-        bool                     m_trainable;           // Allocate gradiant arrays if true.
+        bool                     m_trainable;           // Allocate gradient arrays if true.
         
     public:
         Dnn( bool trainable = true );

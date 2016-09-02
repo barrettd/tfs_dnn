@@ -60,14 +60,14 @@ namespace tfs {
         Matrix     *outA(  void );              // Output Neuron Activations
         Matrix     *outDw( void );              // d/dw Output Neuron Activations
         Matrix     *weights(  void );           // Internal Neuron connection weights   (w)
-        Matrix     *gradiant( void );           // Internal Neuron connection gradiant  (dw)
+        Matrix     *gradient( void );           // Internal Neuron connection gradient  (dw)
         Matrix     *bias(   void );             // Internal Neuron connection bias      (bias.w)
         Matrix     *biasDw( void );             // Internal Neuron connection bias dw   (bias.dw)
 
         const Matrix *outAReadOnly(    void ) const;              // Output Neuron Activations
         const Matrix *outDwReadOnly(    void ) const;              // d/dw Output Neuron Activations
         const Matrix *weightsReadOnly(  void ) const; // Internal Neuron connection weights   (w)
-        const Matrix *gradiantReadOnly( void ) const; // Internal Neuron connection gradiant  (dw)
+        const Matrix *gradientReadOnly( void ) const; // Internal Neuron connection gradient  (dw)
         const Matrix *biasReadOnly(     void ) const; // Internal Neuron connection bias      (bias.w)
         const Matrix *biasDwReadOnly(   void ) const; // Internal Neuron connection bias dw   (bias.dw)
 
@@ -86,8 +86,8 @@ namespace tfs {
         // ----------------------------------------------------------------------------------------------
         // These methods perform a function, then call the next layer in the chain to do the same.
         // ----------------------------------------------------------------------------------------------
-        virtual void initialize( void );        // Zero activations, gradiant and randomize weights. Forward calling.
-        virtual void randomize(  void );        // Randomize gradiant. Forward calling.
+        virtual void initialize( void );        // Zero activations, gradient and randomize weights. Forward calling.
+        virtual void randomize(  void );        // Randomize gradient. Forward calling.
         
         // Perform function in just the current layer
         virtual bool runBias( DNN_NUMERIC value );              // Set biases in current layer.

@@ -42,11 +42,11 @@ namespace tfs {
     }
     
     void
-    DnnTrainer::setUpTrainable( Matrix *weights, Matrix *gradiant, const DNN_NUMERIC l1_decay_mul, const DNN_NUMERIC l2_decay_mul ) {
-        if( weights == 0 || gradiant == 0 ) {
+    DnnTrainer::setUpTrainable( Matrix *weights, Matrix *gradient, const DNN_NUMERIC l1_decay_mul, const DNN_NUMERIC l2_decay_mul ) {
+        if( weights == 0 || gradient == 0 ) {
             return;
         }
-        Trainable *trainable = new Trainable( weights, gradiant );
+        Trainable *trainable = new Trainable( weights, gradient );
         trainable->l1_decay_mul = l1_decay_mul;
         trainable->l2_decay_mul = l2_decay_mul;
         if( trainable->ok()) {
@@ -66,14 +66,14 @@ namespace tfs {
         DnnLayer *layer = (DnnLayer*) m_dnn->getLayerInput();
         while( layer != 0 ) {
             Matrix *weights  = layer->weights();
-            Matrix *gradiant = layer->gradiant();
+            Matrix *gradient = layer->gradient();
             Matrix *bias     = layer->bias();
             Matrix *biasDw   = layer->biasDw();
             
             const DNN_NUMERIC l1_decay_mul = layer->l1DecayMultiplier();
             const DNN_NUMERIC l2_decay_mul = layer->l2DecayMultiplier();
             
-            setUpTrainable( weights, gradiant, l1_decay_mul, l2_decay_mul );
+            setUpTrainable( weights, gradient, l1_decay_mul, l2_decay_mul );
             setUpTrainable( bias,    biasDw,            0.0,          0.0 );
             
             layer = layer->getNextLayer();

@@ -33,7 +33,7 @@ namespace tfs {
         // -----------------------------------------------------------------------------------
         // S = size of input data
         // out_a[S]  = activations of each neuron
-        // out_dw[S] = gradiant
+        // out_dw[S] = gradient
         // -----------------------------------------------------------------------------------
         if( matrixBad( m_in_a )) {
             log_error( "Input activation matrix is bad" );

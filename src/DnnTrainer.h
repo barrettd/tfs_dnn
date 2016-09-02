@@ -28,7 +28,7 @@ namespace tfs {
         Matrix     *m_gsum;
         Matrix     *m_xsum;
 
-        void setUpTrainable( Matrix *weights, Matrix *gradiant, DNN_NUMERIC l1_decay_mul, DNN_NUMERIC l2_decay_mul );
+        void setUpTrainable( Matrix *weights, Matrix *gradient, DNN_NUMERIC l1_decay_mul, DNN_NUMERIC l2_decay_mul );
         void setUpTrainables( void );
         void setupSums( bool xsum );    // Set up gsum[] and (optionally) xsum[]
 

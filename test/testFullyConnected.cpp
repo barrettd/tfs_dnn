@@ -163,9 +163,9 @@ namespace tfs {
     }
     
     static bool
-    localTestGradiant( DnnTrainerSGD &trainer, Dnn &dnn ) {
+    localTestGradient( DnnTrainerSGD &trainer, Dnn &dnn ) {
         // --------------------------------------------------------------------
-        // Check the gradiant.
+        // Check the gradient.
         // --------------------------------------------------------------------
         Matrix *input  = dnn.getMatrixInput();          // x,y pair
         Matrix *output = dnn.getMatrixOutput();         //
@@ -200,7 +200,7 @@ namespace tfs {
         }
         Matrix *inputDw = inputLayer->outDw();
         if( inputDw == 0 ) {
-            return log_error( "Input gradiant is null" );
+            return log_error( "Input gradient is null" );
         }
         DNN_NUMERIC *ww = input->data();
         if( ww == 0 ) {
@@ -260,7 +260,7 @@ namespace tfs {
         if( !localTestTrainer( trainer, dnn )) {
             return false;
         }
-        if( !localTestGradiant( trainer, dnn )) {
+        if( !localTestGradient( trainer, dnn )) {
             return false;
         }
         log_info( "Test Fully Connected - End" );

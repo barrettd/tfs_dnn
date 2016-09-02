@@ -114,7 +114,6 @@ namespace tfs {
         builder.addLayerSoftmax( 10 );
         dnn.initialize();                                   // Randomize the weights.
         const unsigned long count = dnn.count();
-        // TODO: continue work here.
         if( count != 12 ) {
             return log_error( "Expected 12 layers, received %lu", count );
         }

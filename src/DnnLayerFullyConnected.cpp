@@ -36,9 +36,9 @@ namespace tfs {
         // N = number of neurons
         // S = size of input data
         //  w[N,S+1] = neuron weight + bias weight
-        // dw[N,S+1] = gradiant + d/dw bias
+        // dw[N,S+1] = gradient + d/dw bias
         // out_a[N]  = activations of each neuron
-        // out_dw[N] = gradiant
+        // out_dw[N] = gradient
         // -----------------------------------------------------------------------------------
         if( m_neuron_count < 1 ) {
             log_error( "Neuron count is less than 1" );

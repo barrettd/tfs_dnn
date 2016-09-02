@@ -63,7 +63,7 @@ namespace tfs {
             setData( data, label, xx, yy, 0 );
         }
         DNN_NUMERIC val = 0.0;
-        for( int ii = 0.0; ii < count; ii ++ ) {
+        for( int ii = 0; ii < count; ii ++ ) {
             const DNN_NUMERIC rr = random( 3.0, 5.0 );
             const DNN_NUMERIC tt = 2.0 * M_PI * val / count;
             const DNN_NUMERIC xx = rr * sin( tt );

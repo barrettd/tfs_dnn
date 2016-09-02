@@ -84,7 +84,7 @@ namespace tfs {
         
         m_w = new Matrix( m_side, m_side, in_z, m_filter_count );   // side x side x depth x N filters
         if( trainable ) {
-            m_dw = new Matrix( *m_w );                      // Gradiant side x side + depth x N filters
+            m_dw = new Matrix( *m_w );                      // Gradient side x side + depth x N filters
         }
         m_bias_w = new Matrix( out_z );
         if( trainable ) {
@@ -92,7 +92,7 @@ namespace tfs {
         }
         m_out_a = new Matrix( out_x, out_y, out_z );        // Activations (output)
         if( trainable ) {
-            m_out_dw = new Matrix( *m_out_a );              // Activation gradiant
+            m_out_dw = new Matrix( *m_out_a );              // Activation gradient
         }
         return;
     }
@@ -194,7 +194,7 @@ namespace tfs {
               DNN_NUMERIC *biasDw   = m_bias_dw->data();         // [out_z]
         
         if( m_in_dw != 0 ) {
-            m_in_dw->zero();                                    // Zero input gradiant, we add to it below.
+            m_in_dw->zero();                                    // Zero input gradient, we add to it below.
             DNN_NUMERIC *inDw = m_in_dw->data();
             for( unsigned long az = 0; az < out_z; az++ ) {
                 long yy = padStart;

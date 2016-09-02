@@ -48,7 +48,7 @@ namespace tfs {
         // -----------------------------------------------------------------------------------
         // S = size of input data
         // out_a[S]  = activations of each neuron
-        // out_dw[S] = gradiant
+        // out_dw[S] = gradient
         // -----------------------------------------------------------------------------------
         if( matrixBad( m_in_a )) {
             log_error( "Input activation matrix is bad" );
@@ -123,11 +123,11 @@ namespace tfs {
     }
     
     Matrix*
-    DnnLayer::gradiant( void ) {    // Internal Neuron connection gradiant (dw)
+    DnnLayer::gradient( void ) {    // Internal Neuron connection gradient (dw)
         return m_dw;
     }
     const Matrix*
-    DnnLayer::gradiantReadOnly( void ) const { // Internal Neuron connection gradiant  (dw)
+    DnnLayer::gradientReadOnly( void ) const { // Internal Neuron connection gradient  (dw)
         return m_dw;
     }
     
@@ -176,7 +176,7 @@ namespace tfs {
     DnnLayer::setPreviousLayer( DnnLayer *layer ) {
         if( layer != 0 ) {
             m_in_a  = layer->m_out_a;     // Remember previous activation layer
-            m_in_dw = layer->m_out_dw;    // Remember previous gradiant array
+            m_in_dw = layer->m_out_dw;    // Remember previous gradient array
             if( matrixBad( m_in_a )) {
                 log_error( "Input m_in_a is bad" );
             }
@@ -199,7 +199,7 @@ namespace tfs {
 
     void
     DnnLayer::initialize( void ) {
-        // Zero activations, gradiant and randomize weights.
+        // Zero activations, gradient and randomize weights.
         if( m_w != 0 ) {
             m_w->randomize();
         }

@@ -277,7 +277,7 @@ namespace tfs {         // Tree Frog Software
     bool
     OutDnnStream::writeLayerBase( const DnnLayer &layer ) {
         writeMatrix( layer.weightsReadOnly());     // Internal: Weights, to act on input activations from previous layer
-        writeMatrix( layer.gradiantReadOnly());    // Internal: Gradiant, will be null when not training.
+        writeMatrix( layer.gradientReadOnly());    // Internal: Gradient, will be null when not training.
         writeMatrix( layer.biasReadOnly());        // Internal: Bias, to act on input activations from previous layer
         writeMatrix( layer.biasDwReadOnly());      // Internal: Bias derivative, will be null when not training.
         writeMatrix( layer.outAReadOnly());        // Output:   Activations, output of a neuron.
@@ -293,7 +293,7 @@ namespace tfs {         // Tree Frog Software
             return log_error( "Layer is null" );
         }
         Matrix *weights  = readMatrix();
-        Matrix *gradiant = readMatrix();
+        Matrix *gradient = readMatrix();
         Matrix *bias     = readMatrix();
         Matrix *biasDw   = readMatrix();
         Matrix *outA     = readMatrix();
@@ -303,9 +303,9 @@ namespace tfs {         // Tree Frog Software
         if( layerWeights != 0 && weights != 0 ) {
             layerWeights->copy( *weights );
         }
-        Matrix *layerGradiant = layer->gradiant();
-        if( layerGradiant != 0 && gradiant != 0 ) {
-            layerGradiant->copy( *gradiant );
+        Matrix *layerGradient = layer->gradient();
+        if( layerGradient != 0 && gradient != 0 ) {
+            layerGradient->copy( *gradient );
         }
         Matrix *layerBias = layer->bias();
         if( layerBias != 0 && bias != 0 ) {
@@ -331,7 +331,7 @@ namespace tfs {         // Tree Frog Software
         layer->l2DecayMultiplier( l2DecayMultiplier );
         
         delete weights;
-        delete gradiant;
+        delete gradient;
         delete bias;
         delete biasDw;
         delete outA;

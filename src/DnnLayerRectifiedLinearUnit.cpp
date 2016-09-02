@@ -61,10 +61,10 @@ namespace tfs {
 
         while( src < end ) {
             if( *val++ <= 0.0 ) {   // Use the output value to deturmine thesholding
-                *dst++ = 0.0;       // Input gradiant = 0.0;
+                *dst++ = 0.0;       // Input gradient = 0.0;
                 src++;
             } else {
-                *dst++ = *src++;    // Input gradiant = output gradiant.
+                *dst++ = *src++;    // Input gradient = output gradient.
             }
         }
         return true;
