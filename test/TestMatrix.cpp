@@ -147,7 +147,7 @@ namespace tfs {
         bb.randomize();
         result = aa.dot( bb );
         if( result == 12.0 ) {
-            log_warn( "dot product of two random matrices is 12.0, this is a suprise" );
+            log_warn( "dot product of two random matrices is 12.0, this is a surprise" );
         }
         return true;
     }
@@ -215,11 +215,11 @@ namespace tfs {
         fill( left );
         fill( right );
         if( !left.equal( right )) {
-            return log_error( "matricies are equal, but reporting as different" );
+            return log_error( "matrices are equal, but reporting as different" );
         }
         right.set( 5, 5, 1, 1, 3.1415926 );
         if( left.equal( right )) {
-            return log_error( "matricies are different, but reporting as equal" );
+            return log_error( "matrices are different, but reporting as equal" );
         }
         return true;
     }

@@ -38,14 +38,14 @@ namespace tfs {
         trainer.learningRate( 0.01  );
         trainer.l2Decay(      0.001 );
         
-        trainer.train( 0.0 );
+        trainer.train( 0 );
         
         dnn.predict();
         
         DNN_NUMERIC probability2 = *output;
         
         if( probability2 <= probability1 ) {
-            return log_error( "Probablity did not change for the better: %f to %f", probability1, probability2 );
+            return log_error( "Probability did not change for the better: %f to %f", probability1, probability2 );
         }
         
         log_info( "Test 2 Layer - End" );

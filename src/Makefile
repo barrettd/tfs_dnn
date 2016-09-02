@@ -6,7 +6,7 @@
 # $@ = File name of the target.
 # $< = Name of the first dependency.
 # .PHONY tells make that the target does not correspond to a real file.
-# A '-' before a command tells make to ingnore errors.  eg. "-rm -f *.o"
+# A '-' before a command tells make to ignore errors.  eg. "-rm -f *.o"
 # ----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------

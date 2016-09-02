@@ -40,7 +40,7 @@ main( int argc, const char * argv[] ) {
     if( elapsedTime == 1 ) {
        std::cout << "1 second.\n";
     } else {
-        std::cout << elapsedTime << " seconds.\n";  // From my 2009 Macbook pro: Elapsed time: 28 seconds.
+        std::cout << elapsedTime << " seconds.\n";  // From my 2009 MacBook pro: Elapsed time: 15 seconds.
     }
     return 0;
     

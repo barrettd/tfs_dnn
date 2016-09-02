@@ -323,7 +323,7 @@ namespace tfs {
     bool
     DnnLayer::predict( void ) {
         // -----------------------------------------------------------------------------------
-        // Forward progagate when predicting
+        // Forward propagate when predicting
         // -----------------------------------------------------------------------------------
         if( !runPredict()) {
             return false;

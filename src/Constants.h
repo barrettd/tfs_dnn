@@ -10,7 +10,7 @@
 
 namespace tfs {     // Tree Frog Software
     
-    // We typically use double for all of our data representaions.
+    // We typically use double for all of our data representations.
     // It is fast with most "big" CPUs.
     // Embedded systems may require different native data types.
     typedef double DNN_NUMERIC;

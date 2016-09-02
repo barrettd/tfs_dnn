@@ -74,7 +74,7 @@ namespace tfs {     // Tree Frog Software
 
         void setBias( DNN_NUMERIC value = 0.0 );                // Set biases in all layers.
         bool forward( void );                                   // Forward propagate while training
-        bool predict( void );                                   // Forward progagate when predicting
+        bool predict( void );                                   // Forward propagate when predicting
         DNN_NUMERIC backprop( const Matrix     &expectation );  // Back propagate while training, returns loss.
         DNN_NUMERIC backprop( const DNN_INTEGER expectation );  // Back propagate while training, returns loss.
         

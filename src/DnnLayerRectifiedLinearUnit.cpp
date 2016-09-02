@@ -60,7 +60,7 @@ namespace tfs {
               DNN_NUMERIC *       dst = m_in_dw->data();
 
         while( src < end ) {
-            if( *val++ <= 0.0 ) {   // Use the output value to deturmine thesholding
+            if( *val++ <= 0.0 ) {   // Use the output value to determine thesholding
                 *dst++ = 0.0;       // Input gradient = 0.0;
                 src++;
             } else {

@@ -92,7 +92,7 @@ namespace tfs {
         // Perform function in just the current layer
         virtual bool runBias( DNN_NUMERIC value );              // Set biases in current layer.
         virtual bool runForward(  void );                       // Forward propagate while training
-        virtual bool runPredict(  void );                       // Forward progagate when predicting
+        virtual bool runPredict(  void );                       // Forward propagate when predicting
         virtual bool runBackprop( void );                       // Back propagate while training
         virtual DNN_NUMERIC runBackprop( const  Matrix    &expectation );   // Back propagate while training (Last layer)
         virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation );   // Back propagate while training (Last layer)
@@ -100,7 +100,7 @@ namespace tfs {
         // Perform function in all layers (either forward or backward)
         void setBias( DNN_NUMERIC value = 0.0 );                // Set biases in all layers.
         bool forward(  void );                                  // Forward propagate while training
-        bool predict(  void );                                  // Forward progagate when predicting
+        bool predict(  void );                                  // Forward propagate when predicting
         bool backprop( void );                                  // Back propagate while training
         DNN_NUMERIC backprop( const  Matrix    &expectation );  // Last layer
         DNN_NUMERIC backprop( const DNN_INTEGER expectation );  // Last layer

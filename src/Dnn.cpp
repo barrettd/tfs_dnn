@@ -301,7 +301,7 @@ namespace tfs {
     
     bool
     Dnn::predict( void ) {
-        // Forward progagate when predicting
+        // Forward propagate when predicting
         if( m_layer_input != 0 ) {
             return m_layer_input->predict();            // Calls each layer in the forward direction.
         }

@@ -24,7 +24,7 @@ namespace tfs {
         DNN_NUMERIC probability( void ) const;
         
         virtual bool runForward(  void );
-        virtual bool runPredict(  void );                       // Forward progagate when predicting
+        virtual bool runPredict(  void );                       // Forward propagate when predicting
         virtual bool runBackprop( void );
     };
     

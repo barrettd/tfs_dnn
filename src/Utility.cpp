@@ -12,7 +12,7 @@
 namespace tfs {     // Tree Frog Software
     
     // Random functions:
-    // The thinking here is that by centeralizing the random functions, we can choose different implementations
+    // The thinking here is that by centralizing the random functions, we can choose different implementations
     // in the future and change the implementation in just this file.  For example, if we want a predictable
     // distribution.
     
@@ -66,7 +66,7 @@ namespace tfs {     // Tree Frog Software
     DNN_NUMERIC
     randomGauss( void ) {
         // --------------------------------------------------------------------
-        // 0.0 to 1.0, gausian distribution. Box–Muller transform
+        // 0.0 to 1.0, gaussian distribution. Box–Muller transform
         // This form is probably a little faster than randomGaussian() below.
         // --------------------------------------------------------------------
         const DNN_NUMERIC scale = 2.0 / (DNN_NUMERIC) RAND_MAX;
@@ -75,7 +75,7 @@ namespace tfs {     // Tree Frog Software
         static bool return_z1 = false;
         if( return_z1 ) {
             return_z1 = false;
-            return z1;          // Return z1 (prevously calculated)
+            return z1;          // Return z1 (previously calculated)
         }
         return_z1 = true;
         DNN_NUMERIC u, v, r;

@@ -18,7 +18,7 @@ namespace tfs {         // Tree Frog Software
 
     template <typename T> class TMatrix  {      // Row major order (aa changes fastest, dd changes slowest.)
     protected:
-        unsigned long m_a;      // x Width  - columns (contigious)
+        unsigned long m_a;      // x Width  - columns (contiguous)
         unsigned long m_b;      // y Height - rows
         unsigned long m_c;      // z Depth
         unsigned long m_d;      // 4th dimension
