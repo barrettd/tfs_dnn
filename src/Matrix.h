@@ -281,6 +281,26 @@ namespace tfs {         // Tree Frog Software
             return result;
         }
         
+        inline void add( const TMatrix &matrix ) { // Add two matrices, an element at a time, like the dot product. lhs = lhs + rhs;
+            if( isEmpty()) {
+                log_error( "empty matrix" );
+                return;
+            }
+            if( matrix.m_count != m_count ) {
+                log_error( "Matrices not the same size" );
+                return;
+            }
+            T *       lhs = m_data;
+            T * const end = m_end;
+            const T *       rhs = matrix.m_data;
+            while( lhs < end ) {
+                *lhs = *lhs + *rhs;
+                lhs++;
+                rhs++;
+            }
+            return;
+        }
+        
         inline T min( void ) const {                // Return minimum value.
             if( isEmpty()) {
                 log_error( "empty matrix" );
@@ -346,14 +366,13 @@ namespace tfs {         // Tree Frog Software
             return;
         }
 
-
-        inline void multiply( const T value ) const {     // Multiple each element by a scalar.
+        inline void multiply( const T value ) {     // Multiple each element by a scalar.
             if( isEmpty()) {
                 log_error( "empty matrix" );
                 return ;
             }
-            const T *      data = m_data;
-            const T * const end = m_end;
+            T *      data = m_data;
+            T * const end = m_end;
             
             while( data < end ) {
                 *data++ *= value;
