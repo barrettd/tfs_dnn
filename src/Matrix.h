@@ -25,7 +25,7 @@ namespace tfs {         // Tree Frog Software
         unsigned long m_ab;     // = aa * bb
         unsigned long m_abc;    // = aa * bb * cc
         unsigned long m_count;  // = aa * bb * cc * dd;  Count of T elements.
-        unsigned long m_length; // = count * sizeof( T )
+        unsigned long m_length; // = count * sizeof( T ) Byte count
         T            *m_data;   // Pointer to data[] array:     = &data[0];
         T            *m_end;    // Pointer to end of the array: = &data[m_count];
         
@@ -241,6 +241,18 @@ namespace tfs {         // Tree Frog Software
             }
             return value;
         }
+        
+        inline bool isZero( void ) const {          // Return true if matrix is all zero
+            const T *      data = m_data;
+            const T * const end = m_end;
+            
+            while( data < end ) {
+                if( *data++ != 0.0 ) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         inline T plusEquals( const unsigned long aa, const unsigned long bb, const unsigned long cc, const unsigned long dd, const T value ) {
             const unsigned long index = getIndex( aa, bb, cc, dd );
@@ -378,6 +390,45 @@ namespace tfs {         // Tree Frog Software
                 *data++ *= value;
             }
             return;
+        }
+
+        inline void divide( const T value ) {     // Divide each element by a scalar.
+            if( value == 0.0 ) {
+                log_error( "divide by zero" );
+                return ;
+            }
+            if( isEmpty()) {
+                log_error( "empty matrix" );
+                return ;
+            }
+            T *      data = m_data;
+            T * const end = m_end;
+            
+            while( data < end ) {
+                *data++ /= value;
+            }
+            return;
+        }
+
+        inline void normalize( void ) {
+            if( isEmpty()) {
+                log_error( "empty matrix" );
+                return;
+            }
+                  T *      data = m_data;
+            const T * const end = m_end;
+            
+            T sum = *data++;
+            while( data < end ) {
+                sum += *data++;
+            }
+            if( sum == 0.0 ) {
+                return;             // Avoid divide by zero
+            }
+            data = m_data;
+            while( data < end ) {
+                *data++ /= sum;
+            }
         }
         
     };  // class TMatrix
