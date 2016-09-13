@@ -7,6 +7,9 @@
 #include <cmath>
 #include "DnnBuilder.h"
 #include "DnnTrainerSGD.h"
+#include "DnnTrainerAdaDelta.h"
+#include "DnnTrainerAdam.h"
+
 #include "Error.h"
 #include "test2D.hpp"
 #include "Utility.h"
@@ -125,13 +128,7 @@ namespace tfs {
     }
     
     static bool
-    localTest2d( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
-        DnnTrainerSGD trainer( &dnn );
-        trainer.learningRate( 0.01  );
-        trainer.momentum(     0.1   );
-        trainer.batchSize(   10     );
-        trainer.l2Decay(      0.001 );
-        
+    localTest2d( DnnTrainer &trainer, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
         Matrix *input = trainer.getMatrixInput();       // get the input matrix: x,y pair Matrix( 1, 1, 2 )
         if( input == 0 ) {
             return log_error( "Unable to obtain input matrix." );
@@ -171,7 +168,54 @@ namespace tfs {
             average_loss /= DATA_COUNT * MAX_ITERATION;
         } while( average_loss > TARGET_LOSS );
         log_info( "Average loss = %f/%f. Count = %lu", average_loss, TARGET_LOSS, count );
-        
+        return true;
+    }
+    
+        static bool
+    localTest2dAdaDelta( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
+        DnnTrainerAdaDelta trainer( &dnn );
+        trainer.learningRate( 0.01  );
+        trainer.momentum(     0.1   );
+        trainer.batchSize(   10     );
+        trainer.l2Decay(      0.001 );
+        log_info( "Training AdaDelta" );
+        return localTest2d( trainer, data, label );
+    }
+    
+    static bool
+    localTest2dAdam( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
+        DnnTrainerAdam trainer( &dnn );
+        trainer.learningRate( 0.01  );
+        trainer.momentum(     0.1   );
+        trainer.batchSize(   10     );
+        trainer.l2Decay(      0.001 );
+        log_info( "Training Adam" );
+        return localTest2d( trainer, data, label );
+    }
+    
+    static bool
+    localTest2dAdaSGD( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
+        DnnTrainerSGD trainer( &dnn );
+        trainer.learningRate( 0.01  );
+        trainer.momentum(     0.1   );
+        trainer.batchSize(   10     );
+        trainer.l2Decay(      0.001 );
+        log_info( "Training SGD" );
+        return localTest2d( trainer, data, label );
+    }
+
+    static bool
+    localTest2d( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
+        if( !localTest2dAdaDelta( dnn, data, label )) {
+            return log_error( "Cannot train AdaDelta" );
+        }
+        if( !localTest2dAdam( dnn, data, label )) {
+            return log_error( "Cannot train Adam" );
+        }
+        if( !localTest2dAdaSGD( dnn, data, label )) {
+            return log_error( "Cannot train SGD" );
+        }
+
         return true;
     }
     

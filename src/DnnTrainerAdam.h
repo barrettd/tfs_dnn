@@ -8,9 +8,33 @@
 #ifndef DnnTrainerAdam_h
 #define DnnTrainerAdam_h
 
-//this.beta1 = typeof options.beta1 !== 'undefined' ? options.beta1 : 0.9; // used in adam
-//this.beta2 = typeof options.beta2 !== 'undefined' ? options.beta2 : 0.999; // used in adam
-// this.xsum = []; // used in adam or adadelta
+#include "DnnTrainer.h"
 
+namespace tfs {
+    
+    class DnnTrainerAdam : public DnnTrainer {
+    protected:
+        DNN_NUMERIC m_eps;
+        DNN_NUMERIC m_beta1;
+        DNN_NUMERIC m_beta2;
+    public:
+        DnnTrainerAdam( Dnn *dnn );
+        virtual ~DnnTrainerAdam( void );
+        
+        virtual DNN_NUMERIC train( const DNN_INTEGER expectation );     // Returns loss.
+        
+        DNN_NUMERIC eps( void ) const ;                  // get()
+        DNN_NUMERIC eps( const DNN_NUMERIC value );      // set()
+
+        DNN_NUMERIC beta1( void ) const ;                  // get()
+        DNN_NUMERIC beta1( const DNN_NUMERIC value );      // set()
+        
+        DNN_NUMERIC beta2( void ) const ;                  // get()
+        DNN_NUMERIC beta2( const DNN_NUMERIC value );      // set()
+        
+        
+    };
+    
+}   // namespace tfs
 
 #endif /* DnnTrainerAdam_h */
