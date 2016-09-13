@@ -242,12 +242,12 @@ namespace tfs {         // Tree Frog Software
             return value;
         }
         
-        inline T& operator[]( const unsigned long aa ) {
+        inline T& operator[]( const unsigned long aa ) {        // Assignment
             const unsigned long index = getIndex( aa );
             return m_data[index];
         }
         
-        const T& operator[]( const unsigned long aa ) const {
+        const T& operator[]( const unsigned long aa ) const {   // Read only
             const unsigned long index = getIndex( aa );
             return m_data[index];
         }
@@ -420,7 +420,7 @@ namespace tfs {         // Tree Frog Software
             return;
         }
 
-        inline void normalize( void ) {
+        inline void normalize( void ) {         // Divide each element by the sum of all element
             if( isEmpty()) {
                 log_error( "empty matrix" );
                 return;
@@ -430,14 +430,14 @@ namespace tfs {         // Tree Frog Software
             
             T sum = *data++;
             while( data < end ) {
-                sum += *data++;
+                sum += *data++;                 // Accumulate the sum
             }
             if( sum == 0.0 ) {
-                return;             // Avoid divide by zero
+                return;                         // Avoid divide by zero
             }
             data = m_data;
             while( data < end ) {
-                *data++ /= sum;
+                *data++ /= sum;                 // Divide each element by the sum
             }
         }
         
