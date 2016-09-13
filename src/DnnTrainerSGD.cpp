@@ -42,13 +42,20 @@ namespace tfs {
         if( m_k % m_batch_size ) {
             return m_loss;
         }
+        DNN_NUMERIC *gsum = 0;
+        if( m_momentum > 0.0 ) {
+            if( m_gsum == 0 ) {
+                setupSums( false );  // setup only gsum[]
+            }
+            gsum = m_gsum->data();
+        }
         // Set up for modifying the gradients.
 //        DNN_NUMERIC l1_decay_loss = 0.0;
 //        DNN_NUMERIC l2_decay_loss = 0.0;
         
         Trainable **trainableHandle = m_trainable_handle;
         Trainable **trainableEnd    = m_trainable_end;
-        
+
         while( trainableHandle < trainableEnd ) {
                   Trainable   *trainable   = *trainableHandle++;      // trainable != 0 & ok() from DnnTrainer::setUpTrainables()
                   DNN_NUMERIC *weight      = trainable->weightStart;
@@ -78,8 +85,14 @@ namespace tfs {
                     log_error( "Trainable has gradient[] smaller than weight[] in size." );
                     return m_loss;
                 }
+                if( m_momentum > 0.0) {
+                    const DNN_NUMERIC dx = m_momentum * *gsum - m_learning_rate * gij; // step
+                    *gsum++    = dx;    // back this up for next iteration of momentum
+                    *weight++ += dx;    // apply corrected gradient
+                } else {
+                    *weight++  -= m_learning_rate * gij;
+                }
                 *gradient++ = 0.0;
-                *weight++  -= m_learning_rate * gij;
             }
         }
 //        return m_loss += (l1_decay_loss + l2_decay_loss);
