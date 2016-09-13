@@ -74,14 +74,11 @@ namespace tfs {
                     log_error( "Trainable has gradient[] smaller than weight[] in size." );
                     return m_loss;
                 }
+                const DNN_NUMERIC dxMomentum = *gsum * m_momentum;
                 
-                
-                const DNN_NUMERIC dx = *gsum;
-                const DNN_NUMERIC dxMomentum = dx * m_momentum;
-                
-                *gsum = dxMomentum + m_learning_rate * gij;
-
+                *gsum      = dxMomentum + m_learning_rate * gij;
                 *weight++ += dxMomentum - (1.0 + m_momentum) * *gsum;
+                
                 gsum++;
                 *gradient++ = 0.0;
             }
