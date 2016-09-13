@@ -6,9 +6,10 @@
 //
 #include <cmath>
 #include "DnnBuilder.h"
-#include "DnnTrainerSGD.h"
 #include "DnnTrainerAdaDelta.h"
 #include "DnnTrainerAdam.h"
+#include "DnnTrainerNesterov.h"
+#include "DnnTrainerSGD.h"
 
 #include "Error.h"
 #include "test2D.hpp"
@@ -205,6 +206,17 @@ namespace tfs {
     }
 
     static bool
+    localTest2dNesterov( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
+        DnnTrainerNesterov trainer( &dnn );
+        trainer.learningRate( 0.01  );
+        trainer.momentum(     0.1   );
+        trainer.batchSize(   10     );
+        trainer.l2Decay(      0.001 );
+        log_info( "Training Nesterov" );
+        return localTest2d( trainer, data, label );
+    }
+
+    static bool
     localTest2d( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
         if( !localTest2dAdaDelta( dnn, data, label )) {
             return log_error( "Cannot train AdaDelta" );
@@ -212,8 +224,11 @@ namespace tfs {
         if( !localTest2dAdam( dnn, data, label )) {
             return log_error( "Cannot train Adam" );
         }
-        if( !localTest2dAdaSGD( dnn, data, label )) {
+        if( !localTest2dAdaSGD( dnn, data, label )) {   // with momentum
             return log_error( "Cannot train SGD" );
+        }
+        if( !localTest2dNesterov( dnn, data, label )) {
+            return log_error( "Cannot train Nesterov" );
         }
 
         return true;
