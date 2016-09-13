@@ -43,8 +43,8 @@ namespace tfs {
             return m_loss;
         }
         // Set up for modifying the gradients.
-        DNN_NUMERIC l1_decay_loss = 0.0;
-        DNN_NUMERIC l2_decay_loss = 0.0;
+//        DNN_NUMERIC l1_decay_loss = 0.0;
+//        DNN_NUMERIC l2_decay_loss = 0.0;
         
         Trainable **trainableHandle = m_trainable_handle;
         Trainable **trainableEnd    = m_trainable_end;
@@ -66,8 +66,8 @@ namespace tfs {
             while( weight < weightEnd ) {
                 const DNN_NUMERIC ww = *weight;
                 
-                l1_decay_loss += l1_decay * fabs( ww );
-                l2_decay_loss += l2_decay * ww * ww / 2.0;          // accumulate weight decay loss
+//                l1_decay_loss += l1_decay * fabs( ww );
+//                l2_decay_loss += l2_decay * ww * ww / 2.0;          // accumulate weight decay loss
                 
                 const DNN_NUMERIC l1grad = l1_decay * (ww > 0.0 ? 1.0 : -1.0);
                 const DNN_NUMERIC l2grad = l2_decay * ww;
