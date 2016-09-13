@@ -242,6 +242,16 @@ namespace tfs {         // Tree Frog Software
             return value;
         }
         
+        inline T& operator[]( const unsigned long aa ) {
+            const unsigned long index = getIndex( aa );
+            return m_data[index];
+        }
+        
+        const T& operator[]( const unsigned long aa ) const {
+            const unsigned long index = getIndex( aa );
+            return m_data[index];
+        }
+
         inline bool isZero( void ) const {          // Return true if matrix is all zero
             const T *      data = m_data;
             const T * const end = m_end;

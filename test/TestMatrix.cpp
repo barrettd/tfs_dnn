@@ -153,6 +153,33 @@ namespace tfs {
     }
     
     static bool
+    localTestMatrixMath2( void ) {
+        Matrix aa = Matrix( 3, 1, 1 );
+        Matrix bb = Matrix( 3, 1, 1 );
+        aa.set( 0, 0.0 );
+        aa.set( 1, 1.0 );
+        aa.set( 2, 2.0 );
+        bb[0] = 0.0;
+        bb[1] = 1.0;
+        bb[2] = 2.0;
+        if( !aa.equal( bb )) {
+            return log_error( "aa && bb matrices are not the same." );
+        }
+        aa.normalize();
+        bb[1] = 1.0 / 3.0;
+        bb[2] = 2.0 / 3.0;
+        if( !aa.equal( bb )) {
+            return log_error( "aa && bb matrices are not the same." );
+        }
+        aa.multiply( 3.0 );
+        bb.divide( 1.0 / 3.0 );
+        if( !aa.equal( bb )) {
+            return log_error( "aa && bb matrices are not the same." );
+        }
+        return true;
+    }
+    
+    static bool
     localTestMatrixCopy( void ) {
         Matrix aa = Matrix( 3, 2, 1 );
               DNN_NUMERIC *      data = aa.data();
@@ -294,6 +321,9 @@ namespace tfs {
             return false;
         }
         if( !localTestMatrixMath()) {
+            return false;
+        }
+        if( !localTestMatrixMath2()) {
             return false;
         }
         if( !localTestMatrixCopy()) {
