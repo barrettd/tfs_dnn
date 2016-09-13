@@ -29,7 +29,7 @@ main( int argc, const char * argv[] ) {
     testCifar10();
     testSimple();
     testCircle();
-    testSpiral();           // This may take a little time, depending on your computer.
+    testSpiral();           // testSpiral may take a a few minutes, depending on your computer.
     test2Layer();
     testIO();
     
