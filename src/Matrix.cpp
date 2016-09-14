@@ -15,6 +15,9 @@ namespace tfs {     // Tree Frog Software
         if( count != src.count()) {
             return log_error( "Matrix dimensions do not match" );
         }
+        if( count == 0 ) {
+            return log_error( "Matrix empty" );
+        }
         const DNN_NUMERIC *         input = src.dataReadOnly();
         const DNN_NUMERIC * const   inEnd = src.end();
         const DNN_NUMERIC max  = src.max();     // Find input maximum

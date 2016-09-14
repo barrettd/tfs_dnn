@@ -93,8 +93,8 @@ namespace tfs {
     
     static bool
     localTestMatrixMath( void ) {
-        Matrix aa = Matrix( 3, 1, 1 );
-        Matrix bb = Matrix( 3, 1, 1 );
+        Matrix aa( 3, 1, 1 );
+        Matrix bb( 3, 1, 1 );
         if( !aa.ok() || !bb.ok()) {
             return log_error( "Poorly formed matrix" );
         }
@@ -154,8 +154,8 @@ namespace tfs {
     
     static bool
     localTestMatrixMath2( void ) {
-        Matrix aa = Matrix( 3, 1, 1 );
-        Matrix bb = Matrix( 3, 1, 1 );
+        Matrix aa( 3, 1, 1 );
+        Matrix bb( 3, 1, 1 );
         aa.set( 0, 0.0 );
         aa.set( 1, 1.0 );
         aa.set( 2, 2.0 );
