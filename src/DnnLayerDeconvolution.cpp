@@ -4,8 +4,8 @@
 //  Created by Barrett Davis on 6/24/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#include "DnnLayerDeconvolution.h"
-#include "Error.h"
+#include "DnnLayerDeconvolution.hpp"
+#include "Error.hpp"
 
 namespace tfs {
     

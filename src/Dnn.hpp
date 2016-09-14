@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------
-//  Dnn.h
+//  Dnn.hpp
 //  https://github.com/barrettd/tfs_dnn.git
 //
 //  Created by Barrett Davis on 5/8/16.
@@ -10,11 +10,11 @@
 //  Regards, Barrett Davis: barrett (at) thefrog.com
 //  http://thefrog.com/barrett/
 // --------------------------------------------------------------------
-#ifndef dnn_h
-#define dnn_h
+#ifndef dnn_hpp
+#define dnn_hpp
 
 #include <vector>
-#include "Matrix.h"
+#include "Matrix.hpp"
 
 namespace tfs {     // Tree Frog Software
     
@@ -88,4 +88,4 @@ namespace tfs {     // Tree Frog Software
     
 }   // namespace tfs
 
-#endif /* dnn_h */
+#endif /* dnn_hpp */

@@ -5,9 +5,9 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
 
-#include "DnnLayerDropout.h"
-#include "Error.h"
-#include "Utility.h"
+#include "DnnLayerDropout.hpp"
+#include "Error.hpp"
+#include "Utility.hpp"
 
 namespace tfs {
     

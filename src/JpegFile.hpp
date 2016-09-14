@@ -4,10 +4,10 @@
 //  Created by Barrett Davis on 6/19/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
-#include "Matrix.h"
+#include "Matrix.hpp"
 
-#ifndef JpegFile_h
-#define JpegFile_h
+#ifndef JpegFile_hpp
+#define JpegFile_hpp
 
 namespace tfs {
     
@@ -16,4 +16,4 @@ namespace tfs {
     
 }  // tfs namespace
 
-#endif /* JpegFile_h */
+#endif /* JpegFile_hpp */

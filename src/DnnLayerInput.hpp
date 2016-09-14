@@ -4,10 +4,10 @@
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#ifndef DnnLayerInput_h
-#define DnnLayerInput_h
+#ifndef DnnLayerInput_hpp
+#define DnnLayerInput_hpp
 
-#include "DnnLayer.h"
+#include "DnnLayer.hpp"
 
 namespace tfs {
     

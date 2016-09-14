@@ -5,7 +5,7 @@
 //  Created by Barrett Davis on 5/20/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
-#include "Matrix.h"
+#include "Matrix.hpp"
 #include "TestMatrix.hpp"
 
 namespace tfs {

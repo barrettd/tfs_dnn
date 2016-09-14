@@ -4,11 +4,11 @@
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#ifndef dnnTrainer_h
-#define dnnTrainer_h
+#ifndef dnnTrainer_hpp
+#define dnnTrainer_hpp
 
 #include <vector>
-#include "Dnn.h"
+#include "Dnn.hpp"
 
 namespace tfs {
 
@@ -69,4 +69,4 @@ namespace tfs {
 
 }   // namespace tfs
 
-#endif /* dnnTrainer_h */
+#endif /* dnnTrainer_hpp */

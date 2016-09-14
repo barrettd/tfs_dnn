@@ -5,7 +5,7 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
 #include <cmath>
-#include "Matrix.h"
+#include "Matrix.hpp"
 
 namespace tfs {     // Tree Frog Software
 

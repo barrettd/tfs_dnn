@@ -1,18 +1,19 @@
 // --------------------------------------------------------------------
-//  Matrix.h - 3 or 4 D matrix <template> for DNN_NUMERIC and DNN_INTEGER
-//  Possibly use Eigen matricies: https://eigen.tuxfamily.org/
+//  Matrix.hpp
+//  3 or 4 D matrix <template> for DNN_NUMERIC and DNN_INTEGER
 //  Created by Barrett Davis on 5/10/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-// TODO: add flip horizontal and flip vertical, subsample
-#ifndef Matrix_h
-#define Matrix_h
+//  Possibly use Eigen matricies: https://eigen.tuxfamily.org/
+// --------------------------------------------------------------------
+#ifndef Matrix_hpp
+#define Matrix_hpp
 
 #include <cmath>        // sqrt()
 #include <cstring>      // memset()
-#include "Constants.h"
-#include "Error.h"
-#include "Utility.h"    // random()
+#include "Constants.hpp"
+#include "Error.hpp"
+#include "Utility.hpp"    // random()
 
 namespace tfs {         // Tree Frog Software
 
@@ -529,4 +530,4 @@ namespace tfs {         // Tree Frog Software
     
 }   // namespace tfs
 
-#endif /* Matrix_h */
+#endif /* Matrix_hpp */

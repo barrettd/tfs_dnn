@@ -1,13 +1,13 @@
 // --------------------------------------------------------------------
-//  DnnLayerConvolution.h
+//  DnnLayerConvolution.hpp
 //
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#ifndef DnnLayerConvolution_h
-#define DnnLayerConvolution_h
+#ifndef DnnLayerConvolution_hpp
+#define DnnLayerConvolution_hpp
 
-#include "DnnLayer.h"
+#include "DnnLayer.hpp"
 
 namespace tfs {
     
@@ -41,4 +41,4 @@ namespace tfs {
     
 }   // namespace tfs
 
-#endif /* DnnLayerConvolution_h */
+#endif /* DnnLayerConvolution_hpp */

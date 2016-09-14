@@ -7,7 +7,7 @@
 #include <cmath>        // log()
 #include <cstdlib>      // rand(), srand(), RAND_MAX
 #include <limits>
-#include "Utility.h"
+#include "Utility.hpp"
 
 namespace tfs {     // Tree Frog Software
     

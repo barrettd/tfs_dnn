@@ -5,7 +5,7 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
 
-#include "DnnTrainerNesterov.h"
+#include "DnnTrainerNesterov.hpp"
 
 namespace tfs {
     

@@ -4,8 +4,8 @@
 //  Created by Barrett Davis on 5/11/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
-#include "DnnTrainerAdaDelta.h"
-#include "Error.h"
+#include "DnnTrainerAdaDelta.hpp"
+#include "Error.hpp"
 
 namespace tfs {
     

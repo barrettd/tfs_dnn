@@ -22,9 +22,9 @@
 // ----------------------------------------------------------------------------
 // Total bytes:                    32 bytes - aligned to 8 byte boundary
 // ----------------------------------------------------------------------------
-#include "DnnLayers.h"
-#include "DnnStream.h"
-#include "Error.h"
+#include "DnnLayers.hpp"
+#include "DnnStream.hpp"
+#include "Error.hpp"
 
 namespace tfs {         // Tree Frog Software
     

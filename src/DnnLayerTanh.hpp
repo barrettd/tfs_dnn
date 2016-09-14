@@ -1,21 +1,21 @@
 // --------------------------------------------------------------------
-//  DnnLayerSupportVectorMachine.h
+//  DnnLayerTanh.hpp
 //
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#ifndef DnnLayerSupportVectorMachine_h
-#define DnnLayerSupportVectorMachine_h
+#ifndef DnnLayerTanh_hpp
+#define DnnLayerTanh_hpp
 
-#include "DnnLayer.h"
+#include "DnnLayer.hpp"
 
 namespace tfs {
     
-    class DnnLayerSupportVectorMachine : public DnnLayer {
+    class DnnLayerTanh : public DnnLayer {      // tanh( radians ) output is between [-1.0, 1.0]
     protected:
     public:
-        DnnLayerSupportVectorMachine( DnnLayer *previousLayer, const bool trainable = true );
-        virtual ~DnnLayerSupportVectorMachine( void );
+        DnnLayerTanh( DnnLayer *previousLayer, const bool trainable = true );
+        virtual ~DnnLayerTanh( void );
         
         virtual bool runForward(  void );
         virtual bool runBackprop( void );
@@ -25,4 +25,4 @@ namespace tfs {
     
 }   // namespace tfs
 
-#endif /* DnnLayerSupportVectorMachine_h */
+#endif /* DnnLayerTanh_hpp */

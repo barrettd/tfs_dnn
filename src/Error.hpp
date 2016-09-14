@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------
-//  Error.h - Error reporting macros.
+//  Error.hpp - Error reporting macros.
 //  These are fairly simple reporting macros that are used to report state within the library.
 //  log_debug() and log_info() are not be called from a production version of this library.
 //  log_warn() and log_error() are called to report warning and error conditions.
@@ -8,8 +8,8 @@
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#ifndef Error_h
-#define Error_h
+#ifndef Error_hpp
+#define Error_hpp
 
 namespace tfs {     // Tree Frog Software
 
@@ -23,4 +23,4 @@ namespace tfs {     // Tree Frog Software
 
 }   // namespace tfs
 
-#endif /* Error_h */
+#endif /* Error_hpp */

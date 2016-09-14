@@ -5,10 +5,10 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
 
-#ifndef DnnLayerDeconvolution_h
-#define DnnLayerDeconvolution_h
+#ifndef DnnLayerDeconvolution_hpp
+#define DnnLayerDeconvolution_hpp
 
-#include "DnnLayer.h"
+#include "DnnLayer.hpp"
 
 namespace tfs {
     
@@ -28,4 +28,4 @@ namespace tfs {
 
 
 
-#endif /* DnnLayerDeconvolution_h */
+#endif /* DnnLayerDeconvolution_hpp */

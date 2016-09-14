@@ -6,9 +6,9 @@
 //  Created by Barrett Davis on 6/15/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // ----------------------------------------------------------------------------
-#include "BinaryStream.h"
-#include "Dnn.h"
-#include "DnnLayer.h"
+#include "BinaryStream.hpp"
+#include "Dnn.hpp"
+#include "DnnLayer.hpp"
 
 // Forward declarations:
 class DnnLayerInput;

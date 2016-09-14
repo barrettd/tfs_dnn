@@ -6,9 +6,9 @@
 //
 //  Much of this code (and comments) came from the jpeg lib example.c
 // ----------------------------------------------------------------------------
-#include "Error.h"
-#include "JpegFile.h"
-#include "Jpeg.h"
+#include "Error.hpp"
+#include "JpegFile.hpp"
+#include "Jpeg.hpp"
 
 
 namespace tfs {

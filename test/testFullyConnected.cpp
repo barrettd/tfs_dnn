@@ -5,9 +5,9 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
 #include <cmath>
-#include "DnnLayers.h"
-#include "DnnTrainerSGD.h"
-#include "Error.h"
+#include "DnnLayers.hpp"
+#include "DnnTrainerSGD.hpp"
+#include "Error.hpp"
 #include "testFullyConnected.hpp"
 
 namespace tfs {

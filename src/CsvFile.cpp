@@ -8,8 +8,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>      // String stream
-#include "CsvFile.h"
-#include "Error.h"
+#include "CsvFile.hpp"
+#include "Error.hpp"
 
 namespace tfs {         // Tree Frog Software
     

@@ -5,15 +5,15 @@
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
 #include <cmath>
-#include "DnnBuilder.h"
-#include "DnnTrainerAdaDelta.h"
-#include "DnnTrainerAdam.h"
-#include "DnnTrainerNesterov.h"
-#include "DnnTrainerSGD.h"
+#include "DnnBuilder.hpp"
+#include "DnnTrainerAdaDelta.hpp"
+#include "DnnTrainerAdam.hpp"
+#include "DnnTrainerNesterov.hpp"
+#include "DnnTrainerSGD.hpp"
 
-#include "Error.h"
+#include "Error.hpp"
 #include "test2D.hpp"
-#include "Utility.h"
+#include "Utility.hpp"
 
 namespace tfs {
     

@@ -1,12 +1,12 @@
 // --------------------------------------------------------------------
-//  Constants.h
+//  Constants.hpp
 //  TFS DNN library level constants are defined here.
 //
 //  Created by Barrett Davis on 5/10/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#ifndef Constants_h
-#define Constants_h
+#ifndef Constants_hpp
+#define Constants_hpp
 
 namespace tfs {     // Tree Frog Software
     
@@ -19,4 +19,4 @@ namespace tfs {     // Tree Frog Software
 }   // namespace tfs
 
 
-#endif /* Constants_h */
+#endif /* Constants_hpp */

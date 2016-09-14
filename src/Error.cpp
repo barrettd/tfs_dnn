@@ -7,7 +7,7 @@
 #include <cstdarg>  // va_list
 #include <cstdio>   // vsnprintf
 #include <iostream>
-#include "Error.h"
+#include "Error.hpp"
 
 namespace tfs {     // Tree Frog Software
 

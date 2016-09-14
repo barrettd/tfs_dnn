@@ -1,14 +1,14 @@
 //
-//  DnnTrainerAdam.h
+//  DnnTrainerAdam.hpp
 //
 //  Created by Barrett Davis on 5/11/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
 
-#ifndef DnnTrainerAdam_h
-#define DnnTrainerAdam_h
+#ifndef DnnTrainerAdam_hpp
+#define DnnTrainerAdam_hpp
 
-#include "DnnTrainer.h"
+#include "DnnTrainer.hpp"
 
 namespace tfs {
     
@@ -37,4 +37,4 @@ namespace tfs {
     
 }   // namespace tfs
 
-#endif /* DnnTrainerAdam_h */
+#endif /* DnnTrainerAdam_hpp */

@@ -6,8 +6,8 @@
 //  Created by Barrett Davis on 5/26/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
-#include "DnnBuilder.h"
-#include "Error.h"
+#include "DnnBuilder.hpp"
+#include "Error.hpp"
 
 #include "testBuilder.hpp"
 

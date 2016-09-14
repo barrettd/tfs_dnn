@@ -1,13 +1,13 @@
 //
-//  DnnTrainerAdaDelta.h
+//  DnnTrainerAdaDelta.hpp
 //
 //  Created by Barrett Davis on 5/11/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
-#ifndef DnnTrainerAdaDelta_h
-#define DnnTrainerAdaDelta_h
+#ifndef DnnTrainerAdaDelta_hpp
+#define DnnTrainerAdaDelta_hpp
 
-#include "DnnTrainer.h"
+#include "DnnTrainer.hpp"
 
 namespace tfs {
     
@@ -33,4 +33,4 @@ namespace tfs {
     
 }   // namespace tfs
 
-#endif /* DnnTrainerAdaDelta_h */
+#endif /* DnnTrainerAdaDelta_hpp */

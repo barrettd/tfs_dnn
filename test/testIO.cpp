@@ -5,10 +5,10 @@
 //  Created by Barrett Davis on 5/31/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
-#include "DnnBuilder.h"
-#include "DnnTrainerAdaDelta.h"
-#include "DnnStream.h"
-#include "Error.h"
+#include "DnnBuilder.hpp"
+#include "DnnTrainerAdaDelta.hpp"
+#include "DnnStream.hpp"
+#include "Error.hpp"
 #include "testIO.hpp"
 
 namespace tfs {

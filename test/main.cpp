@@ -13,8 +13,7 @@
 #include "test2Layer.hpp"
 #include "test2D.hpp"
 #include "testIO.hpp"
-#include "Utility.h"
-
+#include "Utility.hpp"
 
 
 int

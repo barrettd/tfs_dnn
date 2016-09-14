@@ -5,7 +5,7 @@
 //  Created by Barrett Davis on 5/21/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#include "DnnBuilder.h"
+#include "DnnBuilder.hpp"
 
 
 namespace tfs {

@@ -8,7 +8,7 @@
 #ifndef DnnTrainerNesterov_hpp
 #define DnnTrainerNesterov_hpp
 
-#include "DnnTrainer.h"
+#include "DnnTrainer.hpp"
 
 namespace tfs {
     

@@ -1,13 +1,13 @@
 // --------------------------------------------------------------------
-//  DnnLayer.h
+//  DnnLayer.hpp
 //
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#ifndef dnnLayer_h
-#define dnnLayer_h
+#ifndef dnnLayer_hpp
+#define dnnLayer_hpp
 
-#include "Matrix.h"
+#include "Matrix.hpp"
 
 namespace tfs {
     
@@ -111,4 +111,4 @@ namespace tfs {
     
 }   // namespace tfs
 
-#endif /* dnnLayers_h */
+#endif /* dnnLayers_hpp */

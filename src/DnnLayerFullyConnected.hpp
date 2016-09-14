@@ -1,13 +1,13 @@
 // --------------------------------------------------------------------
-//  DnnLayerFullyConnected.h
+//  DnnLayerFullyConnected.hpp
 //
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#ifndef DnnLayerFullyConnected_h
-#define DnnLayerFullyConnected_h
+#ifndef DnnLayerFullyConnected_hpp
+#define DnnLayerFullyConnected_hpp
 
-#include "DnnLayer.h"
+#include "DnnLayer.hpp"
 
 namespace tfs {
     
@@ -35,4 +35,4 @@ namespace tfs {
 }   // namespace tfs
 
 
-#endif /* DnnLayerFullyConnected_h */
+#endif /* DnnLayerFullyConnected_hpp */

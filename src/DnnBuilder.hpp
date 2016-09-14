@@ -1,15 +1,15 @@
 // --------------------------------------------------------------------
-//  DnnBuilder.h
+//  DnnBuilder.hpp
 //  This is a helper class that add activation layers and fully connected
 //  layers in some cases to simplify the DNN building process.
 //
 //  Created by Barrett Davis on 5/21/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#include "Dnn.h"
+#include "Dnn.hpp"
 
-#ifndef DnnBuilder_h
-#define DnnBuilder_h
+#ifndef DnnBuilder_hpp
+#define DnnBuilder_hpp
 
 namespace tfs {
     
@@ -55,4 +55,4 @@ namespace tfs {
 
 }   // namespace tfs
 
-#endif /* DnnBuilder_h */
+#endif /* DnnBuilder_hpp */

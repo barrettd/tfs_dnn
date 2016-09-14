@@ -4,7 +4,7 @@
 //  Created by Barrett Davis on 6/12/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 //
-#include "Matrix.h"
+#include "Matrix.hpp"
 
 #ifndef CsvFile_h
 #define CsvFile_h

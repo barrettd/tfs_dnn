@@ -4,19 +4,14 @@
 set(SOURCE_FILES
         main.cpp
         test2D.cpp
-        test2D.hpp
         test2Layer.cpp
-        test2Layer.hpp
         testBuilder.cpp
-        testBuilder.hpp
         testCifar10.cpp
-        testCifar10.hpp
         testFullyConnected.cpp
-        testFullyConnected.hpp
         testIO.cpp
-        testIO.hpp
-        TestMatrix.cpp
-        TestMatrix.hpp)
+        TestMatrix.cpp)
+
+include_directories (../src)
 
 set_source_files_properties( ${SOURCE_FILES} PROPERTIES LANGUAGE CXX )
 

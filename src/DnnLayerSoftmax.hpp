@@ -1,13 +1,13 @@
 // --------------------------------------------------------------------
-//  DnnLayerSoftmax.h
+//  DnnLayerSoftmax.hpp
 //
 //  Created by Barrett Davis on 5/8/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
 // --------------------------------------------------------------------
-#ifndef DnnLayerSoftmax_h
-#define DnnLayerSoftmax_h
+#ifndef DnnLayerSoftmax_hpp
+#define DnnLayerSoftmax_hpp
 
-#include "DnnLayer.h"
+#include "DnnLayer.hpp"
 
 namespace tfs {
     
@@ -32,4 +32,4 @@ namespace tfs {
     
 }   // namespace tfs
 
-#endif /* DnnLayerSoftmax_h */
+#endif /* DnnLayerSoftmax_hpp */
