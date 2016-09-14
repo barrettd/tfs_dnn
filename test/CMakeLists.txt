@@ -18,6 +18,8 @@ set(SOURCE_FILES
         TestMatrix.cpp
         TestMatrix.hpp)
 
+set_source_files_properties( ${SOURCE_FILES} PROPERTIES LANGUAGE CXX )
+
 add_executable(test_tfs_dnn ${SOURCE_FILES})
 
 target_link_libraries (test_tfs_dnn LINK_PUBLIC tfs_dnn)

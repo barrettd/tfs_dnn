@@ -1,6 +1,5 @@
 # tfs_dnn library
 
-
 set(SOURCE_FILES
         BinaryStream.cpp
         BinaryStream.h
@@ -61,6 +60,8 @@ set(SOURCE_FILES
         Utility.cpp
         Utility.h)
 
+set_source_files_properties( ${SOURCE_FILES} PROPERTIES LANGUAGE CXX )
+
 add_library(tfs_dnn ${SOURCE_FILES})
 
-target_include_directories (tfs_dnn PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+# target_include_directories (tfs_dnn PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
