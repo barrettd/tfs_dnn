@@ -132,7 +132,11 @@ namespace tfs {
     }
     
     static bool
-    localTest2d( DnnTrainer &trainer, const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label, const char *trainingName ) {
+    localTest2d( DnnTrainer &trainer,
+                const std::vector< DNN_NUMERIC > &data,
+                const std::vector< DNN_INTEGER > &label,
+                const char *trainingName,
+                const unsigned long max_iteration = 200 ) {
         Matrix *input = trainer.getMatrixInput();       // get the input matrix: x,y pair Matrix( 1, 1, 2 )
         if( input == 0 ) {
             return log_error( "Unable to obtain input matrix." );
@@ -151,7 +155,6 @@ namespace tfs {
         }
         const DNN_INTEGER * const ePtr = lPtr + DATA_COUNT;
 
-        const unsigned long MAX_ITERATION = 200;
         const unsigned int      MAX_EPOCH = 200;
         const DNN_NUMERIC     TARGET_LOSS = 0.02;
         unsigned long      iterationCount = 0;
@@ -171,8 +174,8 @@ namespace tfs {
                 }
             }
             average_loss /= DATA_COUNT * MAX_EPOCH;
-        } while( average_loss > TARGET_LOSS && iterationCount < MAX_ITERATION );
-        log_info( "Average loss = %f/%f. Count = %lu (%s)", average_loss, TARGET_LOSS, iterationCount, trainingName );
+        } while( average_loss > TARGET_LOSS && iterationCount < max_iteration );
+        log_info( "Average loss = %f/%f. Count = %lu/%lu (%s)", average_loss, TARGET_LOSS, iterationCount, max_iteration, trainingName );
         return true;
     }
     
