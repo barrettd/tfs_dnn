@@ -103,6 +103,9 @@ namespace tfs {
     
     static bool
     setupDnn( Dnn &dnn ) {                                      // Same DNN for all 2d tests.
+        if( dnn.count() > 0 ) {
+            return log_error("Dnn already has layers");
+        }
         DnnBuilder builder( dnn, ACTIVATION_TANH );
         if( !builder.addLayerInput( 1, 1, 2 )) {                // Input layer a single x, y data point.
             return log_error( "Cannot add Input layer" );
@@ -129,7 +132,7 @@ namespace tfs {
     }
     
     static bool
-    localTest2d( DnnTrainer &trainer, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
+    localTest2d( DnnTrainer &trainer, const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label, const char *trainingName ) {
         Matrix *input = trainer.getMatrixInput();       // get the input matrix: x,y pair Matrix( 1, 1, 2 )
         if( input == 0 ) {
             return log_error( "Unable to obtain input matrix." );
@@ -146,16 +149,17 @@ namespace tfs {
         if( DATA_COUNT < 1 ) {
             return log_error( "Label data size < 1" );
         }
-        const DNN_INTEGER *ePtr = lPtr + DATA_COUNT;
-        
-        const unsigned int MAX_ITERATION = 200;
-        const DNN_NUMERIC   TARGET_LOSS  = 0.02;
-        unsigned long count = 0;
-        DNN_NUMERIC average_loss = 0.0;
+        const DNN_INTEGER * const ePtr = lPtr + DATA_COUNT;
+
+        const unsigned long MAX_ITERATION = 200;
+        const unsigned int      MAX_EPOCH = 200;
+        const DNN_NUMERIC     TARGET_LOSS = 0.02;
+        unsigned long      iterationCount = 0;
+        DNN_NUMERIC          average_loss = 0.0;
         do {
-            count++;
+            iterationCount++;
             average_loss = 0.0;
-            for( unsigned int ii = 0; ii < MAX_ITERATION; ii++ ) {
+            for( unsigned int ii = 0; ii < MAX_EPOCH; ii++ ) {
                 dPtr = data.data();
                 lPtr = label.data();
                 
@@ -166,87 +170,94 @@ namespace tfs {
                     average_loss += trainer.train( *lPtr++ );
                 }
             }
-            average_loss /= DATA_COUNT * MAX_ITERATION;
-        } while( average_loss > TARGET_LOSS );
-        log_info( "Average loss = %f/%f. Count = %lu", average_loss, TARGET_LOSS, count );
+            average_loss /= DATA_COUNT * MAX_EPOCH;
+        } while( average_loss > TARGET_LOSS && iterationCount < MAX_ITERATION );
+        log_info( "Average loss = %f/%f. Count = %lu (%s)", average_loss, TARGET_LOSS, iterationCount, trainingName );
         return true;
     }
     
         static bool
-    localTest2dAdaDelta( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
+    localTest2dAdaDelta( const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label ) {
+        Dnn dnn;
+        if( !setupDnn( dnn )) {
+            return false;
+        }
         DnnTrainerAdaDelta trainer( &dnn );
         trainer.learningRate( 0.01  );
         trainer.momentum(     0.1   );
         trainer.batchSize(   10     );
         trainer.l2Decay(      0.001 );
-        log_info( "Training AdaDelta" );
-        return localTest2d( trainer, data, label );
+        return localTest2d( trainer, data, label, "AdaDelta" );
     }
     
     static bool
-    localTest2dAdam( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
+    localTest2dAdam( const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label ) {
+        Dnn dnn;
+        if( !setupDnn( dnn )) {
+            return false;
+        }
         DnnTrainerAdam trainer( &dnn );
         trainer.learningRate( 0.01  );
         trainer.momentum(     0.1   );
         trainer.batchSize(   10     );
         trainer.l2Decay(      0.001 );
-        log_info( "Training Adam" );
-        return localTest2d( trainer, data, label );
+        return localTest2d( trainer, data, label, "Adam" );
     }
     
     static bool
-    localTest2dAdaSGD( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
-        DnnTrainerSGD trainer( &dnn );
-        trainer.learningRate( 0.01  );
-        trainer.momentum(     0.1   );
-        trainer.batchSize(   10     );
-        trainer.l2Decay(      0.001 );
-        log_info( "Training SGD" );
-        return localTest2d( trainer, data, label );
-    }
-
-    static bool
-    localTest2dNesterov( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
+    localTest2dNesterov( const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label ) {
+        Dnn dnn;
+        if( !setupDnn( dnn )) {
+            return false;
+        }
         DnnTrainerNesterov trainer( &dnn );
         trainer.learningRate( 0.01  );
         trainer.momentum(     0.1   );
         trainer.batchSize(   10     );
         trainer.l2Decay(      0.001 );
-        log_info( "Training Nesterov" );
-        return localTest2d( trainer, data, label );
+        return localTest2d( trainer, data, label, "Nesterov" );
     }
 
     static bool
-    localTest2d( Dnn &dnn, std::vector< DNN_NUMERIC > &data, std::vector< DNN_INTEGER > &label ) {
-        if( !localTest2dAdaDelta( dnn, data, label )) {
+    localTest2dAdaSGD( const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label ) {
+        Dnn dnn;
+        if( !setupDnn( dnn )) {
+            return false;
+        }
+        DnnTrainerSGD trainer( &dnn );
+        trainer.learningRate( 0.01  );
+        trainer.momentum(     0.1   );
+        trainer.batchSize(   10     );
+        trainer.l2Decay(      0.001 );
+        return localTest2d( trainer, data, label, "SGD" );
+    }
+
+    static bool
+    localTest2d( const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label ) {
+        if( !localTest2dAdaDelta( data, label )) {
             return log_error( "Cannot train AdaDelta" );
         }
-        if( !localTest2dAdam( dnn, data, label )) {
+        if( !localTest2dAdam( data, label )) {
             return log_error( "Cannot train Adam" );
         }
-        if( !localTest2dAdaSGD( dnn, data, label )) {   // with momentum
-            return log_error( "Cannot train SGD" );
-        }
-        if( !localTest2dNesterov( dnn, data, label )) {
+        if( !localTest2dNesterov( data, label )) {
             return log_error( "Cannot train Nesterov" );
         }
-
+        if( !localTest2dAdaSGD( data, label )) {   // with momentum
+            return log_error( "Cannot train SGD" );
+        }
         return true;
     }
     
     static bool
     localTestSimple( void ) {
         log_info( "Test Simple - Start" );
-        Dnn dnn;
-        if( !setupDnn( dnn )) {
-            return false;
-        }
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
         setUpDataSimple( data, label );
         
-        localTest2d( dnn, data, label );
+        localTest2d( data, label );
         
         log_info( "Test Simple - End" );
         return true;
@@ -255,16 +266,12 @@ namespace tfs {
     static bool
     localTestRandom( void ) {
         log_info( "Test Random - Start" );
-        Dnn dnn;
-        if( !setupDnn( dnn )) {
-            return false;
-        }
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
         setUpDataRandom( data, label, 40 );
         
-        localTest2d( dnn, data, label );
+        localTest2d( data, label );
         
         log_info( "Test Random - End" );
         return true;
@@ -273,16 +280,12 @@ namespace tfs {
     static bool
     localTestCircle( void ) {
         log_info( "Test Circle - Start" );
-        Dnn dnn;
-        if( !setupDnn( dnn )) {
-            return false;
-        }
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
         setUpDataCircle( data, label, 50 );
         
-        localTest2d( dnn, data, label );
+        localTest2d( data, label );
 
         log_info( "Test Circle - End" );
         return true;
@@ -291,16 +294,12 @@ namespace tfs {
     static bool
     localTestSpiral( void ) {
         log_info( "Test Spiral - Start" );
-        Dnn dnn;
-        if( !setupDnn( dnn )) {
-            return false;
-        }
         std::vector< DNN_NUMERIC > data;    // x,y pairs
         std::vector< DNN_INTEGER > label;   // binary labels.
         
         setUpDataSpiral( data, label, 100.0 );
         
-        localTest2d( dnn, data, label );
+        localTest2d( data, label );
 
         log_info( "Test Spiral - End" );
         return true;

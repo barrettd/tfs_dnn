@@ -78,7 +78,7 @@ namespace tfs {
                     log_error( "Trainable has gradient[] smaller than weight[] in size." );
                     return m_loss;
                 }
-                if( m_momentum > 0.0 ) {
+                if( m_momentum > 0.0 && gsum != 0 ) {
                     const DNN_NUMERIC dx = m_momentum * *gsum - m_learning_rate * gij;
                     *gsum++    = dx;    // Save next momentum iteration
                     *weight++ += dx;    // apply corrected gradient

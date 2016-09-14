@@ -13,7 +13,7 @@
 #include "test2Layer.hpp"
 #include "test2D.hpp"
 #include "testIO.hpp"
-
+#include "Utility.h"
 
 
 
@@ -21,7 +21,9 @@ int
 main( int argc, const char * argv[] ) {
     std::cout << "Test DNN begin\n";
     
-    const time_t startTime = time( 0 ); 
+    tfs::randomSeed( 1024 );    // Consistent behavior during testing.  Effects DNN initialization.
+
+    const time_t startTime = time( 0 );
     
     testMatrix();
     testBuilder();
@@ -29,7 +31,7 @@ main( int argc, const char * argv[] ) {
     testCifar10();
     testSimple();
     testCircle();
-    testSpiral();           // testSpiral may take a a few minutes, depending on your computer.
+    testSpiral();               // testSpiral may take a a few minutes, depending on your computer.
     test2Layer();
     testIO();
     

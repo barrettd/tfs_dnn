@@ -64,7 +64,7 @@ namespace tfs {
         Matrix     *bias(   void );             // Internal Neuron connection bias      (bias.w)
         Matrix     *biasDw( void );             // Internal Neuron connection bias dw   (bias.dw)
 
-        const Matrix *outAReadOnly(    void ) const;              // Output Neuron Activations
+        const Matrix *outAReadOnly(     void ) const;              // Output Neuron Activations
         const Matrix *outDwReadOnly(    void ) const;              // d/dw Output Neuron Activations
         const Matrix *weightsReadOnly(  void ) const; // Internal Neuron connection weights   (w)
         const Matrix *gradientReadOnly( void ) const; // Internal Neuron connection gradient  (dw)
