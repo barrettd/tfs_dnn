@@ -8,7 +8,7 @@
 // ----------------------------------------------------------------------------
 #include "Error.hpp"
 #include "JpegFile.hpp"
-#include "Jpeg.hpp"
+#include "Jpeg.h"
 
 
 namespace tfs {

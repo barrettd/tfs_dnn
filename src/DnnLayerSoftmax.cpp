@@ -135,5 +135,31 @@ namespace tfs {
         return loss;
     }
     
+    DNN_INTEGER
+    DnnLayerSoftmax::getPrediction( void ) const {
+        // Return index of max probability
+        if( matrixBad( m_out_a )) {
+            log_error( "Not configured" );
+            return 0;
+        }
+              DNN_NUMERIC *        output = m_out_a->data();
+        const DNN_NUMERIC * const  outEnd = m_out_a->end();
+
+        DNN_NUMERIC    max = *output++;
+        DNN_INTEGER result = 0;
+        DNN_INTEGER  index = 1;
+        
+        while( output < outEnd ) {
+            if( *output > max ) {
+                max    = *output;
+                result = index;
+            }
+            output++;
+            index++;
+        }
+        return result;
+    }
+
+    
 }   // namespace tfs
 

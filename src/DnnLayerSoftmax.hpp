@@ -27,6 +27,8 @@ namespace tfs {
         virtual bool runForward(  void );   // Forward propagate
         virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation );   // Back propagate
         
+        DNN_INTEGER getPrediction( void ) const;    // Return index of max probability
+        
     };
     
     
