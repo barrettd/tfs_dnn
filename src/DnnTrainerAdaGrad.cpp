@@ -28,16 +28,16 @@ namespace tfs {
         if( m_gsum == 0 ) {
             setupSums( false );  // setup gsum[] only
         }
+        DNN_NUMERIC *gsum = m_gsum->data();
+        
         Trainable **trainableHandle = m_trainable_handle;
         Trainable **trainableEnd    = m_trainable_end;
         
-        DNN_NUMERIC *gsum = m_gsum->data();
-        
         while( trainableHandle < trainableEnd ) {
-            Trainable   *trainable   = *trainableHandle++;      // trainable != 0 & ok() from DnnTrainer::setUpTrainables()
-            DNN_NUMERIC *weight      = trainable->weightStart;
+                  Trainable   *trainable   = *trainableHandle++;      // trainable != 0 & ok() from DnnTrainer::setUpTrainables()
+                  DNN_NUMERIC *weight      = trainable->weightStart;
             const DNN_NUMERIC *weightEnd   = trainable->weightEnd;
-            DNN_NUMERIC *gradient    = trainable->gradientStart;
+                  DNN_NUMERIC *gradient    = trainable->gradientStart;
             const DNN_NUMERIC *gradientEnd = trainable->gradientEnd;
             const DNN_NUMERIC l1_decay     = trainable->l1_decay_mul * m_l1_decay;
             const DNN_NUMERIC l2_decay     = trainable->l2_decay_mul * m_l2_decay;

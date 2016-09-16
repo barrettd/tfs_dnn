@@ -32,10 +32,10 @@ namespace tfs {
         Trainable **trainableEnd    = m_trainable_end;
         
         while( trainableHandle < trainableEnd ) {
-            Trainable   *trainable   = *trainableHandle++;      // trainable != 0 & ok() from DnnTrainer::setUpTrainables()
-            DNN_NUMERIC *weight      = trainable->weightStart;
+                  Trainable   *trainable   = *trainableHandle++;      // trainable != 0 & ok() from DnnTrainer::setUpTrainables()
+                  DNN_NUMERIC *weight      = trainable->weightStart;
             const DNN_NUMERIC *weightEnd   = trainable->weightEnd;
-            DNN_NUMERIC *gradient    = trainable->gradientStart;
+                  DNN_NUMERIC *gradient    = trainable->gradientStart;
             const DNN_NUMERIC *gradientEnd = trainable->gradientEnd;
             const DNN_NUMERIC l1_decay     = m_l1_decay * trainable->l1_decay_mul;
             const DNN_NUMERIC l2_decay     = m_l2_decay * trainable->l2_decay_mul;
