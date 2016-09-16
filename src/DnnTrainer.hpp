@@ -12,7 +12,7 @@
 
 namespace tfs {
 
-    class DnnTrainer {  // sgd/adam/adagrad/adadelta/windowgrad/netsterov
+    class DnnTrainer {  // base class to all of the trainers.  The trainers differ in adjustWeights() implementation.
     protected:
         Dnn          *m_dnn;
         DNN_NUMERIC   m_learning_rate;
