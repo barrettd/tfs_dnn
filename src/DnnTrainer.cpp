@@ -177,23 +177,37 @@ namespace tfs {
     DnnTrainer::loss( DNN_NUMERIC value ) {
         return m_loss = value;
     }
-
-    DNN_NUMERIC
-    DnnTrainer::train( const Matrix &expectation ) {    // Input from input matrix.
-        m_loss = 0.0;
-        return m_loss;
-    }
-
-    DNN_NUMERIC
-    DnnTrainer::train( const DMatrix &expectation ) {   // Input from input matrix.
-        m_loss = 0.0;
-        return m_loss;
-    }
     
     DNN_NUMERIC
-    DnnTrainer::train( const DNN_INTEGER expectation ) {
-        return 0.0;
+    DnnTrainer::adjustWeights( void ) {
+        return m_loss;
     }
 
+    DNN_NUMERIC
+    DnnTrainer::train( const DNN_INTEGER expectation ) {
+        // Assume: Input matrix already set for the DNN
+        m_loss = 0.0;
+        if( m_dnn == 0 ) {
+            log_error( "No DNN set" );
+            return m_loss;
+        }
+        if( m_batch_size == 0 ) {
+            log_error( "Batch size 0 - will be a divide by zero error" );
+            return m_loss;
+        }
+        if( m_trainable_handle == 0 || m_trainable_end == 0 ) {
+            log_error( "No gradients available for training" );
+            return m_loss;
+        }
+        if( !m_dnn->forward()) {
+            return m_loss;
+        }
+        m_loss = m_dnn->backprop( expectation );
+        m_k++;
+        if( m_k % m_batch_size ) {
+            return m_loss;
+        }
+        return adjustWeights();
+    }
     
 }   // namespace tfs

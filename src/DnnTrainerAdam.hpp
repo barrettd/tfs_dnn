@@ -17,11 +17,13 @@ namespace tfs {
         DNN_NUMERIC m_eps;
         DNN_NUMERIC m_beta1;
         DNN_NUMERIC m_beta2;
+
+    protected:
+        virtual DNN_NUMERIC adjustWeights( void );
+
     public:
         DnnTrainerAdam( Dnn *dnn );
         virtual ~DnnTrainerAdam( void );
-        
-        virtual DNN_NUMERIC train( const DNN_INTEGER expectation );     // Returns loss.
         
         DNN_NUMERIC eps( void ) const ;                  // get()
         DNN_NUMERIC eps( const DNN_NUMERIC value );      // set()
@@ -31,7 +33,6 @@ namespace tfs {
         
         DNN_NUMERIC beta2( void ) const ;                  // get()
         DNN_NUMERIC beta2( const DNN_NUMERIC value );      // set()
-        
         
     };
     

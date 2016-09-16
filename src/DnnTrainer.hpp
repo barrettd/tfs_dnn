@@ -28,10 +28,12 @@ namespace tfs {
         Matrix     *m_gsum;
         Matrix     *m_xsum;
 
+    protected:
         void setUpTrainable( Matrix *weights, Matrix *gradient, DNN_NUMERIC l1_decay_mul, DNN_NUMERIC l2_decay_mul );
         void setUpTrainables( void );
         void setupSums( bool xsum );    // Set up gsum[] and (optionally) xsum[]
 
+        virtual DNN_NUMERIC adjustWeights( void );
         
     public:
         DnnTrainer( Dnn *dnn );
@@ -60,9 +62,9 @@ namespace tfs {
         unsigned long k( void ) const;
         unsigned long k( unsigned long value );
         
-        virtual DNN_NUMERIC train( const  Matrix    &expectation );     // Returns loss.
-        virtual DNN_NUMERIC train( const DMatrix    &expectation );     // Returns loss.
-        virtual DNN_NUMERIC train( const DNN_INTEGER expectation );     // Returns loss.
+//        DNN_NUMERIC train( const  Matrix    &expectation );     // Returns loss.
+//        DNN_NUMERIC train( const DMatrix    &expectation );     // Returns loss.
+        DNN_NUMERIC train( const DNN_INTEGER expectation );     // Returns loss.
         
         
     };

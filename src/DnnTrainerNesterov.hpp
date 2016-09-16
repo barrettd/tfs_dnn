@@ -14,12 +14,13 @@ namespace tfs {
     
     class DnnTrainerNesterov : public DnnTrainer {
 
+    protected:
+        virtual DNN_NUMERIC adjustWeights( void );
+
     public:
         DnnTrainerNesterov( Dnn *dnn );
         virtual ~DnnTrainerNesterov( void );
-        
-        virtual DNN_NUMERIC train( const DNN_INTEGER expectation );     // Returns loss.
-        
+                
     };
     
 }   // namespace tfs

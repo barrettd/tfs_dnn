@@ -16,31 +16,8 @@ namespace tfs {
     DnnTrainerNesterov::~DnnTrainerNesterov( void ) {
     }
     
-    
     DNN_NUMERIC
-    DnnTrainerNesterov::train( const DNN_INTEGER expectation ) {
-        // Assume: Input matrix already set for the DNN
-        m_loss = 0.0;
-        if( m_dnn == 0 ) {
-            log_error( "No DNN set" );
-            return m_loss;
-        }
-        if( m_batch_size == 0 ) {
-            log_error( "Batch size 0 - will be a divide by zero error" );
-            return m_loss;
-        }
-        if( m_trainable_handle == 0 || m_trainable_end == 0 ) {
-            log_error( "No gradients available for training" );
-            return m_loss;
-        }
-        if( !m_dnn->forward()) {
-            return m_loss;
-        }
-        m_loss = m_dnn->backprop( expectation );
-        m_k++;
-        if( m_k % m_batch_size ) {
-            return m_loss;
-        }
+    DnnTrainerNesterov::adjustWeights( void ) {
         if( m_gsum == 0 ) {
             setupSums( false );  // setup gsum[] only
         }
@@ -85,6 +62,6 @@ namespace tfs {
         }
         return m_loss;
     }
-    
+
     
 }   // namespace tfs

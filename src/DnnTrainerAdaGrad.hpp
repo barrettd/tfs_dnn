@@ -16,11 +16,12 @@ namespace tfs {
     protected:
         DNN_NUMERIC m_eps;
         
+    protected:
+        virtual DNN_NUMERIC adjustWeights( void );
+
     public:
         DnnTrainerAdaGrad( Dnn *dnn );
         virtual ~DnnTrainerAdaGrad( void );
-        
-        virtual DNN_NUMERIC train( const DNN_INTEGER expectation );     // Returns loss.
         
         DNN_NUMERIC eps( void ) const ;                  // get()
         DNN_NUMERIC eps( const DNN_NUMERIC value );      // set()

@@ -16,11 +16,12 @@ namespace tfs {
         DNN_NUMERIC m_ro;
         DNN_NUMERIC m_eps;
         
+    protected:
+        virtual DNN_NUMERIC adjustWeights( void );
+
     public:
         DnnTrainerAdaDelta( Dnn *dnn );
         virtual ~DnnTrainerAdaDelta( void );
-        
-        virtual DNN_NUMERIC train( const DNN_INTEGER expectation );     // Returns loss.
         
         DNN_NUMERIC ro( void ) const ;                  // get()
         DNN_NUMERIC ro( const DNN_NUMERIC value );      // set()
