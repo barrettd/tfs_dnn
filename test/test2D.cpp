@@ -7,6 +7,7 @@
 #include <cmath>
 #include "DnnBuilder.hpp"
 #include "DnnTrainerAdaDelta.hpp"
+#include "DnnTrainerAdaGrad.hpp"
 #include "DnnTrainerAdam.hpp"
 #include "DnnTrainerNesterov.hpp"
 #include "DnnTrainerSGD.hpp"
@@ -179,7 +180,7 @@ namespace tfs {
         return true;
     }
     
-        static bool
+    static bool
     localTest2dAdaDelta( const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label ) {
         Dnn dnn;
         if( !setupDnn( dnn )) {
@@ -188,11 +189,28 @@ namespace tfs {
         DnnTrainerAdaDelta trainer( &dnn );
         trainer.learningRate( 0.01  );
         trainer.momentum(     0.1   );
-        trainer.batchSize(   10     );
+        trainer.batchSize(    8     );
         trainer.l2Decay(      0.001 );
+        trainer.eps(          1e-6  );
+        trainer.ro(           0.95  );
         return localTest2d( trainer, data, label, "AdaDelta" );
     }
-    
+
+    static bool
+    localTest2dAdaGrad( const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label ) {
+        Dnn dnn;
+        if( !setupDnn( dnn )) {
+            return false;
+        }
+        DnnTrainerAdaGrad trainer( &dnn );
+        trainer.learningRate( 0.01  );
+        trainer.momentum(     0.1   );
+        trainer.batchSize(    8     );
+        trainer.l2Decay(      0.001 );
+        trainer.eps(          1e-6  );
+        return localTest2d( trainer, data, label, "AdaGrad" );
+    }
+
     static bool
     localTest2dAdam( const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label ) {
         Dnn dnn;
@@ -239,6 +257,9 @@ namespace tfs {
     localTest2d( const std::vector< DNN_NUMERIC > &data, const std::vector< DNN_INTEGER > &label ) {
         if( !localTest2dAdaDelta( data, label )) {
             return log_error( "Cannot train AdaDelta" );
+        }
+        if( !localTest2dAdaGrad( data, label )) {
+            return log_error( "Cannot train AdaGrad" );
         }
         if( !localTest2dAdam( data, label )) {
             return log_error( "Cannot train Adam" );

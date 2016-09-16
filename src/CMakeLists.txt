@@ -23,6 +23,7 @@ set(SOURCE_FILES
         DnnStream.cpp
         DnnTrainer.cpp
         DnnTrainerAdaDelta.cpp
+        DnnTrainerAdaGrad.cpp
         DnnTrainerAdam.cpp
         DnnTrainerNesterov.cpp
         DnnTrainerSGD.cpp
