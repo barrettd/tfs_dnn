@@ -1,10 +1,11 @@
-//
+// -------------------------------------------------------------
 //  DnnTrainerAdaGrad.hpp
 //
 //  Created by Barrett Davis on 9/15/16.
 //  Copyright © 2016 Tree Frog Software. All rights reserved.
-//
-
+// -------------------------------------------------------------
+// AdaDelta / AdaGrad paper: http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf
+// -------------------------------------------------------------
 #ifndef DnnTrainerAdaGrad_hpp
 #define DnnTrainerAdaGrad_hpp
 
