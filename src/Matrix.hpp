@@ -395,12 +395,12 @@ namespace tfs {         // Tree Frog Software
             return result;
         }
         
-        inline void add( const T value ) const {          // Add a scalar to each element.
+        inline void add( const T value )  {          // Add a scalar to each element.
             if( isEmpty()) {
                 log_error( "empty matrix" );
                 return ;
             }
-            const T *      data = m_data;
+                  T *      data = m_data;
             const T * const end = m_end;
             
             while( data < end ) {
@@ -409,12 +409,12 @@ namespace tfs {         // Tree Frog Software
             return;
         }
 
-        inline void subtract( const T value ) const {          // Subtract a scalar from each element.
+        inline void subtract( const T value )  {          // Subtract a scalar from each element.
             if( isEmpty()) {
                 log_error( "empty matrix" );
                 return ;
             }
-            const T *      data = m_data;
+                  T *      data = m_data;
             const T * const end = m_end;
             
             while( data < end ) {
