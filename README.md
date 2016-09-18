@@ -1,5 +1,5 @@
 # tfs_dnn
-C++ Deep Neural Net library - Version 1.01 is now available.
+C++ Deep Neural Net library - Version 1.02 is now available.
 
 The currently implemented features work well, but there is still some more work to do.
 
