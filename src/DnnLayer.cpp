@@ -206,6 +206,10 @@ namespace tfs {
                 inputCount = weights->count();
             }
         }
+        if( m_layer_type == LAYER_RECTIFIED_LINEAR_UNIT ) {
+            // http://arxiv.org/pdf/1502.01852.pdf
+            inputCount /= 2.0;
+        }
         // Zero activations, gradient and randomize weights.
         if( m_w != 0 ) {
             if( inputCount > 0 ) {
