@@ -86,19 +86,27 @@ namespace tfs {         // Tree Frog Software
         inline const T* end(  void ) const {         return m_end;  }   // End of data array
         inline const T* dataReadOnly( void ) const { return m_data; }   // Start of data array (const)
         
-        inline void randomize( void ) {                // Fill matrix with small positive values
+
+        inline void randomize( unsigned long inputCount ) {             // Fill matrix with small positive values
             // Weight normalization is done to equalize the output variance of every neuron,
             // otherwise neurons with a lot of incoming connections will have outputs with a larger variance
             if( isEmpty()) {
                 log_error( "empty matrix" );
                 return;
             }
-            const double  scale = sqrt( 1.0 / m_count );
-                  T *       ptr = m_data;
+            if( inputCount < 1 ) {
+                inputCount = 1;
+            }
+            const double  scale = sqrt( 1.0 / inputCount );
+            T *       ptr = m_data;
             const T * const end = m_end;
             while( ptr < end ) {
                 *ptr++ = (T) randn( scale );
             }
+        }
+        
+        inline void randomize( void ) {     // Fill matrix with small positive values
+            randomize( m_count );           // If no inputs, look to the number of nodes in this layer
         }
 
         inline void zero( void ) {                  // Fill matrix with zeros
