@@ -199,21 +199,21 @@ namespace tfs {
 
     void
     DnnLayer::initialize( void ) {
-        unsigned long inputCount = 0;
+        unsigned long scale = 0;
         if( m_prev_layer != 0 ) {
             Matrix *weights = m_prev_layer->weights();
             if( weights != 0 ) {
-                inputCount = weights->count();
+                scale = weights->count();
             }
         }
         if( m_layer_type == LAYER_RECTIFIED_LINEAR_UNIT ) {
             // http://arxiv.org/pdf/1502.01852.pdf
-            inputCount /= 2.0;
+            scale /= 2.0;
         }
         // Zero activations, gradient and randomize weights.
         if( m_w != 0 ) {
-            if( inputCount > 0 ) {
-                m_w->randomize( inputCount );
+            if( scale > 0 ) {
+                m_w->randomize( scale );
             } else {
                 m_w->randomize();
             }
@@ -222,8 +222,8 @@ namespace tfs {
             m_dw->zero();
         }
         if( m_bias_w != 0 ) {
-            if( inputCount > 0 ) {
-                m_bias_w->randomize( inputCount );
+            if( scale > 0 ) {
+                m_bias_w->randomize( scale );
             } else {
                 m_bias_w->randomize();
             }
