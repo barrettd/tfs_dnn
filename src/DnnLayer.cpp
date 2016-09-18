@@ -199,15 +199,30 @@ namespace tfs {
 
     void
     DnnLayer::initialize( void ) {
+        unsigned long inputCount = 0;
+        if( m_prev_layer != 0 ) {
+            Matrix *weights = m_prev_layer->weights();
+            if( weights != 0 ) {
+                inputCount = weights->count();
+            }
+        }
         // Zero activations, gradient and randomize weights.
         if( m_w != 0 ) {
-            m_w->randomize();
+            if( inputCount > 0 ) {
+                m_w->randomize( inputCount );
+            } else {
+                m_w->randomize();
+            }
         }
         if( m_dw != 0 ) {
             m_dw->zero();
         }
         if( m_bias_w != 0 ) {
-            m_bias_w->randomize();
+            if( inputCount > 0 ) {
+                m_bias_w->randomize( inputCount );
+            } else {
+                m_bias_w->randomize();
+            }
         }
         if( m_bias_dw != 0 ) {
             m_bias_dw->zero();
