@@ -87,21 +87,21 @@ namespace tfs {         // Tree Frog Software
         inline const T* dataReadOnly( void ) const { return m_data; }   // Start of data array (const)
         
 
-        inline void randomize( unsigned long inputCount ) {             // Fill matrix with small positive values
+        inline void randomize( unsigned long scale ) {             // Fill matrix with small positive values
             // Weight normalization is done to equalize the output variance of every neuron,
             // otherwise neurons with a lot of incoming connections will have outputs with a larger variance
             if( isEmpty()) {
                 log_error( "empty matrix" );
                 return;
             }
-            if( inputCount < 1 ) {
-                inputCount = 1;
+            if( scale < 1 ) {
+                scale = 1;
             }
-            const double  scale = sqrt( 1.0 / inputCount );
+            const double  max = sqrt( 1.0 / scale );
             T *       ptr = m_data;
             const T * const end = m_end;
             while( ptr < end ) {
-                *ptr++ = (T) randn( scale );
+                *ptr++ = (T) randn( max );
             }
         }
         
