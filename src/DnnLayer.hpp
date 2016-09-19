@@ -48,6 +48,7 @@ namespace tfs {
         
         void setup( const bool trainable = true );
         void teardown( void );
+        DNN_NUMERIC randomizeScale( const Matrix *matrix ) const;
         
         
     public:

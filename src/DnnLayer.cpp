@@ -196,9 +196,9 @@ namespace tfs {
     DnnLayer::setNextLayer( DnnLayer *layer ) {
         return m_next_layer = layer;
     }
-
-    void
-    DnnLayer::initialize( void ) {
+    
+    DNN_NUMERIC
+    DnnLayer::randomizeScale( const Matrix *matrix ) const {
         unsigned long scale = 0;
         if( m_prev_layer != 0 ) {
             Matrix *weights = m_prev_layer->weights();
@@ -206,27 +206,28 @@ namespace tfs {
                 scale = weights->count();
             }
         }
-        if( m_layer_type == LAYER_RECTIFIED_LINEAR_UNIT ) {
-            // http://arxiv.org/pdf/1502.01852.pdf
-            scale /= 2.0;
+        if( scale == 0 && matrix != 0 ) {
+            scale = matrix->count();
         }
+        if( m_layer_type == LAYER_RECTIFIED_LINEAR_UNIT ) {
+            scale /= 2.0;       // http://arxiv.org/pdf/1502.01852.pdf
+        }
+        return scale;
+    }
+
+    void
+    DnnLayer::initialize( void ) {
         // Zero activations, gradient and randomize weights.
         if( m_w != 0 ) {
-            if( scale > 0 ) {
-                m_w->randomize( scale );
-            } else {
-                m_w->randomize();
-            }
+            DNN_NUMERIC scale = randomizeScale( m_w );
+            m_w->randomize( scale );
         }
         if( m_dw != 0 ) {
             m_dw->zero();
         }
         if( m_bias_w != 0 ) {
-            if( scale > 0 ) {
-                m_bias_w->randomize( scale );
-            } else {
-                m_bias_w->randomize();
-            }
+            DNN_NUMERIC scale = randomizeScale( m_bias_w );
+            m_bias_w->randomize( scale );
         }
         if( m_bias_dw != 0 ) {
             m_bias_dw->zero();
@@ -249,10 +250,12 @@ namespace tfs {
         // Randomize weights and bias.
         // -----------------------------------------------------------------------------------
         if( m_w != 0 ) {
-            m_w->randomize();
+            DNN_NUMERIC scale = randomizeScale( m_w );
+            m_w->randomize( scale );
         }
         if( m_bias_w != 0 ) {
-            m_bias_w->randomize();
+            DNN_NUMERIC scale = randomizeScale( m_bias_w );
+            m_bias_w->randomize( scale );
         }
         if( m_next_layer != 0 ) {
             m_next_layer->randomize();  // Forward propagate
