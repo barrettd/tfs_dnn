@@ -47,11 +47,10 @@ namespace tfs {
         const DNN_NUMERIC *             yy = expectation.dataReadOnly();
         const DNN_NUMERIC *            inA = m_in_a->dataReadOnly();
               DNN_NUMERIC *           inDw = m_in_dw->data();
-        const DNN_NUMERIC *          outDw = m_out_dw->dataReadOnly();
-        const DNN_NUMERIC * const outDwEnd = m_out_dw->end();
+        const DNN_NUMERIC * const  inDwEnd = m_in_dw->end();
               DNN_NUMERIC             loss = 0.0;
         
-        while( outDw < outDwEnd ) {
+        while( inDw < inDwEnd ) {
             const DNN_NUMERIC dy = *inA++ - *yy++;
             *inDw++ = dy;
             loss += 0.5 * dy*dy;
