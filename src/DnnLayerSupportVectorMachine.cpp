@@ -38,6 +38,7 @@ namespace tfs {
         // -----------------------------------------------------------------------------------
         // Using a structured loss, which means that the score of the ground truth should be
         // higher than the score of any other class, by a margin
+        // -----------------------------------------------------------------------------------
         if( matrixBad( m_in_a ) || matrixBad( m_in_dw )) {
             log_error( "Not configured for training" );
             return 0.0;
@@ -59,7 +60,7 @@ namespace tfs {
             }
             const DNN_NUMERIC ydiff = -yscore + *inA++ + margin;
             if( ydiff > 0.0 ) {
-                // violating dimension, apply loss
+                // Violating dimension, apply loss
                 inDw[ii] += 1.0;
                 inDw[yy] -= 1.0;
                 loss     += ydiff;
