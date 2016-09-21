@@ -48,12 +48,12 @@ namespace tfs {
         }
         const DNN_NUMERIC *   inA = m_in_a->dataReadOnly();
               DNN_NUMERIC *  inDw = m_in_dw->data();
-        const long          count = (long) m_in_dw->count();
+        const DNN_INTEGER   count = (DNN_INTEGER) m_in_dw->count();
         const DNN_NUMERIC  margin = 1.0;
         const DNN_NUMERIC  yscore = inA[yy];        // Ground truth score
               DNN_NUMERIC    loss = 0.0;
 
-        for( long ii = 0; ii < count; ii++ ) {
+        for( DNN_INTEGER ii = 0; ii < count; ii++ ) {
             if( ii == yy ) {
                 continue;
             }
