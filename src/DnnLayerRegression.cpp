@@ -12,7 +12,7 @@ namespace tfs {
     DnnLayerRegression::DnnLayerRegression( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( LAYER_REGRESSION, previousLayer ) {
         // Constructor
-        setup( trainable );
+        setup( false );     // We ignore m_out_dw for training, this should be the last layer.
     }
     
     DnnLayerRegression::~DnnLayerRegression( void ) {
@@ -45,13 +45,13 @@ namespace tfs {
             return 0.0;
         }
         const DNN_NUMERIC *             yy = expectation.dataReadOnly();
-        const DNN_NUMERIC *            inA = m_in_a->dataReadOnly();
+        const DNN_NUMERIC *           outA = m_out_a->dataReadOnly();
               DNN_NUMERIC *           inDw = m_in_dw->data();
         const DNN_NUMERIC * const  inDwEnd = m_in_dw->end();
               DNN_NUMERIC             loss = 0.0;
         
         while( inDw < inDwEnd ) {
-            const DNN_NUMERIC dy = *inA++ - *yy++;
+            const DNN_NUMERIC dy = *outA++ - *yy++;
             *inDw++ = dy;
             loss += 0.5 * dy*dy;
         }
