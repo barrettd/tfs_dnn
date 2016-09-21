@@ -45,11 +45,11 @@ namespace tfs {
         bool addLayerDropout( DNN_NUMERIC probability = 0.5 );
         bool addLayerLocalResponseNormalization( void );
         bool addLayerPool( unsigned long side, unsigned long stride = 1 );
-        bool addLayerRegression( unsigned long neuronCount );
         
+        // Output layers:
+        bool addLayerRegression(           unsigned long neuronCount );
         bool addLayerSupportVectorMachine( unsigned long numberOfClasses );
-
-        bool addLayerSoftmax( unsigned long numberOfClasses );
+        bool addLayerSoftmax(              unsigned long numberOfClasses );
         
     };
 

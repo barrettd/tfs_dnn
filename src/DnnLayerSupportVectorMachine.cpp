@@ -47,24 +47,26 @@ namespace tfs {
             log_error( "Expectation is out of range" );
             return 0.0;
         }
-        const DNN_NUMERIC *   inA = m_in_a->dataReadOnly();
-              DNN_NUMERIC *  inDw = m_in_dw->data();
-        const DNN_INTEGER   count = (DNN_INTEGER) m_in_dw->count();
-        const DNN_NUMERIC  margin = 1.0;
-        const DNN_NUMERIC  yscore = inA[yy];        // Ground truth score
-              DNN_NUMERIC    loss = 0.0;
+        const DNN_NUMERIC *    inA = m_in_a->dataReadOnly();
+              DNN_NUMERIC *   inDw = m_in_dw->data();
+              DNN_NUMERIC *  inDwY = &inDw[yy];
+        const DNN_NUMERIC *inDwEnd = m_in_dw->end();
+        const DNN_NUMERIC   margin = 1.0;
+        const DNN_NUMERIC   yscore = inA[yy];        // Ground truth score
+        const DNN_NUMERIC   mscore = margin - yscore;
+              DNN_NUMERIC     loss = 0.0;
 
-        for( DNN_INTEGER ii = 0; ii < count; ii++ ) {
-            if( ii == yy ) {
-                continue;
+        while( inDw < inDwEnd ) {
+            if( inDw != inDwY ) {
+                const DNN_NUMERIC ydiff = *inA + mscore;
+                if( ydiff > 0.0 ) {     // Violating dimension, apply loss
+                    *inDw  += 1.0;
+                    *inDwY -= 1.0;
+                    loss   += ydiff;
+                }
             }
-            const DNN_NUMERIC ydiff = -yscore + *inA++ + margin;
-            if( ydiff > 0.0 ) {
-                // Violating dimension, apply loss
-                inDw[ii] += 1.0;
-                inDw[yy] -= 1.0;
-                loss     += ydiff;
-            }
+            inDw++;
+            inA++;
         }
         return loss;
     }
