@@ -18,7 +18,7 @@ namespace tfs {
         virtual ~DnnLayerSupportVectorMachine( void );
         
         virtual bool runForward(  void );
-        virtual bool runBackprop( void );
+        virtual DNN_NUMERIC runBackprop( const DNN_INTEGER expectation );
         
     };
     

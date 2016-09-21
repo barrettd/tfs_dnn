@@ -12,6 +12,7 @@ namespace tfs {
     DnnLayerSupportVectorMachine::DnnLayerSupportVectorMachine( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( LAYER_SUPPORT_VECTOR_MACHINE, previousLayer ) {
         // Constructor
+        setup( false );     // We ignore m_out_dw for training, this should be the last layer.
     }
     
     DnnLayerSupportVectorMachine::~DnnLayerSupportVectorMachine( void ) {
@@ -23,17 +24,48 @@ namespace tfs {
         // -----------------------------------------------------------------------------------
         // virtual: Forward propagate, used with forward()
         // -----------------------------------------------------------------------------------
-        // TODO:
-        return log_warn( "Not implemented yet" );
+        if( matrixBad( m_in_a ) || matrixBad( m_out_a )) {
+            return log_error( "Not configured" );
+        }
+        m_out_a->copy( *m_in_a );   // Simple identity
+        return true;
     }
     
-    bool
-    DnnLayerSupportVectorMachine::runBackprop( void ) {
+    DNN_NUMERIC
+    DnnLayerSupportVectorMachine::runBackprop( const DNN_INTEGER yy ) {
         // -----------------------------------------------------------------------------------
         // virtual: Back propagate, used with backprop()
         // -----------------------------------------------------------------------------------
-        // TODO:
-        return log_warn( "Not implemented yet" );
+        // Using a structured loss, which means that the score of the ground truth should be
+        // higher than the score of any other class, by a margin
+        if( matrixBad( m_in_a ) || matrixBad( m_in_dw )) {
+            log_error( "Not configured for training" );
+            return 0.0;
+        }
+        if( yy < 0 || yy >= (DNN_INTEGER) m_in_a->count()) {
+            log_error( "Expectation is out of range" );
+            return 0.0;
+        }
+        const DNN_NUMERIC *   inA = m_in_a->dataReadOnly();
+              DNN_NUMERIC *  inDw = m_in_dw->data();
+        const long          count = (long) m_in_dw->count();
+        const DNN_NUMERIC  margin = 1.0;
+        const DNN_NUMERIC  yscore = inA[yy];        // Ground truth score
+              DNN_NUMERIC    loss = 0.0;
+
+        for( long ii = 0; ii < count; ii++ ) {
+            if( ii == yy ) {
+                continue;
+            }
+            const DNN_NUMERIC ydiff = -yscore + *inA++ + margin;
+            if( ydiff > 0.0 ) {
+                // violating dimension, apply loss
+                inDw[ii] += 1.0;
+                inDw[yy] -= 1.0;
+                loss     += ydiff;
+            }
+        }
+        return loss;
     }
 
     
