@@ -12,9 +12,7 @@ namespace tfs {
     DnnLayerRegression::DnnLayerRegression( DnnLayer *previousLayer, const bool trainable ):
     DnnLayer( LAYER_REGRESSION, previousLayer ) {
         // Constructor
-        if( previousLayer != 0 ) {
-//            setup( previousLayer->outA(), trainable );
-        }
+        setup( trainable );
     }
     
     DnnLayerRegression::~DnnLayerRegression( void ) {
@@ -26,17 +24,39 @@ namespace tfs {
         // -----------------------------------------------------------------------------------
         // virtual: Forward propagate, used with forward()
         // -----------------------------------------------------------------------------------
-        // TODO:
-        return log_warn( "Not implemented yet" );
+        if( matrixBad( m_in_a ) || matrixBad( m_out_a )) {
+            return log_error( "Not configured" );
+        }
+        m_out_a->copy( *m_in_a );   // Simple identity
+        return true;
     }
     
-    bool
-    DnnLayerRegression::runBackprop( void ) {
+    DNN_NUMERIC
+    DnnLayerRegression::runBackprop( const  Matrix &expectation ) {
         // -----------------------------------------------------------------------------------
         // virtual: Back propagate, used with backprop()
         // -----------------------------------------------------------------------------------
-        // TODO:
-        return log_warn( "Not implemented yet" );
+        if( m_in_dw == 0 ) {
+            log_error( "Not configured for training" );
+            return 0.0;
+        }
+        if( m_in_dw->count() != expectation.count()) {
+            log_error( "Gradiant and expectation not the same size" );
+            return 0.0;
+        }
+        const DNN_NUMERIC *             yy = expectation.dataReadOnly();
+        const DNN_NUMERIC *            inA = m_in_a->dataReadOnly();
+              DNN_NUMERIC *           inDw = m_in_dw->data();
+        const DNN_NUMERIC *          outDw = m_out_dw->dataReadOnly();
+        const DNN_NUMERIC * const outDwEnd = m_out_dw->end();
+              DNN_NUMERIC             loss = 0.0;
+        
+        while( outDw < outDwEnd ) {
+            const DNN_NUMERIC dy = *inA++ - *yy++;
+            *inDw++ = dy;
+            loss += 0.5 * dy*dy;
+        }
+        return loss;
     }
 
     

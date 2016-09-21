@@ -62,8 +62,7 @@ namespace tfs {
         unsigned long k( void ) const;
         unsigned long k( unsigned long value );
         
-//        DNN_NUMERIC train( const  Matrix    &expectation );     // Returns loss.
-//        DNN_NUMERIC train( const DMatrix    &expectation );     // Returns loss.
+        DNN_NUMERIC train( const Matrix     &expectation );     // Returns loss.
         DNN_NUMERIC train( const DNN_INTEGER expectation );     // Returns loss.
         
         

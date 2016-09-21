@@ -18,8 +18,7 @@ namespace tfs {
         virtual ~DnnLayerRegression( void );
         
         virtual bool runForward(  void );
-        virtual bool runBackprop( void );
-        
+        virtual DNN_NUMERIC runBackprop( const  Matrix &expectation );         
     };
     
     
