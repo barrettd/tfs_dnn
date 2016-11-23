@@ -62,7 +62,7 @@ namespace tfs {
                 if( ydiff > 0.0 ) {     // Violating dimension, apply loss
                     *inDw  += 1.0;
                     *inDwY -= 1.0;
-                    loss   += ydiff;
+                     loss  += ydiff;
                 }
             }
             inDw++;
